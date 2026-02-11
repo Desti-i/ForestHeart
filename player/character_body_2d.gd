@@ -68,3 +68,4 @@ func handle_animation() -> void:
 			DIRECTION.RIGHT:
 				anim.play("idle_front")
 				anim.flip_h = true
+#sosi huy

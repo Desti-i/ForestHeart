@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://dkovgvj2bf4oq"]
+
+[ext_resource type="PackedScene" uid="uid://cqsqmkqeedok4" path="res://player/character_body_2d.tscn" id="1_ggsh4"]
+
+[node name="TestWorld" type="Node2D" unique_id=618480200]
+
+[node name="Player" parent="." unique_id=627426411 instance=ExtResource("1_ggsh4")]
+position = Vector2(567, 313)
+
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1779810055]
+zoom = Vector2(2, 2)
+limit_left = 0
+limit_top = 0
+limit_right = 1152
+limit_bottom = 648

@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bh5bepya11gn8"]
+
+[ext_resource type="Texture2D" uid="uid://1s4eidn7te68" path="res://background/20260210_034611.jpg" id="1_q061c"]
+
+[node name="Bg" type="ParallaxBackground" unique_id=1034420027]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="." unique_id=1763961801]
+
+[node name="20260210034611" type="Sprite2D" parent="ParallaxLayer" unique_id=1657723793]
+position = Vector2(575.9449, 323.99997)
+scale = Vector2(0.63267994, 0.63281244)
+texture = ExtResource("1_q061c")

@@ -64,7 +64,7 @@ func handle_animation() -> void:
 				anim.play("idle_up")
 			DIRECTION.LEFT:
 				anim.play("idle_front")
-				anim.flip_h = false
+				anim.flip_h = false		# Повораиваем спрайт
 			DIRECTION.RIGHT:
 				anim.play("idle_front")
 				anim.flip_h = true

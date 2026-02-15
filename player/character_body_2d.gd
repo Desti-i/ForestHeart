@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 
-@onready var anim = $AnimatedSprite2D
+@onready var anim = $Movements
 
 # Константы для скоростей
 const WALK_SPEED: float = 100.0

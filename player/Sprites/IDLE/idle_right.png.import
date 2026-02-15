@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bbr0kwu3b1fu"
-path="res://.godot/imported/idle_up.png-075a39ad67b05f4b29da8f2ffa8f1e29.ctex"
+uid="uid://so0dmspygq7q"
+path="res://.godot/imported/idle_right.png-8fbd3c332927ec9ba4d25b19135a7583.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://player/FREE_Adventurer 2D Pixel Art/Sprites/IDLE/idle_up.png"
-dest_files=["res://.godot/imported/idle_up.png-075a39ad67b05f4b29da8f2ffa8f1e29.ctex"]
+source_file="res://player/Sprites/IDLE/idle_right.png"
+dest_files=["res://.godot/imported/idle_right.png-8fbd3c332927ec9ba4d25b19135a7583.ctex"]
 
 [params]
 

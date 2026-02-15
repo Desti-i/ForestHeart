@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dx8ps12jhnrfc"
-path="res://.godot/imported/attack2_up.png-8901191fe8a7d20c853239cc88ae1570.ctex"
+uid="uid://d243o6yyyw2e4"
+path="res://.godot/imported/run_up.png-f0e53a823020f92f08f355a40f49d6bd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://player/FREE_Adventurer 2D Pixel Art/Sprites/ATTACK 2/attack2_up.png"
-dest_files=["res://.godot/imported/attack2_up.png-8901191fe8a7d20c853239cc88ae1570.ctex"]
+source_file="res://player/Sprites/RUN/run_up.png"
+dest_files=["res://.godot/imported/run_up.png-f0e53a823020f92f08f355a40f49d6bd.ctex"]
 
 [params]
 

@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://cqsqmkqeedok4"]
 
 [ext_resource type="Script" uid="uid://dctxsmpmym6t1" path="res://player/character_body_2d.gd" id="1_scca8"]
-[ext_resource type="Texture2D" uid="uid://dg3fgjeq3186v" path="res://player/FREE_Adventurer 2D Pixel Art/Sprites/IDLE/idle_down.png" id="1_ydsn6"]
-[ext_resource type="Texture2D" uid="uid://dx45n47p7vobr" path="res://player/FREE_Adventurer 2D Pixel Art/Sprites/RUN/run_down.png" id="2_00gdi"]
-[ext_resource type="Texture2D" uid="uid://f0g3axw63jny" path="res://player/FREE_Adventurer 2D Pixel Art/Sprites/IDLE/idle_left.png" id="2_scca8"]
-[ext_resource type="Texture2D" uid="uid://coft2pqy13xbe" path="res://player/FREE_Adventurer 2D Pixel Art/Sprites/RUN/run_left.png" id="3_4eqd5"]
-[ext_resource type="Texture2D" uid="uid://bbr0kwu3b1fu" path="res://player/FREE_Adventurer 2D Pixel Art/Sprites/IDLE/idle_up.png" id="4_00gdi"]
-[ext_resource type="Texture2D" uid="uid://d243o6yyyw2e4" path="res://player/FREE_Adventurer 2D Pixel Art/Sprites/RUN/run_up.png" id="4_dc2cb"]
+[ext_resource type="Texture2D" uid="uid://dg3fgjeq3186v" path="res://player/Sprites/IDLE/idle_down.png" id="1_ydsn6"]
+[ext_resource type="Texture2D" uid="uid://dx45n47p7vobr" path="res://player/Sprites/RUN/run_down.png" id="2_00gdi"]
+[ext_resource type="Texture2D" uid="uid://f0g3axw63jny" path="res://player/Sprites/IDLE/idle_left.png" id="2_scca8"]
+[ext_resource type="Texture2D" uid="uid://coft2pqy13xbe" path="res://player/Sprites/RUN/run_left.png" id="3_4eqd5"]
+[ext_resource type="Texture2D" uid="uid://bbr0kwu3b1fu" path="res://player/Sprites/IDLE/idle_up.png" id="4_00gdi"]
+[ext_resource type="Texture2D" uid="uid://d243o6yyyw2e4" path="res://player/Sprites/RUN/run_up.png" id="4_dc2cb"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y1i2i"]
 radius = 9.0
@@ -386,7 +386,7 @@ script = ExtResource("1_scca8")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=504994080]
 shape = SubResource("CapsuleShape2D_y1i2i")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=484262454]
+[node name="Movements" type="AnimatedSprite2D" parent="." unique_id=484262454]
 position = Vector2(0, -2)
 scale = Vector2(0.90625, 0.8875)
 sprite_frames = SubResource("SpriteFrames_bdpsx")

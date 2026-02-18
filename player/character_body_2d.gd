@@ -16,11 +16,7 @@ func _physics_process(_delta: float) -> void:
 	# Собираем входные данные
 	input_direction = Vector2.ZERO
 	# Определяем направление
-	input_direction = Input.get_vector("left", "right", "up", "down")
-	
-	# Нормализуем направление (если двигаемся по диагонали)
-	if input_direction.length() > 0:
-		input_direction = input_direction.normalized()
+	input_direction = Input.get_vector("left", "right", "up", "down").normalized()
 	
 	# Определяем скорость
 	current_speed = RUN_SPEED if Input.is_action_pressed("run") else WALK_SPEED

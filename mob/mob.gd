@@ -50,8 +50,8 @@ func handle_animation() -> void:
 			DIRECTION.RIGHT:
 				anim.flip_h = true
 				anim.play("idle_front")
-			
-	
+
+
 func _on_ditector_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
 		player = body

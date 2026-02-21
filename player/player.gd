@@ -3,7 +3,6 @@ extends CharacterBody2D
 enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 
 @onready var anim = $Movements
-@onready var anim_Atack = $Atack
 
 # Константы для скоростей
 const WALK_SPEED: float = 100.0
@@ -36,18 +35,17 @@ func _physics_process(_delta: float) -> void:
 	
 	move_and_slide()
 
+# Движение
 func handle_movements() -> void:
 	if input_direction != Vector2.ZERO:
 		# Движение
 		if abs(input_direction.x) > abs(input_direction.y):
 			# Горизонтальное движение
 			if input_direction.x > 0:
-				anim.flip_h = true	# Поворачиваем спрайт так как у нас только движение влево
-				anim.play("Front")
+				anim.play("Right")
 				idle_dir = DIRECTION.RIGHT
 			else:
-				anim.flip_h = false
-				anim.play("Front")
+				anim.play("Left")
 				idle_dir = DIRECTION.LEFT
 		else:
 			# Вертикальное движение
@@ -65,23 +63,24 @@ func handle_movements() -> void:
 			DIRECTION.UP:
 				anim.play("idle_up")
 			DIRECTION.LEFT:
-				anim.play("idle_front")
+				anim.play("idle_left")
 			DIRECTION.RIGHT:
-				anim.play("idle_front")
+				anim.play("idle_right")
 
+# Атака
 func handle_atack() -> void:
 	can_move = false
 	velocity = Vector2.ZERO
 	
 	match idle_dir:
 			DIRECTION.DOWN:
-				anim_Atack.play("atak_1_down")
+				anim.play("atak_1_down")
 			DIRECTION.UP:
-				anim_Atack.play("atak_1_up")
+				anim.play("atak_1_up")
 			DIRECTION.LEFT:
-				anim_Atack.play("atak_1_left")
+				anim.play("atak_1_left")
 			DIRECTION.RIGHT:
-				anim_Atack.play("atak_1_right")
+				anim.play("atak_1_right")
 				
-	await anim_Atack.animation_finished
+	await anim.animation_finished
 	can_move = true

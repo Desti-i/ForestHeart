@@ -13,7 +13,6 @@ config_version=5
 config/name="Forest Heatr 0.0"
 run/main_scene="uid://bkwqt42xcp7ca"
 config/features=PackedStringArray("4.6", "GL Compatibility")
-config/icon="res://icon.svg"
 
 [display]
 

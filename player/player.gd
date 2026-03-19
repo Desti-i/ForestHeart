@@ -3,6 +3,10 @@ extends CharacterBody2D
 enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 
 @onready var anim = $Movements
+@onready var animP = $AnimationPlayer
+
+var heals: float = 1000
+var damage: float = 5
 
 # Константы для скоростей
 const WALK_SPEED: float = 100.0
@@ -16,26 +20,26 @@ var can_move: bool = true # переменная для замирания во 
 func _physics_process(_delta: float) -> void:
 	if !can_move:
 		return
-	
+
 	# Определяем атаку
 	if Input.is_action_just_pressed("atack"):
-		handle_atack()
+		handle_attack()
 		return
-		
+
 	# Определяем направление
 	input_direction = Vector2.ZERO
 	input_direction = Input.get_vector("left", "right", "up", "down").normalized()
-	
+
 	# Определяем скорость
 	current_speed = RUN_SPEED if Input.is_action_pressed("run") else WALK_SPEED
 	velocity = input_direction * current_speed
-	
+
 	# Обработка движения
 	handle_movements()
-	
+
 	move_and_slide()
 
-# Движение
+# Анимация движения
 func handle_movements() -> void:
 	if input_direction != Vector2.ZERO:
 		# Движение
@@ -57,30 +61,45 @@ func handle_movements() -> void:
 				idle_dir = DIRECTION.UP
 	else:
 		# Бездействие
-		match idle_dir:
-			DIRECTION.DOWN:
-				anim.play("idle_down")
-			DIRECTION.UP:
-				anim.play("idle_up")
-			DIRECTION.LEFT:
-				anim.play("idle_left")
-			DIRECTION.RIGHT:
-				anim.play("idle_right")
+		var anim_name = "idle_" + get_direction_string()
+		anim.play(anim_name)
 
-# Атака
-func handle_atack() -> void:
+# Анимация атаки
+func handle_attack() -> void:
 	can_move = false
 	velocity = Vector2.ZERO
-	
-	match idle_dir:
-			DIRECTION.DOWN:
-				anim.play("atak_1_down")
-			DIRECTION.UP:
-				anim.play("atak_1_up")
-			DIRECTION.LEFT:
-				anim.play("atak_1_left")
-			DIRECTION.RIGHT:
-				anim.play("atak_1_right")
+
+	var anim_name = "attack_1_" + get_direction_string()
+	animP.play(anim_name)
 				
-	await anim.animation_finished
+	await animP.animation_finished
 	can_move = true
+
+# Получение урона
+func take_damage(incoming_damage: float):
+	heals -= incoming_damage
+
+	print("player: ", heals)
+
+	modulate = Color.RED
+	await get_tree().create_timer(0.1).timeout
+	modulate = Color.WHITE
+
+	if heals <= 0:
+		queue_free()
+		get_tree().change_scene_to_file("res://menu/menu.tscn")
+
+# Выбор анимации по направлению idle
+func get_direction_string() -> String:
+	match idle_dir:
+		DIRECTION.DOWN: return "down"
+		DIRECTION.UP: return "up"
+		DIRECTION.LEFT: return "left"
+		DIRECTION.RIGHT: return "right"
+
+	return "down"
+
+# Атака
+func _on_attack_area_body_entered(body: Node2D) -> void:
+	if body.has_method("take_damage"):
+		body.take_damage(damage)

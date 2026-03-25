@@ -262,29 +262,33 @@ region = Rect2(576, 0, 96, 80)
 atlas = ExtResource("10_hbkom")
 region = Rect2(0, 0, 96, 80)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_234y4"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_mlfor"]
 atlas = ExtResource("10_hbkom")
 region = Rect2(96, 0, 96, 80)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_u8vxv"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ddnt4"]
 atlas = ExtResource("10_hbkom")
 region = Rect2(192, 0, 96, 80)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_lhjxl"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_234y4"]
 atlas = ExtResource("10_hbkom")
 region = Rect2(288, 0, 96, 80)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_y2u3w"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_u8vxv"]
 atlas = ExtResource("10_hbkom")
 region = Rect2(384, 0, 96, 80)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_uyl0s"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_lhjxl"]
 atlas = ExtResource("10_hbkom")
 region = Rect2(480, 0, 96, 80)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vud74"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_y2u3w"]
 atlas = ExtResource("10_hbkom")
 region = Rect2(576, 0, 96, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uyl0s"]
+atlas = ExtResource("10_hbkom")
+region = Rect2(672, 0, 96, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_610ub"]
 atlas = ExtResource("11_d4g0h")
@@ -725,6 +729,12 @@ animations = [{
 "texture": SubResource("AtlasTexture_a0lmo")
 }, {
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_mlfor")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ddnt4")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_234y4")
 }, {
 "duration": 1.0,
@@ -738,9 +748,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_uyl0s")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vud74")
 }],
 "loop": false,
 "name": &"attack_1_right",
@@ -1541,7 +1548,7 @@ script = ExtResource("1_scca8")
 position = Vector2(0, -2)
 scale = Vector2(0.90625, 0.8875)
 sprite_frames = SubResource("SpriteFrames_bdpsx")
-animation = &"attack_1_down"
+animation = &"attack_1_right"
 autoplay = "idle_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=504994080]

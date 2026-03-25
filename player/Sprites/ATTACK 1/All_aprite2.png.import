@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cuhc7p34vundm"
-path="res://.godot/imported/Pixel 16 v2 village free.png-4ae83c06108e02eeae69047b7cb5c50b.ctex"
+uid="uid://dru86mka8j3hu"
+path="res://.godot/imported/All_aprite2.png-02517c57f5e441d668ca0e214750d229.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets_0/Pixel 16 v2 village free.png"
-dest_files=["res://.godot/imported/Pixel 16 v2 village free.png-4ae83c06108e02eeae69047b7cb5c50b.ctex"]
+source_file="res://player/Sprites/ATTACK 1/All_aprite2.png"
+dest_files=["res://.godot/imported/All_aprite2.png-02517c57f5e441d668ca0e214750d229.ctex"]
 
 [params]
 

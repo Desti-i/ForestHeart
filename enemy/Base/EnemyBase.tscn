@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://c0nhbg6rqs1p8"]
+
+[ext_resource type="Script" uid="uid://bhk481g8ciujj" path="res://enemy/Base/EnemyBase.gd" id="1_wc11h"]
+[ext_resource type="Script" uid="uid://cab1kh0ubdu7k" path="res://enemy/Base/FSM/StateMachine.gd" id="2_t2crj"]
+[ext_resource type="Script" uid="uid://wwxbgi65e2ds" path="res://enemy/Base/FSM/Idle.gd" id="3_8mf3i"]
+[ext_resource type="Script" uid="uid://cl5f0t78e1382" path="res://enemy/Base/FSM/Chase.gd" id="4_bqu1w"]
+[ext_resource type="Script" uid="uid://ck1uqevptvkt7" path="res://enemy/Base/FSM/Attack.gd" id="5_endcf"]
+[ext_resource type="Script" uid="uid://j236rghrxvgi" path="res://enemy/Base/FSM/Death.gd" id="6_2banv"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5t5nu"]
+height = 34.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wc11h"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wc11h"]
+radius = 72.02777
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6edku"]
+radius = 8.46
+height = 20.09
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kqgm3"]
+
+[node name="EnemyBase" type="CharacterBody2D" unique_id=355327370]
+collision_layer = 4
+script = ExtResource("1_wc11h")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1468184344]
+shape = SubResource("CapsuleShape2D_5t5nu")
+debug_color = Color(0.752089, 0, 0.21516001, 0.41960785)
+
+[node name="Movements" type="AnimatedSprite2D" parent="." unique_id=403867546]
+sprite_frames = SubResource("SpriteFrames_wc11h")
+
+[node name="detector" type="Area2D" parent="." unique_id=963818677]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="detector" unique_id=766399847]
+shape = SubResource("CircleShape2D_wc11h")
+
+[node name="Attack_zone" type="Area2D" parent="." unique_id=1428366797]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attack_zone" unique_id=784964863]
+position = Vector2(0, -1.37)
+rotation = 1.5707964
+scale = Vector2(2.29, 2.29)
+shape = SubResource("CapsuleShape2D_6edku")
+
+[node name="Attack_area" type="Area2D" parent="." unique_id=1858617201]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attack_area" unique_id=954509707]
+position = Vector2(0, 14)
+shape = SubResource("CircleShape2D_kqgm3")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1423741969]
+root_node = NodePath("../CollisionShape2D")
+
+[node name="StateMachine" type="Node2D" parent="." unique_id=823540589]
+script = ExtResource("2_t2crj")
+
+[node name="Idle" type="Node2D" parent="StateMachine" unique_id=295526773]
+script = ExtResource("3_8mf3i")
+
+[node name="Chase" type="Node2D" parent="StateMachine" unique_id=393080123]
+script = ExtResource("4_bqu1w")
+
+[node name="Attack" type="Node2D" parent="StateMachine" unique_id=621416600]
+script = ExtResource("5_endcf")
+
+[node name="RangedAttack" type="Node2D" parent="StateMachine" unique_id=1083006962]
+
+[node name="Death" type="Node2D" parent="StateMachine" unique_id=1669259827]
+script = ExtResource("6_2banv")
+
+[connection signal="body_entered" from="detector" to="." method="_on_detector_body_entered"]
+[connection signal="body_exited" from="detector" to="." method="_on_detector_body_exited"]
+[connection signal="body_entered" from="Attack_zone" to="." method="_on_attack_zone_body_entered"]
+[connection signal="body_exited" from="Attack_zone" to="." method="_on_attack_zone_body_exited"]
+[connection signal="body_entered" from="Attack_area" to="." method="_on_attack_area_body_entered"]

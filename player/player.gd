@@ -5,7 +5,7 @@ enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 @onready var anim = $Movements
 @onready var animP = $AnimationPlayer
 
-var heals: float = 1000
+var heals: float = 20
 var damage: float = 5
 
 # Константы для скоростей

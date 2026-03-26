@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://kk5jf2ubemd0"]
+
+[ext_resource type="PackedScene" uid="uid://c0nhbg6rqs1p8" path="res://enemy/Base/EnemyBase.tscn" id="1_hwdep"]
+[ext_resource type="Script" uid="uid://ciauvidq51uvq" path="res://enemy/Base/MeleeEnemyBase.gd" id="2_wr58x"]
+
+[node name="MeleeEnemyBase" unique_id=355327370 instance=ExtResource("1_hwdep")]
+script = ExtResource("2_wr58x")
+use_melee = true
+use_ranged = false
+ranged_range = 0.0

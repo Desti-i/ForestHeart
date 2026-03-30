@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cqsqmkqeedok4" path="res://player/Player.tscn" id="1_ggsh4"]
 [ext_resource type="Texture2D" uid="uid://dx04ippliseyq" path="res://test world/Decorations/Tileset.png" id="2_3m4fv"]
 [ext_resource type="Texture2D" uid="uid://ch73sgmorgk6m" path="res://test world/Decorations/Decorations.png" id="2_hfkqp"]
-[ext_resource type="PackedScene" uid="uid://drjcam5sus5u4" path="res://enemy/Orc/Orc1/Orc.tscn" id="4_hswa1"]
+[ext_resource type="PackedScene" uid="uid://drjcam5sus5u4" path="res://enemy/Orc/Orc1/Orc_1.tscn" id="4_hswa1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hfkqp"]
 texture = ExtResource("2_3m4fv")

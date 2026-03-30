@@ -23,6 +23,8 @@
 [ext_resource type="Texture2D" uid="uid://b4nci7psneya" path="res://assets_0/Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Buildings/Wood_Tower/Wood_Tower_Destroyed.png" id="22_kw54p"]
 [ext_resource type="PackedScene" uid="uid://cqsqmkqeedok4" path="res://player/Player.tscn" id="23_3re7l"]
 [ext_resource type="Texture2D" uid="uid://d34nl6sny043a" path="res://assets_0/Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Buildings/Wood_Tower/Wood_Tower_Purple.png" id="23_a021s"]
+[ext_resource type="PackedScene" uid="uid://drjcam5sus5u4" path="res://enemy/Orc/Orc1/Orc_1.tscn" id="24_i6k6j"]
+[ext_resource type="PackedScene" uid="uid://b1h4hrkw57x73" path="res://enemy/Orc/Orc2/Orc_2.tscn" id="25_mpwpa"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onb6d"]
 texture = ExtResource("1_fu060")
@@ -5540,3 +5542,13 @@ tile_set = SubResource("TileSet_ah1mw")
 [node name="Player" parent="." unique_id=627426411 instance=ExtResource("23_3re7l")]
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=218296511]
+
+[node name="Orc" parent="." unique_id=355327370 instance=ExtResource("24_i6k6j")]
+position = Vector2(-133, -70)
+speed = 100.0
+
+[node name="Orc_2" parent="." unique_id=732531416 instance=ExtResource("25_mpwpa")]
+position = Vector2(-11, -170)
+health = 20.0
+damage = 5.0
+speed = 80.0

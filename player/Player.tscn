@@ -950,7 +950,7 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y1i2i"]
 radius = 7.0
-height = 28.0
+height = 40.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_w24id"]
 radius = 13.241378
@@ -1545,13 +1545,14 @@ collision_mask = 4
 script = ExtResource("1_scca8")
 
 [node name="Movements" type="AnimatedSprite2D" parent="." unique_id=484262454]
-position = Vector2(0, -2)
-scale = Vector2(0.90625, 0.8875)
+position = Vector2(0, -8.000001)
+scale = Vector2(1.234375, 1.1937499)
 sprite_frames = SubResource("SpriteFrames_bdpsx")
 animation = &"attack_1_right"
 autoplay = "idle_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=504994080]
+position = Vector2(0, -6)
 shape = SubResource("CapsuleShape2D_y1i2i")
 
 [node name="Attack_area" type="Area2D" parent="." unique_id=799103396]

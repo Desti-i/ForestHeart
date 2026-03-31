@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cuhc7p34vundm"
-path="res://.godot/imported/Pixel 16 v2 village free.png-4ae83c06108e02eeae69047b7cb5c50b.ctex"
+uid="uid://ti3fg3gwg4bf"
+path="res://.godot/imported/orc3_run_full.png-bb4a3262da81590fe1e14ff5f3db1361.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets_0/Pixel 16 v2 village free.png"
-dest_files=["res://.godot/imported/Pixel 16 v2 village free.png-4ae83c06108e02eeae69047b7cb5c50b.ctex"]
+source_file="res://enemy/Orc/Orc3/orc3_run_full.png"
+dest_files=["res://.godot/imported/orc3_run_full.png-bb4a3262da81590fe1e14ff5f3db1361.ctex"]
 
 [params]
 

@@ -1,10 +1,13 @@
 extends CharacterBody2D
 
+signal health_changed(new_health, max_health)
+
 enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 
 @onready var anim = $Movements
 @onready var animP = $AnimationPlayer
 
+var max_heals: float = 20
 var heals: float = 20
 var damage: float = 5
 
@@ -78,18 +81,21 @@ func handle_attack() -> void:
 # Получение урона
 func take_damage(incoming_damage: float):
 	heals -= incoming_damage
-
+	
+	# Эмитим сигнал об изменении здоровья
+	health_changed.emit(heals, max_heals)  # 20 - это max_health (можно сделать переменной)
+	
 	print("player: ", heals)
-
+	
 	modulate = Color.RED
 	await get_tree().create_timer(0.1).timeout
 	modulate = Color.WHITE
-
+	
 	if heals <= 0:
 		queue_free()
 		get_tree().change_scene_to_file("res://menu/menu.tscn")
-
 # Выбор анимации по направлению idle
+
 func get_direction_string() -> String:
 	match idle_dir:
 		DIRECTION.DOWN: return "down"

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dbtlki65oy0j1"]
+
+[ext_resource type="Script" uid="uid://c8hhov8fyionb" path="res://locations/primary_village/health_bar.gd" id="1_mrq8p"]
+
+[node name="Ui" type="CanvasLayer" unique_id=916099402]
+
+[node name="Control" type="Control" parent="." unique_id=826686987]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_mrq8p")
+
+[node name="ProgressBar" type="ProgressBar" parent="Control" unique_id=9113173]
+layout_mode = 0
+offset_right = 4.0
+offset_bottom = 27.0
+max_value = 20.0
+value = 20.0

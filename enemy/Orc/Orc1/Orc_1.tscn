@@ -1470,7 +1470,7 @@ _data = {
 &"idle_up": SubResource("Animation_hdlyx")
 }
 
-[node name="Orc" unique_id=355327370 instance=ExtResource("1_rq00x")]
+[node name="Orc_1" unique_id=355327370 instance=ExtResource("1_rq00x")]
 health = 15.0
 damage = 5.0
 speed = 70.0

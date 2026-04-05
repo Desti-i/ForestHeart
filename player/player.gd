@@ -8,8 +8,8 @@ enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 @onready var animP = $AnimationPlayer
 @onready var hp_bar = $"../CanvasLayer/Control/hp_bar"
 
-var max_health: float = 100.0
-var current_health: float = 100.0
+var max_health: float = 20
+var current_health: float = 20
 var damage: float = 5
 
 const WALK_SPEED: float = 100.0
@@ -30,15 +30,6 @@ func _ready():
 		hp_bar.max_value = max_health
 		hp_bar.min_value = 0
 		hp_bar.value = current_health
-		
-		await get_tree().create_timer(2.0).timeout
-		take_damage(30)  # Уменьшит полоску на 30%
-		await get_tree().create_timer(4.0).timeout
-		take_damage(35)
-		await get_tree().create_timer(2.0).timeout
-		heal(20)
-		await get_tree().create_timer(6.0).timeout
-		take_damage(35)
 
 	
 func _physics_process(_delta: float) -> void:
@@ -49,10 +40,6 @@ func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("atack"):
 		handle_attack()
 		return
-		
-	if Input.is_action_just_pressed("ui_accept"):
-		print("TEST DAMAGE")
-		take_damage(10)
 
 	# Движение
 	input_direction = Input.get_vector("left", "right", "up", "down").normalized()
@@ -109,8 +96,6 @@ func take_damage(incoming_damage: float) -> void:
 	await get_tree().create_timer(0.1).timeout
 	modulate = Color.WHITE
 	
-	print("Player health: ", current_health, "/", max_health)
-	
 	if current_health <= 0:
 		die()
 
@@ -122,10 +107,8 @@ func heal(amount: float) -> void:
 		hp_bar.value = current_health
 	
 	health_changed.emit(current_health, max_health)
-	print("Player healed: ", current_health, "/", max_health)
 
 func die() -> void:
-	print("Player died!")
 	queue_free()
 	await get_tree().create_timer(0.5).timeout
 	get_tree().change_scene_to_file("res://menu/menu.tscn")

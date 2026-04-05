@@ -6,48 +6,67 @@ enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 
 @onready var anim = $Movements
 @onready var animP = $AnimationPlayer
+@onready var hp_bar = $"../CanvasLayer/Control/hp_bar"
 
-var max_heals: float = 22
-var heals: float = 20
+var max_health: float = 100.0
+var current_health: float = 100.0
 var damage: float = 5
 
-# Константы для скоростей
 const WALK_SPEED: float = 100.0
 const RUN_SPEED: float = 200.0
 
 var current_speed: float = WALK_SPEED
 var idle_dir: DIRECTION = DIRECTION.DOWN
 var input_direction := Vector2.ZERO
-var can_move: bool = true # переменная для замирания во время атаки
+var can_move: bool = true
+var is_invincible: bool = false
 
+func _ready():
+	# Инициализация здоровья
+	current_health = max_health
+	
+	# Настройка HP бара
+	if hp_bar:
+		hp_bar.max_value = max_health
+		hp_bar.min_value = 0
+		hp_bar.value = current_health
+		
+		await get_tree().create_timer(2.0).timeout
+		take_damage(30)  # Уменьшит полоску на 30%
+		await get_tree().create_timer(4.0).timeout
+		take_damage(35)
+		await get_tree().create_timer(2.0).timeout
+		heal(20)
+		await get_tree().create_timer(6.0).timeout
+		take_damage(35)
+
+	
 func _physics_process(_delta: float) -> void:
 	if !can_move:
 		return
 
-	# Определяем атаку
+	# Атака
 	if Input.is_action_just_pressed("atack"):
 		handle_attack()
 		return
+		
+	if Input.is_action_just_pressed("ui_accept"):
+		print("TEST DAMAGE")
+		take_damage(10)
 
-	# Определяем направление
-	input_direction = Vector2.ZERO
+	# Движение
 	input_direction = Input.get_vector("left", "right", "up", "down").normalized()
-
-	# Определяем скорость
 	current_speed = RUN_SPEED if Input.is_action_pressed("run") else WALK_SPEED
 	velocity = input_direction * current_speed
 
-	# Обработка движения
 	handle_movements()
-
 	move_and_slide()
 
-# Анимация движения
+	
+
 func handle_movements() -> void:
 	if input_direction != Vector2.ZERO:
-		# Движение
 		if abs(input_direction.x) > abs(input_direction.y):
-			# Горизонтальное движение
 			if input_direction.x > 0:
 				anim.play("Right")
 				idle_dir = DIRECTION.RIGHT
@@ -55,7 +74,6 @@ func handle_movements() -> void:
 				anim.play("Left")
 				idle_dir = DIRECTION.LEFT
 		else:
-			# Вертикальное движение
 			if input_direction.y > 0:
 				anim.play("Down")
 				idle_dir = DIRECTION.DOWN
@@ -63,38 +81,54 @@ func handle_movements() -> void:
 				anim.play("Up")
 				idle_dir = DIRECTION.UP
 	else:
-		# Бездействие
 		var anim_name = "idle_" + get_direction_string()
 		anim.play(anim_name)
 
-# Анимация атаки
 func handle_attack() -> void:
 	can_move = false
 	velocity = Vector2.ZERO
-
 	var anim_name = "attack_1_" + get_direction_string()
 	animP.play(anim_name)
-				
 	await animP.animation_finished
 	can_move = true
 
-# Получение урона
-func take_damage(incoming_damage: float):
-	heals -= incoming_damage
+func take_damage(incoming_damage: float) -> void:
+	if is_invincible:
+		return
 	
-	# Эмитим сигнал об изменении здоровья
-	health_changed.emit(heals, max_heals)  # 20 - это max_health (можно сделать переменной)
+	current_health -= incoming_damage
+	current_health = max(current_health, 0)
 	
-	print("player: ", heals)
+	if hp_bar:
+		hp_bar.value = current_health
 	
+	health_changed.emit(current_health, max_health)
+	
+	# Эффект получения урона
 	modulate = Color.RED
 	await get_tree().create_timer(0.1).timeout
 	modulate = Color.WHITE
 	
-	if heals <= 0:
-		queue_free()
-		get_tree().change_scene_to_file("res://menu/menu.tscn")
-# Выбор анимации по направлению idle
+	print("Player health: ", current_health, "/", max_health)
+	
+	if current_health <= 0:
+		die()
+
+func heal(amount: float) -> void:
+	current_health += amount
+	current_health = min(current_health, max_health)
+	
+	if hp_bar:
+		hp_bar.value = current_health
+	
+	health_changed.emit(current_health, max_health)
+	print("Player healed: ", current_health, "/", max_health)
+
+func die() -> void:
+	print("Player died!")
+	queue_free()
+	await get_tree().create_timer(0.5).timeout
+	get_tree().change_scene_to_file("res://menu/menu.tscn")
 
 func get_direction_string() -> String:
 	match idle_dir:
@@ -102,10 +136,8 @@ func get_direction_string() -> String:
 		DIRECTION.UP: return "up"
 		DIRECTION.LEFT: return "left"
 		DIRECTION.RIGHT: return "right"
-
 	return "down"
 
-# Атака
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.has_method("take_damage"):
 		body.take_damage(damage)

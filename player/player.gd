@@ -7,7 +7,7 @@ enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 @onready var anim = $Movements
 @onready var animP = $AnimationPlayer
 
-var max_heals: float = 22
+var max_heals: float = 20
 var heals: float = 20
 var damage: float = 5
 

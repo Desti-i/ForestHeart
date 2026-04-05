@@ -24,8 +24,8 @@ height = 20.09
 [sub_resource type="CircleShape2D" id="CircleShape2D_kqgm3"]
 
 [node name="EnemyBase" type="CharacterBody2D" unique_id=355327370]
-collision_layer = 2
-collision_mask = 3
+collision_layer = 4
+collision_mask = 2
 script = ExtResource("1_wc11h")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1468184344]

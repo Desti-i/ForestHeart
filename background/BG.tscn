@@ -7,6 +7,6 @@
 [node name="ParallaxLayer" type="ParallaxLayer" parent="." unique_id=1763961801]
 
 [node name="20260210034611" type="Sprite2D" parent="ParallaxLayer" unique_id=1657723793]
-position = Vector2(575.9449, 323.99997)
-scale = Vector2(0.63267994, 0.63281244)
+position = Vector2(1059.9448, 640)
+scale = Vector2(1.164256, 1.25)
 texture = ExtResource("1_q061c")

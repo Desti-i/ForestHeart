@@ -24,7 +24,8 @@ height = 20.09
 [sub_resource type="CircleShape2D" id="CircleShape2D_kqgm3"]
 
 [node name="EnemyBase" type="CharacterBody2D" unique_id=355327370]
-collision_layer = 4
+collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_wc11h")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1468184344]
@@ -79,10 +80,10 @@ script = ExtResource("6_2banv")
 [node name="TextureProgressBar" type="TextureProgressBar" parent="." unique_id=815901222]
 modulate = Color(1, 1, 0.08627451, 1)
 self_modulate = Color(1, 0.68235296, 1, 1)
-offset_left = -30.0
-offset_top = -6.0
-offset_right = 12.0
-offset_bottom = 5.0
+offset_left = -37.0
+offset_top = -26.0
+offset_right = 5.0
+offset_bottom = -15.0
 max_value = 25.0
 value = 25.0
 texture_under = ExtResource("7_bqu1w")

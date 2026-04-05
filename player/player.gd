@@ -21,18 +21,20 @@ var input_direction := Vector2.ZERO
 var can_move: bool = true
 var is_invincible: bool = false
 
+# --- РЕГЕН ---
+var regen_delay: float = 3.0
+var regen_amount: float = 20
+var regen_timer: float = 0.0
+
 func _ready():
-	# Инициализация здоровья
 	current_health = max_health
 	
-	# Настройка HP бара
 	if hp_bar:
 		hp_bar.max_value = max_health
 		hp_bar.min_value = 0
 		hp_bar.value = current_health
 
-	
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if !can_move:
 		return
 
@@ -49,7 +51,13 @@ func _physics_process(_delta: float) -> void:
 	handle_movements()
 	move_and_slide()
 
-	
+	# --- РЕГЕН ---
+	if current_health > 0 and current_health < max_health:
+		regen_timer += delta
+		
+		if regen_timer >= regen_delay:
+			heal(regen_amount)
+			regen_timer = 0.0  # сбрасываем, чтобы лечило каждые 3 сек
 
 func handle_movements() -> void:
 	if input_direction != Vector2.ZERO:
@@ -86,12 +94,14 @@ func take_damage(incoming_damage: float) -> void:
 	current_health -= incoming_damage
 	current_health = max(current_health, 0)
 	
+	# ❗ СБРОС ТАЙМЕРА РЕГЕНА
+	regen_timer = 0.0
+	
 	if hp_bar:
 		hp_bar.value = current_health
 	
 	health_changed.emit(current_health, max_health)
 	
-	# Эффект получения урона
 	modulate = Color.RED
 	await get_tree().create_timer(0.1).timeout
 	modulate = Color.WHITE
@@ -109,7 +119,6 @@ func heal(amount: float) -> void:
 	health_changed.emit(current_health, max_health)
 
 func die() -> void:
-	queue_free()
 	await get_tree().create_timer(0.5).timeout
 	get_tree().change_scene_to_file("res://menu/menu.tscn")
 

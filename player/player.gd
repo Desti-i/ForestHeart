@@ -117,6 +117,10 @@ func heal(amount: float) -> void:
 		hp_bar.value = current_health
 	
 	health_changed.emit(current_health, max_health)
+	
+	if animP.has_animation("heal"):
+		animP.play("heal")
+
 
 func die() -> void:
 	await get_tree().create_timer(0.5).timeout

@@ -9115,7 +9115,8 @@ tile_map_data = PackedByteArray("AAB+ACcABgAdAAMAAAB+ACgABgAdAAQAAAB+ACkABgAdAAU
 tile_set = SubResource("TileSet_ah1mw")
 
 [node name="Player" parent="." unique_id=627426411 instance=ExtResource("25_j64ij")]
-position = Vector2(-26, -591)
+position = Vector2(2806, -768)
+collision_mask = 1
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1540635320]
 position = Vector2(12, 0)
@@ -9161,4 +9162,16 @@ tile_map_data = PackedByteArray("AACwANX/AAAAAAQAAACwANb/AAAAAAUAAACwANf/AAAAAAY
 tile_set = SubResource("TileSet_l52ty")
 
 [node name="Orc_1" parent="." unique_id=355327370 instance=ExtResource("48_mymtm")]
-position = Vector2(-211, -353)
+position = Vector2(2676, -194)
+
+[node name="Orc_2" parent="." unique_id=631308007 instance=ExtResource("48_mymtm")]
+position = Vector2(2939, -162)
+
+[node name="Orc_3" parent="." unique_id=1208915055 instance=ExtResource("48_mymtm")]
+position = Vector2(2971, -419)
+
+[node name="Orc_4" parent="." unique_id=497789669 instance=ExtResource("48_mymtm")]
+position = Vector2(2644, -419)
+
+[node name="Orc_5" parent="." unique_id=1307059657 instance=ExtResource("48_mymtm")]
+position = Vector2(2806, -504)

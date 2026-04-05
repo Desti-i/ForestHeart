@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://cl5f0t78e1382" path="res://enemy/Base/FSM/Chase.gd" id="4_bqu1w"]
 [ext_resource type="Script" uid="uid://ck1uqevptvkt7" path="res://enemy/Base/FSM/Attack.gd" id="5_endcf"]
 [ext_resource type="Script" uid="uid://j236rghrxvgi" path="res://enemy/Base/FSM/Death.gd" id="6_2banv"]
+[ext_resource type="Texture2D" uid="uid://bng0x85go2dky" path="res://iNTERFACE/Sprite-0003.png" id="7_bqu1w"]
+[ext_resource type="Texture2D" uid="uid://ds3q6aaltgei" path="res://iNTERFACE/Sprite-0002 (1).png" id="8_endcf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5t5nu"]
 height = 34.0
@@ -42,7 +44,7 @@ shape = SubResource("CircleShape2D_wc11h")
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Attack_zone" unique_id=784964863]
-position = Vector2(0, -1.37)
+position = Vector2(0, -2)
 rotation = 1.5707964
 scale = Vector2(2.29, 2.29)
 shape = SubResource("CapsuleShape2D_6edku")
@@ -73,6 +75,18 @@ script = ExtResource("5_endcf")
 
 [node name="Death" type="Node2D" parent="StateMachine" unique_id=1669259827]
 script = ExtResource("6_2banv")
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="." unique_id=815901222]
+modulate = Color(1, 1, 0.08627451, 1)
+self_modulate = Color(1, 0.68235296, 1, 1)
+offset_left = -30.0
+offset_top = -6.0
+offset_right = 12.0
+offset_bottom = 5.0
+max_value = 25.0
+value = 25.0
+texture_under = ExtResource("7_bqu1w")
+texture_progress = ExtResource("8_endcf")
 
 [connection signal="body_entered" from="detector" to="." method="_on_detector_body_entered"]
 [connection signal="body_exited" from="detector" to="." method="_on_detector_body_exited"]

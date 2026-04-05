@@ -8,8 +8,8 @@ enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 @onready var animP = $AnimationPlayer
 @onready var hp_bar = $"../CanvasLayer/Control/hp_bar"
 
-var max_health: float = 20
-var current_health: float = 20
+var max_health: float = 100
+var current_health: float = 100
 var damage: float = 5
 
 const WALK_SPEED: float = 100.0

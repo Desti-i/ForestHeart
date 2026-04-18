@@ -50,6 +50,8 @@
 [ext_resource type="PackedScene" uid="uid://drjcam5sus5u4" path="res://enemy/Orc/Orc1/Orc_1.tscn" id="48_mymtm"]
 [ext_resource type="PackedScene" uid="uid://e1pvr5xeq1pq" path="res://NPC/starshina.tscn" id="49_j64ij"]
 [ext_resource type="PackedScene" uid="uid://b1h4hrkw57x73" path="res://enemy/Orc/Orc2/Orc_2.tscn" id="50_03m2q"]
+[ext_resource type="PackedScene" uid="uid://b77odrur68o7t" path="res://animals/base/animals_mobile.tscn" id="51_yd5io"]
+[ext_resource type="PackedScene" uid="uid://dq8rnl158fhs3" path="res://animals/fox/fox.tscn" id="52_tn8ok"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onb6d"]
 texture = ExtResource("1_6ql0f")
@@ -9179,5 +9181,11 @@ position = Vector2(2671, -296)
 
 [node name="Orc_4" parent="." unique_id=1159436016 instance=ExtResource("48_mymtm")]
 position = Vector2(2946, -206)
+
+[node name="animals_mobile" parent="." unique_id=1933003742 instance=ExtResource("51_yd5io")]
+position = Vector2(978, -1099)
+
+[node name="fox" parent="." unique_id=8268270 instance=ExtResource("52_tn8ok")]
+position = Vector2(1242, -1068)
 
 [connection signal="child_exiting_tree" from="Starshina" to="Starshina" method="_on_child_exiting_tree"]

@@ -3076,6 +3076,39 @@ sources/4 = SubResource("TileSetAtlasSource_00f6k")
 sources/5 = SubResource("TileSetAtlasSource_iuklk")
 sources/7 = SubResource("TileSetAtlasSource_jbup7")
 
+[sub_resource type="Theme" id="Theme_6na36"]
+
+[sub_resource type="FontFile" id="FontFile_jv868"]
+cache/0/variation_coordinates = {}
+cache/0/face_index = 0
+cache/0/embolden = 0.0
+cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
+cache/0/spacing_top = 0
+cache/0/spacing_bottom = 0
+cache/0/spacing_space = 0
+cache/0/spacing_glyph = 0
+cache/0/baseline_offset = 0.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/28/0/ascent = 0.0
+cache/0/28/0/descent = 0.0
+cache/0/28/0/underline_position = 0.0
+cache/0/28/0/underline_thickness = 0.0
+cache/0/28/0/scale = 1.0
+cache/0/17/0/ascent = 0.0
+cache/0/17/0/descent = 0.0
+cache/0/17/0/underline_position = 0.0
+cache/0/17/0/underline_thickness = 0.0
+cache/0/17/0/scale = 1.0
+
+[sub_resource type="Theme" id="Theme_am1wp"]
+default_font = SubResource("FontFile_jv868")
+
+[sub_resource type="Theme" id="Theme_s1xfd"]
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c0hx4"]
 texture = ExtResource("24_fuefb")
 0:0/0 = 0
@@ -9139,6 +9172,8 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="hp_bar" type="TextureProgressBar" parent="CanvasLayer/Control" unique_id=349782919]
+modulate = Color(1, 0.08235294, 0.19215687, 1)
+self_modulate = Color(1, 1, 0.03529412, 1)
 custom_minimum_size = Vector2(300, 30)
 layout_mode = 1
 anchors_preset = -1
@@ -9150,11 +9185,25 @@ offset_left = -19.240002
 offset_top = -4.0
 offset_right = 280.76
 offset_bottom = 30.0
+theme = SubResource("Theme_6na36")
 value = 50.0
 nine_patch_stretch = true
 texture_under = ExtResource("46_mymtm")
 texture_over = ExtResource("47_j64ij")
 texture_progress = ExtResource("48_03m2q")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/hp_bar" unique_id=2094298484]
+layout_mode = 0
+offset_left = 95.0
+offset_top = -4.0
+offset_right = 359.0
+offset_bottom = 35.0
+theme = SubResource("Theme_am1wp")
+theme_type_variation = &"HeaderLarge"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "100/100"
 
 [node name="StaminaBar" type="TextureProgressBar" parent="CanvasLayer/Control" unique_id=1551979973]
 modulate = Color(1, 1, 0, 1)
@@ -9163,12 +9212,23 @@ offset_left = 27.0
 offset_top = 41.0
 offset_right = 227.0
 offset_bottom = 71.0
-scale = Vector2(8.62, 4)
+scale = Vector2(8.62, 4.455)
 pivot_offset = Vector2(2, 0)
 value = 50.0
 texture_under = ExtResource("20_uyjsw")
 texture_progress = ExtResource("21_s1xfd")
 script = ExtResource("22_s1xfd")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/StaminaBar" unique_id=678350789]
+layout_mode = 0
+offset_left = 12.672853
+offset_top = 2.9180694
+offset_right = 88.94508
+offset_bottom = 107.08474
+scale = Vector2(0.26, 0.215)
+theme = SubResource("Theme_s1xfd")
+theme_override_colors/font_color = Color(2.7140994, 0.06894164, 3.7251358, 1)
+text = "100/100"
 
 [node name="Home" type="TileMapLayer" parent="." unique_id=1075272652]
 position = Vector2(-14, -31)
@@ -9191,7 +9251,7 @@ position = Vector2(3013, -462)
 speed = 100.0
 
 [node name="Orc_2" parent="." unique_id=2123033460 instance=ExtResource("50_03m2q")]
-position = Vector2(2770, -511)
+position = Vector2(1255, -120)
 
 [node name="Orc_3" parent="." unique_id=1990180398 instance=ExtResource("48_mymtm")]
 position = Vector2(2671, -296)

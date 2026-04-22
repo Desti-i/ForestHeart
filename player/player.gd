@@ -8,7 +8,7 @@ enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 @onready var anim  = $Movements
 @onready var animP = $AnimationPlayer
 @onready var hp_bar = $"../CanvasLayer/Control/hp_bar"
-
+@onready var hp_label = $"../CanvasLayer/Control/hp_bar/Label"
 # ── Здоровье ──────────────────────────────────────────────
 var max_health:     float = 100
 var current_health: float = 100
@@ -52,6 +52,16 @@ func _ready() -> void:
 		hp_bar.max_value = max_health
 		hp_bar.min_value = 0
 		hp_bar.value     = current_health
+	
+	# Отладка: проверяем, найден ли Label
+	if hp_label:
+		print("✅ hp_label найден!")
+		hp_label.text = "100/100"  # Тестовый текст
+		hp_label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
+	else:
+		print("❌ hp_label НЕ найден! Проверь путь.")
+	
+	_update_hp_label()
 
 func _physics_process(delta: float) -> void:
 	_dash_cd = max(0.0, _dash_cd - delta)
@@ -120,7 +130,7 @@ func _physics_process(delta: float) -> void:
 		if regen_timer >= regen_delay:
 			heal(regen_amount)
 			regen_timer = 0.0
-	print("Stamina: ", stamina, " Speed: ", current_speed)
+	#print("Stamina: ", stamina, " Speed: ", current_speed)
 
 func _start_dash() -> void:
 	_dash_dir     = input_direction if input_direction != Vector2.ZERO else _facing_vector()
@@ -170,6 +180,10 @@ func take_damage(incoming_damage: float) -> void:
 	if hp_bar:
 		hp_bar.value = current_health
 	health_changed.emit(current_health, max_health)
+	
+	# Обновляем текстовое значение
+	_update_hp_label()
+	
 	modulate = Color.RED
 	await get_tree().create_timer(0.1).timeout
 	modulate = Color.WHITE
@@ -181,6 +195,9 @@ func heal(amount: float) -> void:
 	if hp_bar:
 		hp_bar.value = current_health
 	health_changed.emit(current_health, max_health)
+	
+	# Обновляем текстовое значение
+	_update_hp_label()
 
 func die() -> void:
 	await get_tree().create_timer(0.5).timeout
@@ -197,3 +214,39 @@ func get_direction_string() -> String:
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.has_method("take_damage"):
 		body.take_damage(damage)
+
+func _update_hp_label() -> void:
+	if hp_label:
+		hp_label.text = str(int(current_health)) + " / " + str(int(max_health))
+		
+		# Очищаем старые стили (на всякий случай)
+		hp_label.remove_theme_color_override("font_color")
+		hp_label.remove_theme_color_override("font_outline_color")
+		hp_label.remove_theme_constant_override("outline_size")
+		
+		# Устанавливаем обводку
+		hp_label.add_theme_constant_override("outline_size", 2)
+		hp_label.add_theme_color_override("font_outline_color", Color.BLACK)
+		
+		# Меняем цвет в зависимости от здоровья
+		var health_percent = current_health / max_health
+		
+		if health_percent <= 0.2:
+			# Критическое здоровье (красный)
+			hp_label.add_theme_color_override("font_color", Color(1.0, 0.2, 0.2))
+		elif health_percent <= 0.5:
+			# Ранен (оранжевый)
+			hp_label.add_theme_color_override("font_color", Color(1.0, 0.7, 0.2))
+		else:
+			# Здоров (белый)
+			hp_label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
+		
+		# Добавляем тень для красоты
+		hp_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.5))
+		hp_label.add_theme_constant_override("shadow_offset_x", 1)
+		hp_label.add_theme_constant_override("shadow_offset_y", 1)
+		
+		# Небольшая анимация при изменении HP
+		hp_label.scale = Vector2(1.1, 1.1)
+		await get_tree().create_timer(0.1).timeout
+		hp_label.scale = Vector2(1.0, 1.0)

@@ -1,40 +1,74 @@
 extends CharacterBody2D
 
 signal health_changed(new_health, max_health)
+signal stamina_changed(cur: float, max_val: float)
 
 enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 
-@onready var anim = $Movements
+@onready var anim  = $Movements
 @onready var animP = $AnimationPlayer
 @onready var hp_bar = $"../CanvasLayer/Control/hp_bar"
 
-var max_health: float = 100
+# ── Здоровье ──────────────────────────────────────────────
+var max_health:     float = 100
 var current_health: float = 100
-var damage: float = 5
+var damage:         float = 5
 
 const WALK_SPEED: float = 100.0
-const RUN_SPEED: float = 200.0
+const RUN_SPEED:  float = 200.0
 
 var current_speed: float = WALK_SPEED
-var idle_dir: DIRECTION = DIRECTION.DOWN
+var idle_dir:      DIRECTION = DIRECTION.DOWN
 var input_direction := Vector2.ZERO
-var can_move: bool = true
+var can_move:      bool = true
 var is_invincible: bool = false
 
-# --- РЕГЕН ---
-var regen_delay: float = 3.0
+# ── Реген ─────────────────────────────────────────────────
+var regen_delay:  float = 3.0
 var regen_amount: float = 20
-var regen_timer: float = 0.0
+var regen_timer:  float = 0.0
 
-func _ready():
+# ── Стамина ───────────────────────────────────────────────
+@export var max_stamina:       float = 100.0
+@export var stamina_regen:     float = 22.0
+@export var run_stamina_cost:  float = 16.0
+@export var dash_stamina_cost: float = 25.0
+var stamina: float
+
+# ── Рывок (Ctrl) ──────────────────────────────────────────
+@export var dash_speed:    float = 480.0
+@export var dash_duration: float = 0.16
+@export var dash_cooldown: float = 0.9
+
+var _dashing:     bool    = false
+var _dash_timer:  float   = 0.0
+var _dash_cd:     float   = 0.0
+var _dash_dir:    Vector2 = Vector2.ZERO
+
+func _ready() -> void:
 	current_health = max_health
-	
+	stamina        = max_stamina
 	if hp_bar:
 		hp_bar.max_value = max_health
 		hp_bar.min_value = 0
-		hp_bar.value = current_health
+		hp_bar.value     = current_health
 
 func _physics_process(delta: float) -> void:
+	_dash_cd = max(0.0, _dash_cd - delta)
+
+	# Рывок
+	if _dashing:
+		_dash_timer -= delta
+		velocity = _dash_dir * dash_speed
+		move_and_slide()
+		modulate.a = 0.5 if int(_dash_timer * 20) % 2 == 0 else 1.0
+		if _dash_timer <= 0.0:
+			_dashing = false
+			is_invincible = false
+			modulate.a = 1.0
+			velocity = Vector2.ZERO
+		return
+
 	if !can_move:
 		return
 
@@ -43,79 +77,109 @@ func _physics_process(delta: float) -> void:
 		handle_attack()
 		return
 
+	# Рывок
+	if Input.is_action_just_pressed("dash") and _dash_cd <= 0.0 and stamina >= dash_stamina_cost and stamina > max_stamina * 0.1:
+		_start_dash()
+		return
+
 	# Движение
 	input_direction = Input.get_vector("left", "right", "up", "down").normalized()
-	current_speed = RUN_SPEED if Input.is_action_pressed("run") else WALK_SPEED
+	
+	# === НОВАЯ ЛОГИКА ===
+	var is_running_key_pressed = Input.is_action_pressed("run") and input_direction != Vector2.ZERO
+	
+	# Тратим стамину если зажат Shift (ВСЕГДА, даже если стамина = 0)
+	if is_running_key_pressed:
+		stamina = max(0.0, stamina - run_stamina_cost * delta)
+		emit_signal("stamina_changed", stamina, max_stamina)
+	
+	# Определяем скорость:
+	# - Бежим если зажат Shift И стамина > 10% от максимума
+	# - Иначе ходьба
+	if is_running_key_pressed and stamina > max_stamina * 0.1:
+		current_speed = RUN_SPEED  # Бег (быстро)
+	else:
+		current_speed = WALK_SPEED  # Ходьба (медленно)
+	
 	velocity = input_direction * current_speed
+	
+	# Реген стамины ТОЛЬКО если Shift НЕ зажат
+	if not is_running_key_pressed:
+		var prev := stamina
+		stamina = min(max_stamina, stamina + stamina_regen * delta)
+		if stamina != prev:
+			emit_signal("stamina_changed", stamina, max_stamina)
+	# =======================
 
 	handle_movements()
 	move_and_slide()
 
-	# --- РЕГЕН ---
+	# Реген HP
 	if current_health > 0 and current_health < max_health:
 		regen_timer += delta
-		
 		if regen_timer >= regen_delay:
 			heal(regen_amount)
-			regen_timer = 0.0  # сбрасываем, чтобы лечило каждые 3 сек
+			regen_timer = 0.0
+	print("Stamina: ", stamina, " Speed: ", current_speed)
+
+func _start_dash() -> void:
+	_dash_dir     = input_direction if input_direction != Vector2.ZERO else _facing_vector()
+	_dashing      = true
+	_dash_timer   = dash_duration
+	_dash_cd      = dash_cooldown
+	stamina      -= dash_stamina_cost
+	is_invincible = true
+	emit_signal("stamina_changed", stamina, max_stamina)
+
+func _facing_vector() -> Vector2:
+	match idle_dir:
+		DIRECTION.DOWN:  return Vector2.DOWN
+		DIRECTION.UP:    return Vector2.UP
+		DIRECTION.LEFT:  return Vector2.LEFT
+		DIRECTION.RIGHT: return Vector2.RIGHT
+	return Vector2.DOWN
 
 func handle_movements() -> void:
 	if input_direction != Vector2.ZERO:
 		if abs(input_direction.x) > abs(input_direction.y):
 			if input_direction.x > 0:
-				anim.play("Right")
-				idle_dir = DIRECTION.RIGHT
+				anim.play("Right"); idle_dir = DIRECTION.RIGHT
 			else:
-				anim.play("Left")
-				idle_dir = DIRECTION.LEFT
+				anim.play("Left");  idle_dir = DIRECTION.LEFT
 		else:
 			if input_direction.y > 0:
-				anim.play("Down")
-				idle_dir = DIRECTION.DOWN
+				anim.play("Down"); idle_dir = DIRECTION.DOWN
 			else:
-				anim.play("Up")
-				idle_dir = DIRECTION.UP
+				anim.play("Up");   idle_dir = DIRECTION.UP
 	else:
-		var anim_name = "idle_" + get_direction_string()
-		anim.play(anim_name)
+		anim.play("idle_" + get_direction_string())
 
 func handle_attack() -> void:
 	can_move = false
 	velocity = Vector2.ZERO
-	var anim_name = "attack_1_" + get_direction_string()
-	animP.play(anim_name)
+	animP.play("attack_1_" + get_direction_string())
 	await animP.animation_finished
 	can_move = true
 
 func take_damage(incoming_damage: float) -> void:
 	if is_invincible:
 		return
-	
 	current_health -= incoming_damage
-	current_health = max(current_health, 0)
-	
-	# ❗ СБРОС ТАЙМЕРА РЕГЕНА
-	regen_timer = 0.0
-	
+	current_health  = max(current_health, 0)
+	regen_timer     = 0.0
 	if hp_bar:
 		hp_bar.value = current_health
-	
 	health_changed.emit(current_health, max_health)
-	
 	modulate = Color.RED
 	await get_tree().create_timer(0.1).timeout
 	modulate = Color.WHITE
-	
 	if current_health <= 0:
 		die()
 
 func heal(amount: float) -> void:
-	current_health += amount
-	current_health = min(current_health, max_health)
-	
+	current_health = min(current_health + amount, max_health)
 	if hp_bar:
 		hp_bar.value = current_health
-	
 	health_changed.emit(current_health, max_health)
 
 func die() -> void:
@@ -124,9 +188,9 @@ func die() -> void:
 
 func get_direction_string() -> String:
 	match idle_dir:
-		DIRECTION.DOWN: return "down"
-		DIRECTION.UP: return "up"
-		DIRECTION.LEFT: return "left"
+		DIRECTION.DOWN:  return "down"
+		DIRECTION.UP:    return "up"
+		DIRECTION.LEFT:  return "left"
 		DIRECTION.RIGHT: return "right"
 	return "down"
 

@@ -53,7 +53,7 @@
 [ext_resource type="PackedScene" uid="uid://e1pvr5xeq1pq" path="res://NPC/starshina.tscn" id="49_j64ij"]
 [ext_resource type="PackedScene" uid="uid://dq8rnl158fhs3" path="res://animals/fox/fox.tscn" id="52_tn8ok"]
 [ext_resource type="PackedScene" uid="uid://bsd32bmuluket" path="res://animals/cat/cat_orange.tscn" id="54_6na36"]
-[ext_resource type="PackedScene" uid="uid://dacbf762c616w" path="res://enemy/Orc/Orc2/Orc_archer.tscn" id="55_s1xfd"]
+[ext_resource type="PackedScene" uid="uid://cbcvjc3lh52nj" path="res://enemy/ammo/arrow/Arrow.tscn" id="55_s1xfd"]
 [ext_resource type="PackedScene" uid="uid://ci3t88uo4qkhq" path="res://enemy/Orc/Orc3/Orc_3.tscn" id="56_6na36"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onb6d"]
@@ -9254,12 +9254,10 @@ position = Vector2(1242, -1068)
 position = Vector2(1005, -1056)
 
 [node name="Orc_3" parent="." unique_id=355327370 instance=ExtResource("56_6na36")]
-position = Vector2(-71, 106)
-shoot_cooldown = 1.0
-
-[node name="Orc_archer" parent="." unique_id=1051792797 instance=ExtResource("55_s1xfd")]
-position = Vector2(-247, 74)
-speed_ammo = 70.0
-shoot_cooldown = 3.0
+position = Vector2(-146, 64)
+use_melee = false
+use_ranged = true
+ranged_range = 10.0
+bullet_scene = ExtResource("55_s1xfd")
 
 [connection signal="child_exiting_tree" from="Starshina" to="Starshina" method="_on_child_exiting_tree"]

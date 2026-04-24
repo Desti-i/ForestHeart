@@ -5,5 +5,5 @@ func enter():
 	var anim_name = "idle_" + enemy.get_direction_string()
 	enemy.anim.play(anim_name)
 
-func update():
+func update(_delta):
 	state_machine.change_state("Chase")

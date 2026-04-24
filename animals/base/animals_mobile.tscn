@@ -6,6 +6,7 @@
 radius = 8.062258
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_wdvpg"]
+resource_local_to_scene = true
 animations = [{
 "frames": [],
 "loop": true,

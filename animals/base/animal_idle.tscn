@@ -1,11 +1,8 @@
 [gd_scene format=3 uid="uid://b00g4ilqcimf4"]
 
-[ext_resource type="Script" uid="uid://daoc7gfpiosdl" path="res://animals/base/animal_idle.gd" id="1_e41gi"]
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_08ux7"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7egah"]
-resource_local_to_scene = true
 animations = [{
 "frames": [],
 "loop": true,
@@ -19,11 +16,12 @@ animations = [{
 }]
 
 [node name="AnimalIdle" type="StaticBody2D" unique_id=1160405329]
-script = ExtResource("1_e41gi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1819264115]
 shape = SubResource("CircleShape2D_08ux7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=799620870]
 sprite_frames = SubResource("SpriteFrames_7egah")
-animation = &"Idle_1"
+animation = &"Idle_2"
+autoplay = "Idle_1"
+frame_progress = 0.2808151

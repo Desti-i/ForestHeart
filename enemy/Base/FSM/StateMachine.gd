@@ -10,7 +10,7 @@ func init(enemy_ref) -> void:  # Инициализация FSM
 		"Idle": $Idle,
 		"Chase": $Chase,
 		"Attack": $Attack,
-		"RangedAttack": $RangedAttack,
+		
 		"Death": $Death
 	}
 	
@@ -26,7 +26,7 @@ func change_state(state_name: String) -> void:  # Функция смены со
 	current_state = states[state_name]
 	current_state.enter()
 
-func update(delta) -> void:
+func update() -> void:
 	if current_state:
-		current_state.update(delta)
+		current_state.update()
 		

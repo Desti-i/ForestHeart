@@ -6,109 +6,22 @@
 [ext_resource type="Script" uid="uid://cl5f0t78e1382" path="res://enemy/Base/FSM/Chase.gd" id="4_bqu1w"]
 [ext_resource type="Script" uid="uid://ck1uqevptvkt7" path="res://enemy/Base/FSM/Attack.gd" id="5_endcf"]
 [ext_resource type="Script" uid="uid://j236rghrxvgi" path="res://enemy/Base/FSM/Death.gd" id="6_2banv"]
-[ext_resource type="Script" uid="uid://ce5g1rn1e0tkm" path="res://enemy/Base/FSM/RangedAttack.gd" id="6_endcf"]
 [ext_resource type="Texture2D" uid="uid://bng0x85go2dky" path="res://iNTERFACE/Sprite-0003.png" id="7_bqu1w"]
 [ext_resource type="Texture2D" uid="uid://ds3q6aaltgei" path="res://iNTERFACE/Sprite-0002 (1).png" id="8_endcf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5t5nu"]
-resource_local_to_scene = true
 height = 34.0
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_endcf"]
-resource_local_to_scene = true
-animations = [{
-"frames": [],
-"loop": true,
-"name": &"Down",
-"speed": 8.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"Left",
-"speed": 8.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"Right",
-"speed": 8.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"Up",
-"speed": 8.0
-}, {
-"frames": [],
-"loop": false,
-"name": &"attack_down",
-"speed": 10.0
-}, {
-"frames": [],
-"loop": false,
-"name": &"attack_left",
-"speed": 10.0
-}, {
-"frames": [],
-"loop": false,
-"name": &"attack_right",
-"speed": 10.0
-}, {
-"frames": [],
-"loop": false,
-"name": &"attack_up",
-"speed": 10.0
-}, {
-"frames": [],
-"loop": false,
-"name": &"death_down",
-"speed": 8.0
-}, {
-"frames": [],
-"loop": false,
-"name": &"death_left",
-"speed": 8.0
-}, {
-"frames": [],
-"loop": false,
-"name": &"death_right",
-"speed": 8.0
-}, {
-"frames": [],
-"loop": false,
-"name": &"death_up",
-"speed": 8.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"idle_down",
-"speed": 4.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"idle_left",
-"speed": 4.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"idle_right",
-"speed": 4.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"idle_up",
-"speed": 4.0
-}]
+[sub_resource type="SpriteFrames" id="SpriteFrames_wc11h"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wc11h"]
-resource_local_to_scene = true
 radius = 72.02777
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6edku"]
-resource_local_to_scene = true
 radius = 8.46
 height = 20.09
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kqgm3"]
-resource_local_to_scene = true
 
 [node name="EnemyBase" type="CharacterBody2D" unique_id=355327370]
 collision_layer = 4
@@ -120,9 +33,7 @@ shape = SubResource("CapsuleShape2D_5t5nu")
 debug_color = Color(0.752089, 0, 0.21516001, 0.41960785)
 
 [node name="Movements" type="AnimatedSprite2D" parent="." unique_id=403867546]
-sprite_frames = SubResource("SpriteFrames_endcf")
-animation = &"attack_down"
-autoplay = "idle_down"
+sprite_frames = SubResource("SpriteFrames_wc11h")
 
 [node name="detector" type="Area2D" parent="." unique_id=963818677]
 collision_layer = 0
@@ -143,9 +54,11 @@ shape = SubResource("CapsuleShape2D_6edku")
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Attack_area" unique_id=954509707]
-position = Vector2(0, 8.595)
+position = Vector2(0, 14)
 shape = SubResource("CircleShape2D_kqgm3")
-disabled = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1423741969]
+root_node = NodePath("../CollisionShape2D")
 
 [node name="StateMachine" type="Node2D" parent="." unique_id=823540589]
 script = ExtResource("2_t2crj")
@@ -160,7 +73,6 @@ script = ExtResource("4_bqu1w")
 script = ExtResource("5_endcf")
 
 [node name="RangedAttack" type="Node2D" parent="StateMachine" unique_id=1083006962]
-script = ExtResource("6_endcf")
 
 [node name="Death" type="Node2D" parent="StateMachine" unique_id=1669259827]
 script = ExtResource("6_2banv")
@@ -176,8 +88,6 @@ max_value = 25.0
 value = 25.0
 texture_under = ExtResource("7_bqu1w")
 texture_progress = ExtResource("8_endcf")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1403558373]
 
 [connection signal="body_entered" from="detector" to="." method="_on_detector_body_entered"]
 [connection signal="body_exited" from="detector" to="." method="_on_detector_body_exited"]

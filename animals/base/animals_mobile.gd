@@ -46,6 +46,7 @@ func _physics_process(delta):
 
 	move_and_slide()
 
+	# рейкаст смотрит вперёд всегда
 	ray.target_position = direction * 15
 
 
@@ -81,7 +82,10 @@ func start_idle():
 # --- ПОВЕДЕНИЕ ---
 
 func pick_new_direction():
-	target_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+	target_direction = Vector2(
+		randf_range(-1, 1),
+		randf_range(-1, 1)
+	).normalized()
 
 
 func avoid_obstacle():

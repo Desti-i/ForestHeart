@@ -1,14 +1,14 @@
 extends State
 
-func update(_delta):
+func update():
 	if enemy.player == null:
 		state_machine.change_state("Idle")
 		return
 		
 	var dir = (enemy.player.position - enemy.position).normalized()
-	#var dist = enemy.position.distance_to(enemy.player.position)
+	var dist = enemy.position.distance_to(enemy.player.position)
 	
-	if enemy.use_ranged and enemy.player_in:
+	if enemy.use_ranged and dist <= enemy.renged_range:
 		state_machine.change_state("RangedAttack")
 		return
 	

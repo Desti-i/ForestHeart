@@ -7,11 +7,19 @@ class_name EnemyBase
 @export var damage: float = 10.0
 @export var speed: float = 60.0
 
+@export var use_melee: bool = true
+@export var use_ranged: bool = false
+
+@export var speed_ammo: float = 20
+#@export var renged_range: float = 0
+@export var shoot_cooldown: float = 1.2
+@export var bullet_scene: PackedScene
+
 # Данные
 @onready var anim = $Movements
 @onready var animP = $AnimationPlayer
 @onready var state_machine = $StateMachine
-@onready var hp_bar = $TextureProgressBar  # Добавь это!
+@onready var hp_bar = $TextureProgressBar
 
 enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 
@@ -33,8 +41,8 @@ func _ready() -> void:
 	
 	state_machine.init(self)
 
-func _physics_process(_delta: float) -> void:
-	state_machine.update()
+func _physics_process(delta: float) -> void:
+	state_machine.update(delta)
 	move_and_slide()
 	
 	# Обновляем позицию HP бара (чтобы всегда был над головой)

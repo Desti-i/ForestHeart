@@ -7,7 +7,7 @@ var state_machine  # Ссылка на FSM
 func enter():  # вход
 	pass
 
-func update():  # логика
+func update(_delta):  # логика
 	pass	
 
 func exit():  # Выход

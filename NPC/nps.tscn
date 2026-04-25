@@ -1,0 +1,131 @@
+[gd_scene format=3 uid="uid://g61rj1s4lhk6"]
+
+[ext_resource type="Script" uid="uid://2my6p37jeog0" path="res://NPC/nps.gd" id="1_r0ded"]
+[ext_resource type="Texture2D" uid="uid://cshyestf26lr6" path="res://NPC/MiniOldMan.png" id="2_2mkxy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r0ded"]
+size = Vector2(14.95845, 17.174517)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v1107"]
+atlas = ExtResource("2_2mkxy")
+region = Rect2(0, 0, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r370b"]
+atlas = ExtResource("2_2mkxy")
+region = Rect2(32, 0, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iic6p"]
+atlas = ExtResource("2_2mkxy")
+region = Rect2(64, 0, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s35rn"]
+atlas = ExtResource("2_2mkxy")
+region = Rect2(96, 0, 32, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m8lyf"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v1107")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r370b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iic6p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s35rn")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_338yd"]
+radius = 52.08935
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r0ded"]
+content_margin_left = 20.0
+content_margin_top = 15.0
+content_margin_right = 20.0
+content_margin_bottom = 15.0
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_fd83g"]
+
+[node name="Nps" type="CharacterBody2D" unique_id=962183908]
+scale = Vector2(1.805, 1.805)
+script = ExtResource("1_r0ded")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1272258675]
+position = Vector2(-0.2770082, 7.479224)
+shape = SubResource("RectangleShape2D_r0ded")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=341612634]
+scale = Vector2(1.3900001, 1.3900001)
+sprite_frames = SubResource("SpriteFrames_m8lyf")
+animation = &"idle"
+frame_progress = 0.9230577
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=353370793]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=283953989]
+position = Vector2(0.55401665, 7.7562327)
+shape = SubResource("CircleShape2D_338yd")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=353910223]
+layer = 3
+follow_viewport_enabled = true
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer" unique_id=567968701]
+custom_minimum_size = Vector2(400, 150)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = -176.0
+offset_bottom = -124.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.145, 0.145)
+theme_override_styles/panel = SubResource("StyleBoxFlat_r0ded")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer" unique_id=1821307802]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameLabel" type="Label" parent="CanvasLayer/PanelContainer/VBoxContainer" unique_id=1326383003]
+layout_mode = 2
+theme = SubResource("Theme_fd83g")
+text = "Старейшина"
+
+[node name="DialogLabel" type="Label" parent="CanvasLayer/PanelContainer/VBoxContainer" unique_id=1724764604]
+layout_mode = 2
+text = "..."
+autowrap_mode = 2
+
+[node name="NextButton" type="Button" parent="CanvasLayer/PanelContainer/VBoxContainer" unique_id=539605021]
+layout_mode = 2
+text = "Далее
+"
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]
+[connection signal="pressed" from="CanvasLayer/PanelContainer/VBoxContainer/NextButton" to="." method="_on_next_button_pressed"]

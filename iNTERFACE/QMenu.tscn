@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c4qqnmbhqfdv0"]
+
+[ext_resource type="Script" uid="uid://342oc7cbrwu" path="res://iNTERFACE/QMenu.gd" id="1_3j6aa"]
+
+[node name="QMenu" type="Control" unique_id=13317859]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_3j6aa")

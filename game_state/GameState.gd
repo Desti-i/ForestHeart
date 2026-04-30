@@ -1,10 +1,9 @@
 extends Node
 
-# ─── Глобальное состояние ────────────────────────────────
 var has_boss_key: bool = false
 var spawn_point_name: String = "SpawnPoint"
 
-# ─── EXP как валюта ──────────────────────────────────────
+# EXP как валюта
 var exp: int = 0
 signal exp_changed(new_amount: int)
 
@@ -20,62 +19,62 @@ func spend_exp(amount: int) -> bool:
 		return true
 	return false
 
-# ─── Оружия ──────────────────────────────────────────────
-# Каждое оружие: { name, damage, anim_prefix, unlocked, cost }
-var weapons: Array = [
+var sword_level: int = 0
+signal sword_upgraded(new_level: int)
+
+var sword_levels: Array = [
 	{
-		"id": "sword_1",
-		"name": "Простой меч",
+		"level": 0,
+		"name": "Меч",
 		"damage": 5.0,
-		"anim_prefix": "attack_1_",
-		"unlocked": true,   # первое оружие доступно сразу
-		"cost": 0
+		"anim_prefix": "attack_1_",   # название анимации для 1 уровня
+		"cost": 0,
+		"color": Color(1.0, 1.0, 1.0),
+		"description": "Обычный меч"
 	},
 	{
-		"id": "sword_2",
-		"name": "Длинный меч",
-		"damage": 12.0,
-		"anim_prefix": "attack_1_",  # пока та же анимация, потом поменяешь
-		"unlocked": false,
-		"cost": 100
+		"level": 1,
+		"name": "Меч",
+		"damage": 7.0,
+		"anim_prefix": "attack_2_",   # название анимации для 2 уровня
+		"cost": 100,
+		"color": Color(1.0, 0.9, 0.2),
+		"description": "Накалённый меч"
 	},
 	{
-		"id": "sword_3",
-		"name": "Боевой топор",
-		"damage": 20.0,
-		"anim_prefix": "attack_1_",
-		"unlocked": false,
-		"cost": 250
+		"level": 2,
+		"name": "Меч",
+		"damage": 10.0,
+		"anim_prefix": "attack_3_",   # название анимации для 3 уровня
+		"cost": 250,
+		"color": Color(0.3, 0.8, 1.0),
+		"description": "Ледяной меч"
 	},
 ]
 
-## Индекс текущего активного оружия
-var active_weapon_index: int = 0
+func get_active_weapon() -> Dictionary:
+	return sword_levels[sword_level]
+
+func can_upgrade_sword() -> bool:
+	return sword_level < sword_levels.size() - 1
+
+func upgrade_sword() -> bool:
+	if not can_upgrade_sword():
+		print("❌ Меч уже максимального уровня!")
+		return false
+	var next = sword_levels[sword_level + 1]
+	if spend_exp(next["cost"]):
+		sword_level += 1
+		print("⚔️ Меч улучшен до уровня:", sword_level)
+		emit_signal("sword_upgraded", sword_level)
+		emit_signal("weapon_changed", get_active_weapon())
+		return true
+	print("❌ Не хватает EXP! Нужно:", next["cost"])
+	return false
 
 signal weapon_changed(weapon: Dictionary)
 
-func get_active_weapon() -> Dictionary:
-	return weapons[active_weapon_index]
-
-func select_weapon(index: int) -> void:
-	if index < 0 or index >= weapons.size():
-		return
-	if not weapons[index]["unlocked"]:
-		print("❌ Оружие заблокировано!")
-		return
-	active_weapon_index = index
-	print("⚔️ Выбрано оружие:", weapons[index]["name"])
-	emit_signal("weapon_changed", weapons[index])
-
-func unlock_weapon(index: int) -> bool:
-	var w = weapons[index]
-	if w["unlocked"]:
-		print("Уже разблокировано!")
-		return false
-	if spend_exp(w["cost"]):
-		weapons[index]["unlocked"] = true
-		print("🔓 Разблокировано:", w["name"])
-		return true
-	else:
-		print("❌ Не хватает EXP! Нужно:", w["cost"])
-		return false
+# Заглушки для совместимости
+func select_weapon(_index: int) -> void: pass
+func unlock_weapon(_index: int) -> bool: return false
+var active_weapon_index: int = 0

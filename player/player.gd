@@ -65,6 +65,7 @@ func _ready() -> void:
 
 func _on_weapon_changed(weapon: Dictionary) -> void:
 	damage = weapon["damage"]
+	print("⚔️ Меч улучшен! Цвет:", weapon["color"])
 
 func _physics_process(delta: float) -> void:
 	_dash_cd = max(0.0, _dash_cd - delta)
@@ -172,6 +173,7 @@ func handle_attack() -> void:
 	can_move = false
 	velocity = Vector2.ZERO
 	var weapon = GameState.get_active_weapon()
+	# Используем anim_prefix из GameState
 	animP.play(weapon["anim_prefix"] + get_direction_string())
 	await animP.animation_finished
 	can_move = true
@@ -200,8 +202,39 @@ func heal(amount: float) -> void:
 	_update_hp_label()
 
 func die() -> void:
-	await get_tree().create_timer(0.5).timeout
-	get_tree().change_scene_to_file("res://menu/menu.tscn")
+	if current_health > 0:
+		return
+	
+	print("💀 Игрок умер!")
+	
+	# Отключаем движение и ввод
+	set_physics_process(false)
+	set_process_input(false)
+	can_move = false
+	velocity = Vector2.ZERO
+	
+	# Отключаем сигналы
+	if GameState and GameState.weapon_changed.is_connected(_on_weapon_changed):
+		GameState.weapon_changed.disconnect(_on_weapon_changed)
+	
+	# Прячем меню
+	if q_menu:
+		q_menu.visible = false
+	
+	# Проверяем анимацию смерти в AnimatedSprite2D (Movements)
+	if anim and anim.sprite_frames.has_animation("death"):
+		print("💀 Найдена анимация смерти в Movements, проигрываем")
+		anim.play("death")
+		
+		# Ждём окончания анимации или просто таймер
+		await get_tree().create_timer(3.4).timeout
+	else:
+		print("💀 Анимации смерти нет, просто ждём")
+		await get_tree().create_timer(1.0).timeout
+	
+	# Смена сцены
+	if is_inside_tree():
+		get_tree().change_scene_to_file("res://menu/menu.tscn")
 
 func get_direction_string() -> String:
 	match idle_dir:

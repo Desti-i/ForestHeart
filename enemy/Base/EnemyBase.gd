@@ -6,6 +6,7 @@ class_name EnemyBase
 @export var max_health: float = 50.0
 @export var damage: float = 10.0
 @export var speed: float = 60.0
+@export var exp_reward: int = 20 
 
 @export var use_melee: bool = true
 @export var use_ranged: bool = false

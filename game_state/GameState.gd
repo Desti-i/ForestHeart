@@ -160,3 +160,95 @@ func upgrade_fire_magic() -> bool:
 
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
+	
+	# ─── АКТИВНАЯ МАГИЯ ──────────────────────────────────────
+# "fire" или "water" - какая магия сейчас активна
+var active_magic: String = "fire"
+signal active_magic_changed(magic_type: String)
+
+func set_active_magic(type: String) -> void:
+	active_magic = type
+	print("✨ Активная магия:", type)
+	emit_signal("active_magic_changed", type)
+
+func get_active_magic_level() -> int:
+	match active_magic:
+		"fire":  return fire_magic_level
+		"water": return water_magic_level
+	return 0
+
+# ─── МАГИЯ ВОДЫ ──────────────────────────────────────────
+var water_magic_unlocked: bool = false
+var water_magic_level: int = 0
+
+signal water_magic_unlocked_signal()
+signal water_magic_upgraded(new_level: int)
+
+var water_magic_levels: Array = [
+	{
+		"level": 0, "name": "Не получена",
+		"damage": 0.0, "cost": 0,
+		"color": Color(0.3, 0.6, 1.0),
+		"description": "Выпадает с водных мобов",
+		"radius": 0.0, "speed": 0.0
+	},
+	{
+		"level": 1, "name": "Водяной шар",
+		"damage": 15.0, "cost": 0,
+		"color": Color(0.2, 0.7, 1.0),
+		"description": "Водяной снаряд",
+		"radius": 8.0, "speed": 240.0
+	},
+	{
+		"level": 2, "name": "Водяной шар II",
+		"damage": 30.0, "cost": 200,
+		"color": Color(0.0, 0.5, 1.0),
+		"description": "Мощный поток воды",
+		"radius": 13.0, "speed": 300.0
+	},
+	{
+		"level": 3, "name": "Водяной шар III",
+		"damage": 55.0, "cost": 400,
+		"color": Color(0.0, 0.3, 0.9),
+		"description": "Волна цунами",
+		"radius": 18.0, "speed": 360.0
+	},
+	{
+		"level": 4, "name": "Океанская мощь",
+		"damage": 90.0, "cost": 700,
+		"color": Color(0.0, 0.1, 0.8),
+		"description": "Сила древнего океана",
+		"radius": 25.0, "speed": 420.0
+	},
+]
+
+func get_water_magic() -> Dictionary:
+	return water_magic_levels[max(water_magic_level, 0)]
+
+func can_upgrade_water() -> bool:
+	return water_magic_level < water_magic_levels.size() - 1
+
+func unlock_water_magic() -> void:
+	if water_magic_unlocked:
+		return
+	water_magic_unlocked = true
+	water_magic_level = 1
+	print("💧 Магия воды получена!")
+	emit_signal("water_magic_unlocked_signal")
+	emit_signal("water_magic_upgraded", water_magic_level)
+
+func upgrade_water_magic() -> bool:
+	if not water_magic_unlocked:
+		return false
+	if not can_upgrade_water():
+		print("💧 Магия воды максимального уровня!")
+		return false
+	var next_level = water_magic_level + 1
+	var cost = water_magic_levels[next_level]["cost"]
+	if spend_exp(cost):
+		water_magic_level = next_level
+		print("💧 Магия воды улучшена до уровня:", water_magic_level)
+		emit_signal("water_magic_upgraded", water_magic_level)
+		return true
+	print("❌ Не хватает EXP! Нужно:", cost)
+	return false

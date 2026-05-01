@@ -101,7 +101,7 @@ func _physics_process(delta: float) -> void:
 
 	# F — магия огня
 	if Input.is_action_just_pressed("fire_magic"):
-		_cast_fire()
+		_cast_magic()  # ← вызываем общую функцию
 		return
 
 	# Пробел — атака мечом
@@ -140,31 +140,61 @@ func _physics_process(delta: float) -> void:
 			heal(regen_amount)
 			regen_timer = 0.0
 
+
 # ── Магия огня ────────────────────────────────────────────
+func _cast_magic() -> void:
+	match GameState.active_magic:
+		"fire":  _cast_fire()
+		"water": _cast_water()
+
 func _cast_fire() -> void:
 	if GameState.fire_magic_level == 0:
 		_show_hint("🔥 Магия не открыта! Открой в меню Q")
 		return
 	if _magic_cd > 0.0:
-		_show_hint("⏳ Перезарядка: " + str(snapped(_magic_cd, 0.1)) + "с")
+		_show_hint("⏳ " + str(snapped(_magic_cd, 0.1)) + "с")
 		return
 
 	_magic_cd = _magic_cd_max
-
-	# Направление — куда смотрит игрок
 	var dir = _facing_vector()
+	var lvl = GameState.fire_magic_level
 
-	# Создаём огненный шар
+	if lvl == 4:
+		# Три шара веером
+		var angles = [-0.3, 0.0, 0.3]
+		for a in angles:
+			var rotated_dir = dir.rotated(a)
+			_spawn_fireball(lvl, rotated_dir)
+	else:
+		_spawn_fireball(lvl, dir)
+
+func _spawn_fireball(lvl: int, dir: Vector2) -> void:
 	var fireball_script = load("res://magic/FireBall.gd")
 	var fb = Area2D.new()
 	fb.set_script(fireball_script)
 	fb.global_position = global_position + dir * 20.0
 	fb.z_index = 10
 	get_parent().add_child(fb)
-	fb.setup(GameState.fire_magic_level, dir)
+	fb.setup(lvl, dir)
 
-	print("🔥 Выпущен огненный шар уровня", GameState.fire_magic_level, "в направлении", dir)
+func _cast_water() -> void:
+	if not GameState.water_magic_unlocked:
+		_show_hint("💧 Магия воды не получена!")
+		return
+	if _magic_cd > 0.0:
+		_show_hint("⏳ " + str(snapped(_magic_cd, 0.1)) + "с")
+		return
 
+	_magic_cd = _magic_cd_max
+	var dir = _facing_vector()
+	var water_script = load("res://magic/WaterBall.gd")
+	var wb = Area2D.new()
+	wb.set_script(water_script)
+	wb.global_position = global_position + dir * 20.0
+	wb.z_index = 10
+	get_parent().add_child(wb)
+	wb.setup(GameState.water_magic_level, dir)
+	
 func _show_hint(msg: String) -> void:
 	var lbl := Label.new()
 	lbl.text = msg

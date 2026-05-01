@@ -7,9 +7,9 @@ enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 
 @onready var anim  = $Movements
 @onready var animP = $AnimationPlayer
-@onready var hp_bar = $"../CanvasLayer/Control/hp_bar"
+@onready var hp_bar   = $"../CanvasLayer/Control/hp_bar"
 @onready var hp_label = $"../CanvasLayer/Control/hp_bar/Label"
-@onready var q_menu = $"../CanvasLayer/QMenu"
+@onready var q_menu   = $"../CanvasLayer/QMenu"
 
 var max_health:     float = 100
 var current_health: float = 100
@@ -18,12 +18,12 @@ var damage:         float = 5.0
 const WALK_SPEED: float = 100.0
 const RUN_SPEED:  float = 200.0
 
-var current_speed: float = WALK_SPEED
-var idle_dir:      DIRECTION = DIRECTION.DOWN
-var input_direction := Vector2.ZERO
-var can_move:      bool = true
-var is_invincible: bool = false
-var _q_menu_open:  bool = false
+var current_speed:    float     = WALK_SPEED
+var idle_dir:         DIRECTION = DIRECTION.DOWN
+var input_direction   := Vector2.ZERO
+var can_move:         bool      = true
+var is_invincible:    bool      = false
+var _q_menu_open:     bool      = false
 
 var regen_delay:  float = 3.0
 var regen_amount: float = 20
@@ -39,10 +39,14 @@ var stamina: float
 @export var dash_duration: float = 0.16
 @export var dash_cooldown: float = 0.9
 
-var _dashing:     bool    = false
-var _dash_timer:  float   = 0.0
-var _dash_cd:     float   = 0.0
-var _dash_dir:    Vector2 = Vector2.ZERO
+var _dashing:    bool    = false
+var _dash_timer: float   = 0.0
+var _dash_cd:    float   = 0.0
+var _dash_dir:   Vector2 = Vector2.ZERO
+
+# ── Кулдаун магии ─────────────────────────────────────────
+var _magic_cd:     float = 0.0
+var _magic_cd_max: float = 0.8   # секунды между выстрелами
 
 func _ready() -> void:
 	current_health = max_health
@@ -65,23 +69,26 @@ func _ready() -> void:
 
 func _on_weapon_changed(weapon: Dictionary) -> void:
 	damage = weapon["damage"]
-	print("⚔️ Меч улучшен! Цвет:", weapon["color"])
+	print("⚔️ Меч улучшен! Урон:", weapon["damage"])
 
 func _physics_process(delta: float) -> void:
-	_dash_cd = max(0.0, _dash_cd - delta)
+	_dash_cd  = max(0.0, _dash_cd  - delta)
+	_magic_cd = max(0.0, _magic_cd - delta)
 
+	# Рывок
 	if _dashing:
 		_dash_timer -= delta
 		velocity = _dash_dir * dash_speed
 		move_and_slide()
 		modulate.a = 0.5 if int(_dash_timer * 20) % 2 == 0 else 1.0
 		if _dash_timer <= 0.0:
-			_dashing = false
+			_dashing     = false
 			is_invincible = false
-			modulate.a = 1.0
-			velocity = Vector2.ZERO
+			modulate.a   = 1.0
+			velocity     = Vector2.ZERO
 		return
 
+	# Q — меню
 	if Input.is_action_just_pressed("open_menu"):
 		_toggle_q_menu()
 		return
@@ -92,29 +99,33 @@ func _physics_process(delta: float) -> void:
 	if !can_move:
 		return
 
+	# F — магия огня
+	if Input.is_action_just_pressed("fire_magic"):
+		_cast_fire()
+		return
+
+	# Пробел — атака мечом
 	if Input.is_action_just_pressed("atack"):
 		handle_attack()
 		return
 
+	# Ctrl — рывок
 	if Input.is_action_just_pressed("dash") and _dash_cd <= 0.0 and stamina >= dash_stamina_cost and stamina > max_stamina * 0.1:
 		_start_dash()
 		return
 
+	# Движение
 	input_direction = Input.get_vector("left", "right", "up", "down").normalized()
-	var is_running_key_pressed = Input.is_action_pressed("run") and input_direction != Vector2.ZERO
+	var running = Input.is_action_pressed("run") and input_direction != Vector2.ZERO
 
-	if is_running_key_pressed:
+	if running:
 		stamina = max(0.0, stamina - run_stamina_cost * delta)
 		emit_signal("stamina_changed", stamina, max_stamina)
 
-	if is_running_key_pressed and stamina > max_stamina * 0.1:
-		current_speed = RUN_SPEED
-	else:
-		current_speed = WALK_SPEED
-
+	current_speed = RUN_SPEED if (running and stamina > max_stamina * 0.1) else WALK_SPEED
 	velocity = input_direction * current_speed
 
-	if not is_running_key_pressed:
+	if not running:
 		var prev := stamina
 		stamina = min(max_stamina, stamina + stamina_regen * delta)
 		if stamina != prev:
@@ -129,6 +140,47 @@ func _physics_process(delta: float) -> void:
 			heal(regen_amount)
 			regen_timer = 0.0
 
+# ── Магия огня ────────────────────────────────────────────
+func _cast_fire() -> void:
+	if GameState.fire_magic_level == 0:
+		_show_hint("🔥 Магия не открыта! Открой в меню Q")
+		return
+	if _magic_cd > 0.0:
+		_show_hint("⏳ Перезарядка: " + str(snapped(_magic_cd, 0.1)) + "с")
+		return
+
+	_magic_cd = _magic_cd_max
+
+	# Направление — куда смотрит игрок
+	var dir = _facing_vector()
+
+	# Создаём огненный шар
+	var fireball_script = load("res://magic/FireBall.gd")
+	var fb = Area2D.new()
+	fb.set_script(fireball_script)
+	fb.global_position = global_position + dir * 20.0
+	fb.z_index = 10
+	get_parent().add_child(fb)
+	fb.setup(GameState.fire_magic_level, dir)
+
+	print("🔥 Выпущен огненный шар уровня", GameState.fire_magic_level, "в направлении", dir)
+
+func _show_hint(msg: String) -> void:
+	var lbl := Label.new()
+	lbl.text = msg
+	lbl.add_theme_color_override("font_color", Color.ORANGE)
+	lbl.add_theme_constant_override("outline_size", 2)
+	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
+	lbl.add_theme_font_size_override("font_size", 15)
+	lbl.position = global_position + Vector2(-80, -70)
+	lbl.z_index = 100
+	get_parent().add_child(lbl)
+	var tw = create_tween()
+	tw.tween_property(lbl, "position:y", lbl.position.y - 30, 1.2)
+	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 1.2)
+	tw.tween_callback(lbl.queue_free)
+
+# ── Меню Q ────────────────────────────────────────────────
 func _toggle_q_menu() -> void:
 	if q_menu:
 		_q_menu_open = !_q_menu_open
@@ -171,9 +223,8 @@ func handle_movements() -> void:
 
 func handle_attack() -> void:
 	can_move = false
-	velocity = Vector2.ZERO
+	velocity  = Vector2.ZERO
 	var weapon = GameState.get_active_weapon()
-	# Используем anim_prefix из GameState
 	animP.play(weapon["anim_prefix"] + get_direction_string())
 	await animP.animation_finished
 	can_move = true
@@ -204,35 +255,20 @@ func heal(amount: float) -> void:
 func die() -> void:
 	if current_health > 0:
 		return
-	
 	print("💀 Игрок умер!")
-	
-	# Отключаем движение и ввод
 	set_physics_process(false)
 	set_process_input(false)
 	can_move = false
 	velocity = Vector2.ZERO
-	
-	# Отключаем сигналы
-	if GameState and GameState.weapon_changed.is_connected(_on_weapon_changed):
+	if GameState.weapon_changed.is_connected(_on_weapon_changed):
 		GameState.weapon_changed.disconnect(_on_weapon_changed)
-	
-	# Прячем меню
 	if q_menu:
 		q_menu.visible = false
-	
-	# Проверяем анимацию смерти в AnimatedSprite2D (Movements)
 	if anim and anim.sprite_frames.has_animation("death"):
-		print("💀 Найдена анимация смерти в Movements, проигрываем")
 		anim.play("death")
-		
-		# Ждём окончания анимации или просто таймер
 		await get_tree().create_timer(3.4).timeout
 	else:
-		print("💀 Анимации смерти нет, просто ждём")
 		await get_tree().create_timer(1.0).timeout
-	
-	# Смена сцены
 	if is_inside_tree():
 		get_tree().change_scene_to_file("res://menu/menu.tscn")
 

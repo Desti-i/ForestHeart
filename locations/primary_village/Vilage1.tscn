@@ -9279,7 +9279,7 @@ exp_reward = 200
 
 [node name="Orc_archer2" parent="." unique_id=1978746734 instance=ExtResource("55_6na36")]
 position = Vector2(723, -975)
-exp_reward = 150
+exp_reward = 1000
 
 [node name="Orc_archer3" parent="." unique_id=1973782560 instance=ExtResource("55_6na36")]
 position = Vector2(933, -915)
@@ -9287,6 +9287,8 @@ exp_reward = 200
 
 [node name="Orc_archer4" parent="." unique_id=1699659660 instance=ExtResource("55_6na36")]
 position = Vector2(548, -853)
+health = 15.0
+max_health = 15.0
 exp_reward = 150
 
 [node name="BGMusic" type="AudioStreamPlayer" parent="." unique_id=544814300]

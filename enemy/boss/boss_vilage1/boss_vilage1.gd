@@ -1,0 +1,19 @@
+extends EnemyBase
+
+@export var damage_att_1: float
+@export var damage_att_2: float
+@export var range_shot: float
+
+var phase: float = 1
+
+func take_damage(amount: float):
+	super(amount)
+	
+	if health <= max_health * 0.5 and phase == 1:
+		phase2()
+		
+func phase2():
+	phase = 2
+	
+	speed *= 1.5
+	shoot_cooldown *= 0.7 

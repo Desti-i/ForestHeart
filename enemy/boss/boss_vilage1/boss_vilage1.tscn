@@ -1,0 +1,142 @@
+[gd_scene format=3 uid="uid://c7pr0xu72a5ti"]
+
+[ext_resource type="PackedScene" uid="uid://c0nhbg6rqs1p8" path="res://enemy/Base/EnemyBase.tscn" id="1_g22wy"]
+[ext_resource type="Script" uid="uid://bj0qkjyeynxcl" path="res://enemy/boss/boss_vilage1/boss_vilage1.gd" id="2_8pwrk"]
+[ext_resource type="Script" uid="uid://jsf4bbtp4tx0" path="res://enemy/boss/boss_vilage1/BossChase.gd" id="2_wem20"]
+[ext_resource type="Script" uid="uid://byg3oy4n35gkk" path="res://enemy/boss/boss_vilage1/Special_attack_1.gd" id="3_7aiw8"]
+[ext_resource type="Script" uid="uid://b4l7frlctk0cu" path="res://enemy/boss/boss_vilage1/Special_attack_2.gd" id="4_8pwrk"]
+[ext_resource type="Script" uid="uid://dbennlh76bme5" path="res://enemy/boss/boss_vilage1/AttackSelect.gd" id="6_4lv3y"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4lv3y"]
+resource_local_to_scene = true
+height = 34.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c44mc"]
+resource_local_to_scene = true
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"Down",
+"speed": 8.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"Left",
+"speed": 8.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"Right",
+"speed": 8.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"Up",
+"speed": 8.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"attack_down",
+"speed": 10.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"attack_left",
+"speed": 10.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"attack_right",
+"speed": 10.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"attack_up",
+"speed": 10.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"death_down",
+"speed": 8.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"death_left",
+"speed": 8.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"death_right",
+"speed": 8.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"death_up",
+"speed": 8.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_down",
+"speed": 4.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_left",
+"speed": 4.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_right",
+"speed": 4.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_up",
+"speed": 4.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ek0g2"]
+resource_local_to_scene = true
+radius = 72.02777
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7mbgb"]
+resource_local_to_scene = true
+radius = 8.46
+height = 20.09
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xm45m"]
+resource_local_to_scene = true
+
+[node name="boss_vilage1" unique_id=355327370 instance=ExtResource("1_g22wy")]
+script = ExtResource("2_8pwrk")
+damage_att_1 = 0.0
+damage_att_2 = 0.0
+range_shot = 0.0
+use_melee = false
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=1468184344]
+shape = SubResource("CapsuleShape2D_4lv3y")
+
+[node name="Movements" parent="." index="1" unique_id=403867546]
+sprite_frames = SubResource("SpriteFrames_c44mc")
+
+[node name="CollisionShape2D" parent="detector" parent_id_path=PackedInt32Array(963818677) index="0" unique_id=766399847]
+shape = SubResource("CircleShape2D_ek0g2")
+
+[node name="CollisionShape2D" parent="Attack_zone" parent_id_path=PackedInt32Array(1428366797) index="0" unique_id=784964863]
+shape = SubResource("CapsuleShape2D_7mbgb")
+
+[node name="CollisionShape2D" parent="Attack_area" parent_id_path=PackedInt32Array(1858617201) index="0" unique_id=954509707]
+shape = SubResource("CircleShape2D_xm45m")
+
+[node name="Chase" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="1" unique_id=393080123]
+script = ExtResource("2_wem20")
+
+[node name="Special_attack_1" type="Node2D" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="5" unique_id=780791270]
+script = ExtResource("3_7aiw8")
+
+[node name="Special_attack_2" type="Node2D" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="6" unique_id=397226635]
+script = ExtResource("4_8pwrk")
+
+[node name="AttackSelect" type="Node2D" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="7" unique_id=1161341449]
+script = ExtResource("6_4lv3y")

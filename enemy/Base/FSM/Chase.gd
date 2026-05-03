@@ -1,4 +1,5 @@
 extends State
+class_name Chase
 
 func update(_delta):
 	if enemy.player == null:
@@ -6,7 +7,6 @@ func update(_delta):
 		return
 		
 	var dir = (enemy.player.position - enemy.position).normalized()
-	#var dist = enemy.position.distance_to(enemy.player.position)
 	
 	if enemy.use_ranged and enemy.player_in:
 		state_machine.change_state("RangedAttack")

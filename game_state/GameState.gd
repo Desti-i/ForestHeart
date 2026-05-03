@@ -252,3 +252,47 @@ func upgrade_water_magic() -> bool:
 		return true
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
+	# ─── КВЕСТЫ ──────────────────────────────────────────────
+enum QuestState { NOT_TAKEN, ACTIVE, COMPLETED, HANDED_IN }
+
+var quest_kill_boars: QuestState = QuestState.NOT_TAKEN
+var boars_killed: int = 0
+var boars_needed: int = 10
+
+signal quest_updated()
+
+func start_quest_kill_boars() -> void:
+	if quest_kill_boars != QuestState.NOT_TAKEN:
+		return
+	quest_kill_boars = QuestState.ACTIVE
+	boars_killed = 0
+	print("📜 Квест начат: Убей 10 кабанов!")
+	emit_signal("quest_updated")
+
+func register_boar_kill() -> void:
+	if quest_kill_boars != QuestState.ACTIVE:
+		return
+	boars_killed += 1
+	print("🐗 Кабанов убито:", boars_killed, "/", boars_needed)
+	emit_signal("quest_updated")
+	if boars_killed >= boars_needed:
+		quest_kill_boars = QuestState.COMPLETED
+		print("✅ Квест выполнен! Вернись к старейшине!")
+		emit_signal("quest_updated")
+
+func hand_in_quest_kill_boars() -> bool:
+	if quest_kill_boars != QuestState.COMPLETED:
+		return false
+	quest_kill_boars = QuestState.HANDED_IN
+	add_exp(300)
+	print("🎉 Квест сдан! +300 EXP!")
+	emit_signal("quest_updated")
+	return true
+	
+func abandon_quest_kill_boars() -> void:
+	if quest_kill_boars != QuestState.ACTIVE:
+		return
+	quest_kill_boars = QuestState.NOT_TAKEN
+	boars_killed = 0
+	print("❌ Квест отменён")
+	emit_signal("quest_updated")

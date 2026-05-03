@@ -31,7 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://d34nl6sny043a" path="res://assets_0/Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Buildings/Wood_Tower/Wood_Tower_Purple.png" id="23_1267v"]
 [ext_resource type="Texture2D" uid="uid://wgnkhxo6uion" path="res://assets_0/TILESET VILLAGE TOP DOWN/GRASS DETAIL 5 - DAY.png" id="24_3w1ti"]
 [ext_resource type="Texture2D" uid="uid://eavn2iifghs4" path="res://assets_0/TILESET VILLAGE TOP DOWN/PIT - DAY.png" id="24_fuefb"]
-[ext_resource type="PackedScene" path="res://iNTERFACE/QMenu.tscn" id="24_jv868"]
+[ext_resource type="PackedScene" uid="uid://c4qqnmbhqfdv0" path="res://iNTERFACE/QMenu.tscn" id="24_jv868"]
 [ext_resource type="Texture2D" uid="uid://drm0kwncjjac4" path="res://assets_0/TILESET VILLAGE TOP DOWN/Sprite-decor.png" id="24_mymtm"]
 [ext_resource type="Texture2D" uid="uid://cwmhca1c70xkd" path="res://assets_0/TILESET VILLAGE TOP DOWN/GRASS DETAIL 4 - DAY.png" id="25_a11uh"]
 [ext_resource type="PackedScene" uid="uid://cqsqmkqeedok4" path="res://player/Player.tscn" id="25_j64ij"]
@@ -59,6 +59,7 @@
 [ext_resource type="PackedScene" uid="uid://3vi0ubdpli5a" path="res://portal/Portal.tscn" id="56_6na36"]
 [ext_resource type="AudioStream" uid="uid://bhypob4qlfqk2" path="res://Music/449359103103a80.mp3" id="58_am1wp"]
 [ext_resource type="AudioStream" uid="uid://d308wnakdefqj" path="res://Music/1774464752.mp3" id="59_eyrn7"]
+[ext_resource type="PackedScene" uid="uid://bayjlmyeofonw" path="res://enemy/Spawner.tscn" id="60_k4j2w"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onb6d"]
 texture = ExtResource("1_6ql0f")
@@ -9266,33 +9267,39 @@ position = Vector2(1005, -1056)
 
 [node name="Nps" parent="." unique_id=962183908 groups=["player"] instance=ExtResource("55_s1xfd")]
 position = Vector2(413, -456)
-npc_name = null
-dialog_lines = null
 
 [node name="Portal" parent="." unique_id=863595973 instance=ExtResource("56_6na36")]
 z_index = 1
 position = Vector2(491, -478)
-
-[node name="Orc_archer" parent="." unique_id=355327370 instance=ExtResource("55_6na36")]
-position = Vector2(494, -1048)
-exp_reward = 200
-
-[node name="Orc_archer2" parent="." unique_id=1978746734 instance=ExtResource("55_6na36")]
-position = Vector2(723, -975)
-exp_reward = 1000
-
-[node name="Orc_archer3" parent="." unique_id=1973782560 instance=ExtResource("55_6na36")]
-position = Vector2(933, -915)
-exp_reward = 200
-
-[node name="Orc_archer4" parent="." unique_id=1699659660 instance=ExtResource("55_6na36")]
-position = Vector2(548, -853)
-max_health = 15.0
-exp_reward = 150
 
 [node name="BGMusic" type="AudioStreamPlayer" parent="." unique_id=544814300]
 stream = ExtResource("58_am1wp")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1064877412]
 stream = ExtResource("59_eyrn7")
-autoplay = true
+
+[node name="Spawner" parent="." unique_id=1258643216 groups=["boar"] instance=ExtResource("60_k4j2w")]
+position = Vector2(-1582.3588, -1164.8042)
+enemy_scene = ExtResource("55_6na36")
+max_enemies = 2
+spawn_interval = 10.0
+spawn_radius = 160.0
+
+[node name="Spawner2" parent="." unique_id=1179290615 groups=["boar"] instance=ExtResource("60_k4j2w")]
+position = Vector2(-1548, -806)
+enemy_scene = ExtResource("55_6na36")
+
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=911503928]
+position = Vector2(329, -969)
+
+[node name="Spawner3" parent="." unique_id=846023257 groups=["boar"] instance=ExtResource("60_k4j2w")]
+position = Vector2(-1359, -1106)
+enemy_scene = ExtResource("55_6na36")
+
+[node name="Spawner4" parent="." unique_id=294586525 groups=["boar"] instance=ExtResource("60_k4j2w")]
+position = Vector2(-1568.7178, -954.34265)
+enemy_scene = ExtResource("55_6na36")
+
+[node name="Spawner5" parent="." unique_id=136479698 groups=["boar"] instance=ExtResource("60_k4j2w")]
+position = Vector2(-113, -942)
+enemy_scene = ExtResource("55_6na36")

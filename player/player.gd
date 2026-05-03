@@ -288,20 +288,82 @@ func die() -> void:
 	print("💀 Игрок умер!")
 	set_physics_process(false)
 	set_process_input(false)
-	can_move = false
-	velocity = Vector2.ZERO
+	can_move      = false
+	velocity      = Vector2.ZERO
+	is_invincible = true
+
 	if GameState.weapon_changed.is_connected(_on_weapon_changed):
 		GameState.weapon_changed.disconnect(_on_weapon_changed)
 	if q_menu:
 		q_menu.visible = false
+
+	# Анимация смерти
 	if anim and anim.sprite_frames.has_animation("death"):
 		anim.play("death")
-		await get_tree().create_timer(3.4).timeout
+		await get_tree().create_timer(2.8).timeout
 	else:
-		await get_tree().create_timer(1.0).timeout
-	if is_inside_tree():
-		get_tree().change_scene_to_file("res://menu/menu.tscn")
+		await get_tree().create_timer(0.5).timeout
 
+	if not is_inside_tree():
+		return
+
+	# Затемнение экрана
+	var overlay := ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0)
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.z_index = 200
+	get_tree().current_scene.add_child(overlay)
+
+	var tw = create_tween()
+	tw.tween_property(overlay, "color:a", 1.0, 0.5)
+	await tw.finished
+
+	# Респавн на месте спавна
+	_respawn()
+
+	# Убираем затемнение
+	var tw2 = create_tween()
+	tw2.tween_property(overlay, "color:a", 0.0, 0.5)
+	await tw2.finished
+	overlay.queue_free()
+
+
+func _respawn() -> void:
+	# Восстанавливаем здоровье и стамину
+	current_health = max_health * 0.3  # Возрождаемся с 30% HP
+	stamina        = max_stamina
+
+	# Телепортируем к точке спавна
+	var spawn = get_tree().current_scene.get_node_or_null("SpawnPoint")
+	if spawn:
+		global_position = spawn.global_position
+		print("✅ Телепортирован к SpawnPoint")
+	else:
+		# Если нет SpawnPoint - остаёмся на месте
+		print("⚠️ SpawnPoint не найден - оставляем на месте")
+
+	# Обновляем UI
+	if hp_bar:
+		hp_bar.max_value = max_health
+		hp_bar.value     = current_health
+	_update_hp_label()
+
+	# Восстанавливаем управление
+	set_physics_process(true)
+	set_process_input(true)
+	can_move      = true
+	is_invincible = false
+	modulate      = Color.WHITE
+	_q_menu_open  = false
+
+	# Переподключаем сигнал
+	if not GameState.weapon_changed.is_connected(_on_weapon_changed):
+		GameState.weapon_changed.connect(_on_weapon_changed)
+
+	damage = GameState.get_active_weapon()["damage"]
+
+	print("✅ Игрок возрождён с HP:", current_health)
+	
 func get_direction_string() -> String:
 	match idle_dir:
 		DIRECTION.DOWN:  return "down"

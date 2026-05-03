@@ -15,7 +15,7 @@ func _ready() -> void:
 	GameState.exp_changed.connect(_on_exp_changed)
 	GameState.sword_upgraded.connect(func(_l): refresh())
 	GameState.fire_magic_upgraded.connect(func(_l): refresh())
-
+	GameState.quest_updated.connect(func():if current_tab == "quest":refresh())
 	# Панель
 	var panel = Panel.new()
 	panel.position = Vector2(300, 50)
@@ -318,22 +318,71 @@ func _draw_magic_tab() -> void:
 func _draw_quest_tab() -> void:
 	_add_section_title("📜 КВЕСТЫ")
 
-	var quests = [
-		{"name": "Убить орков",      "desc": "Убей 5 орков в лесу",        "done": false},
-		{"name": "Найти старейшину", "desc": "Поговори с NPC в деревне",    "done": true},
-	]
+	# ── Квест: убить кабанов ──────────────────────────────
+	var quest_color: Color
+	match GameState.quest_kill_boars:
+		GameState.QuestState.NOT_TAKEN:  quest_color = Color(0.5, 0.5, 0.5)
+		GameState.QuestState.ACTIVE:     quest_color = Color(1.0, 0.8, 0.0)
+		GameState.QuestState.COMPLETED:  quest_color = Color(0.0, 1.0, 0.3)
+		GameState.QuestState.HANDED_IN:  quest_color = Color(0.4, 0.4, 0.4)
 
-	for q in quests:
-		var row = _make_row()
-		row.add_child(_make_color_bar(Color.GREEN if q["done"] else Color(0.5, 0.5, 0.5)))
-		var info = _make_info_box()
-		var name_lbl = _make_label(("✅ " if q["done"] else "🔲 ") + q["name"], 14)
-		name_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5) if q["done"] else Color.WHITE)
-		var desc_lbl = _make_colored_label(q["desc"], 12, Color(0.7, 0.7, 0.7))
-		info.add_child(name_lbl)
-		info.add_child(desc_lbl)
-		row.add_child(info)
-		vbox.add_child(row)
+	var row = _make_row()
+	row.add_child(_make_color_bar(quest_color))
+
+	var info = _make_info_box()
+	var name_lbl = _make_label("", 14)
+	var desc_lbl = _make_label("", 12)
+
+	match GameState.quest_kill_boars:
+		GameState.QuestState.NOT_TAKEN:
+			name_lbl.text = "🔲 Охота на кабанов"
+			desc_lbl.text = "Поговори со Старейшиной в деревне"
+			name_lbl.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+			desc_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+		GameState.QuestState.ACTIVE:
+			name_lbl.text = "⚔ Охота на кабанов"
+			desc_lbl.text = "Убито: " + str(GameState.boars_killed) + " / " + str(GameState.boars_needed)
+			name_lbl.add_theme_color_override("font_color", Color(1.0, 0.9, 0.2))
+			desc_lbl.add_theme_color_override("font_color", Color.WHITE)
+		GameState.QuestState.COMPLETED:
+			name_lbl.text = "✅ Охота на кабанов"
+			desc_lbl.text = "Вернись к Старейшине! (+300 EXP)"
+			name_lbl.add_theme_color_override("font_color", Color(0.2, 1.0, 0.4))
+			desc_lbl.add_theme_color_override("font_color", Color(0.2, 1.0, 0.4))
+		GameState.QuestState.HANDED_IN:
+			name_lbl.text = "🏆 Охота на кабанов"
+			desc_lbl.text = "Выполнено! Получено: 300 EXP"
+			name_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+			desc_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+
+	info.add_child(name_lbl)
+	info.add_child(desc_lbl)
+	row.add_child(info)
+	if GameState.quest_kill_boars == GameState.QuestState.ACTIVE:
+		var abandon_btn := Button.new()
+		abandon_btn.text = "❌"
+		abandon_btn.custom_minimum_size = Vector2(36, 48)
+		abandon_btn.add_theme_color_override("font_color", Color(1.0, 0.3, 0.3))
+		abandon_btn.pressed.connect(func():
+			GameState.abandon_quest_kill_boars()
+			refresh()
+		)
+		row.add_child(abandon_btn)
+	vbox.add_child(row)
+
+	# Прогресс бар если квест активен
+	if GameState.quest_kill_boars == GameState.QuestState.ACTIVE:
+		var progress_bg := ColorRect.new()
+		progress_bg.custom_minimum_size = Vector2(390, 10)
+		progress_bg.color = Color(0.2, 0.2, 0.2)
+		progress_bg.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		vbox.add_child(progress_bg)
+
+		var fill_ratio = float(GameState.boars_killed) / float(GameState.boars_needed)
+		var progress_fill := ColorRect.new()
+		progress_fill.custom_minimum_size = Vector2(390 * fill_ratio, 10)
+		progress_fill.color = Color(1.0, 0.8, 0.0)
+		progress_bg.add_child(progress_fill)
 
 # ══════════════════════════════════════════════════════════
 # ХЕЛПЕРЫ

@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bh7krur22xd7t" path="res://enemy/Orc/Orc2/Boar/Boar_Death_with_shadow.png" id="4_h2qal"]
 [ext_resource type="Texture2D" uid="uid://rklgb85exb2c" path="res://enemy/Orc/Orc2/Boar/Boar_Idle_with_shadow.png" id="5_2ia7e"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_oshus"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3vf20"]
 resource_local_to_scene = true
 height = 34.0
 
@@ -331,7 +331,7 @@ region = Rect2(64, 32, 32, 32)
 atlas = ExtResource("5_2ia7e")
 region = Rect2(96, 32, 32, 32)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_3540s"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_h2qal"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -434,7 +434,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_gg67g")
 }],
 "loop": false,
-"name": &"attack_down",
+"name": &"attack_rang_down",
 "speed": 10.0
 }, {
 "frames": [{
@@ -457,7 +457,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_du8uv")
 }],
 "loop": false,
-"name": &"attack_left",
+"name": &"attack_rang_left",
 "speed": 10.0
 }, {
 "frames": [{
@@ -480,7 +480,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_16tgp")
 }],
 "loop": false,
-"name": &"attack_right",
+"name": &"attack_rang_right",
 "speed": 10.0
 }, {
 "frames": [{
@@ -503,7 +503,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_r44s4")
 }],
 "loop": false,
-"name": &"attack_up",
+"name": &"attack_rang_up",
 "speed": 10.0
 }, {
 "frames": [{
@@ -667,14 +667,14 @@ animations = [{
 "speed": 4.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_b60ft"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_2ia7e"]
 resource_local_to_scene = true
 radius = 118.016945
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_h2qal"]
 radius = 39.79793
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_3vf20"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_rrxya"]
 resource_local_to_scene = true
 
 [node name="Orc_archer" unique_id=355327370 instance=ExtResource("1_171lw")]
@@ -683,17 +683,17 @@ use_ranged = true
 bullet_scene = ExtResource("2_3vf20")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344]
-shape = SubResource("CapsuleShape2D_oshus")
+shape = SubResource("CapsuleShape2D_3vf20")
 
 [node name="Movements" parent="." index="1" unique_id=403867546]
-sprite_frames = SubResource("SpriteFrames_3540s")
-animation = &"attack_up"
+sprite_frames = SubResource("SpriteFrames_h2qal")
+animation = &"attack_rang_up"
 
 [node name="CollisionShape2D" parent="detector" parent_id_path=PackedInt32Array(963818677) index="0" unique_id=766399847]
-shape = SubResource("CircleShape2D_b60ft")
+shape = SubResource("CircleShape2D_2ia7e")
 
 [node name="CollisionShape2D" parent="Attack_zone" parent_id_path=PackedInt32Array(1428366797) index="0" unique_id=784964863]
 shape = SubResource("CircleShape2D_h2qal")
 
 [node name="CollisionShape2D" parent="Attack_area" parent_id_path=PackedInt32Array(1858617201) index="0" unique_id=954509707]
-shape = SubResource("CircleShape2D_3vf20")
+shape = SubResource("CircleShape2D_rrxya")

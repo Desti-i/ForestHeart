@@ -27,11 +27,11 @@
 [ext_resource type="Texture2D" uid="uid://biu1bs3kagsa3" path="res://iNTERFACE/stamina 2.png" id="21_s1xfd"]
 [ext_resource type="Texture2D" uid="uid://b4nci7psneya" path="res://assets_0/Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Buildings/Wood_Tower/Wood_Tower_Destroyed.png" id="22_a11uh"]
 [ext_resource type="Script" uid="uid://c55yxtxr6snv2" path="res://iNTERFACE/Stamina.gd" id="22_s1xfd"]
-[ext_resource type="Script" uid="uid://dc0bcr8e1uwn" path="res://iNTERFACE/ExpBar.gd" id="23_6na36"]
+[ext_resource type="Script" path="res://iNTERFACE/ExpBar.gd" id="23_6na36"]
 [ext_resource type="Texture2D" uid="uid://d34nl6sny043a" path="res://assets_0/Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Buildings/Wood_Tower/Wood_Tower_Purple.png" id="23_1267v"]
 [ext_resource type="Texture2D" uid="uid://wgnkhxo6uion" path="res://assets_0/TILESET VILLAGE TOP DOWN/GRASS DETAIL 5 - DAY.png" id="24_3w1ti"]
 [ext_resource type="Texture2D" uid="uid://eavn2iifghs4" path="res://assets_0/TILESET VILLAGE TOP DOWN/PIT - DAY.png" id="24_fuefb"]
-[ext_resource type="PackedScene" uid="uid://c4qqnmbhqfdv0" path="res://iNTERFACE/QMenu.tscn" id="24_jv868"]
+[ext_resource type="PackedScene" path="res://iNTERFACE/QMenu.tscn" id="24_jv868"]
 [ext_resource type="Texture2D" uid="uid://drm0kwncjjac4" path="res://assets_0/TILESET VILLAGE TOP DOWN/Sprite-decor.png" id="24_mymtm"]
 [ext_resource type="Texture2D" uid="uid://cwmhca1c70xkd" path="res://assets_0/TILESET VILLAGE TOP DOWN/GRASS DETAIL 4 - DAY.png" id="25_a11uh"]
 [ext_resource type="PackedScene" uid="uid://cqsqmkqeedok4" path="res://player/Player.tscn" id="25_j64ij"]
@@ -54,7 +54,7 @@
 [ext_resource type="Texture2D" uid="uid://ds3q6aaltgei" path="res://iNTERFACE/Sprite-0002 (1).png" id="48_03m2q"]
 [ext_resource type="PackedScene" uid="uid://dq8rnl158fhs3" path="res://animals/fox/fox.tscn" id="52_tn8ok"]
 [ext_resource type="PackedScene" uid="uid://bsd32bmuluket" path="res://animals/cat/cat_orange.tscn" id="54_6na36"]
-[ext_resource type="PackedScene" path="res://enemy/Orc/Orc2/Orc_archer.tscn" id="55_6na36"]
+[ext_resource type="PackedScene" uid="uid://dacbf762c616w" path="res://enemy/Orc/Orc2/Orc_archer.tscn" id="55_6na36"]
 [ext_resource type="PackedScene" uid="uid://g61rj1s4lhk6" path="res://NPC/nps.tscn" id="55_s1xfd"]
 [ext_resource type="PackedScene" uid="uid://3vi0ubdpli5a" path="res://portal/Portal.tscn" id="56_6na36"]
 [ext_resource type="AudioStream" uid="uid://bhypob4qlfqk2" path="res://Music/449359103103a80.mp3" id="58_am1wp"]
@@ -9287,7 +9287,6 @@ exp_reward = 200
 
 [node name="Orc_archer4" parent="." unique_id=1699659660 instance=ExtResource("55_6na36")]
 position = Vector2(548, -853)
-health = 15.0
 max_health = 15.0
 exp_reward = 150
 

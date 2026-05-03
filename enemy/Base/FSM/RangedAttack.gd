@@ -28,7 +28,7 @@ func shoot_once(id):
 	
 	var dir = (enemy.player.position - enemy.position).normalized()
 	
-	var anim_name_attack = "attack_" + enemy.get_direction_string()
+	var anim_name_attack = "attack_rang_" + enemy.get_direction_string()
 	var anim_name_idle = "idle_" + enemy.get_direction_string()
 	enemy.anim.play(anim_name_attack)
 	

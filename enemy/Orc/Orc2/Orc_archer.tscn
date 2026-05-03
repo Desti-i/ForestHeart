@@ -684,6 +684,7 @@ speed = 90.0
 exp_reward = 200
 use_melee = false
 use_ranged = true
+speed_ammo = 120.0
 bullet_scene = ExtResource("2_3vf20")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344 groups=["enemy"]]

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dkx04s6s7gxfy" path="res://enemy/ammo/arrow/arrow.gd" id="1_076ow"]
 [ext_resource type="Texture2D" uid="uid://d0okj3awy5e5e" path="res://enemy/ammo/arrow/arrow-Picsart-BackgroundRemover.png" id="2_ldys3"]
+[ext_resource type="Texture2D" uid="uid://c5pnimotch00h" path="res://enemy/ammo/arrow/arrow-Picsart-BackgroundRemove3.png" id="3_aykc8"]
 
 [sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_xcfks"]
 length = 15.11
@@ -12,6 +13,7 @@ collision_layer = 0
 script = ExtResource("1_076ow")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=195179330]
+visible = false
 position = Vector2(-1.0000002, 0)
 rotation = 3.1415927
 scale = Vector2(0.45815763, 0.3756114)
@@ -21,5 +23,10 @@ texture = ExtResource("2_ldys3")
 position = Vector2(0, -2)
 scale = Vector2(1.04, 0.74)
 shape = SubResource("SeparationRayShape2D_xcfks")
+
+[node name="ArrowPicsartBackgroundRemove3" type="Sprite2D" parent="." unique_id=903673186]
+position = Vector2(2.9737062, 3.0260658)
+scale = Vector2(1.0201317, 1.0547986)
+texture = ExtResource("3_aykc8")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

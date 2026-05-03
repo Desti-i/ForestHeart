@@ -679,6 +679,8 @@ radius = 39.79793
 resource_local_to_scene = true
 
 [node name="Orc_archer" unique_id=355327370 groups=["boar"] instance=ExtResource("1_171lw")]
+max_health = 30.0
+speed = 90.0
 exp_reward = 200
 use_melee = false
 use_ranged = true

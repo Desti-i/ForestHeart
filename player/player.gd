@@ -7,43 +7,46 @@ enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 
 @onready var anim  = $Movements
 @onready var animP = $AnimationPlayer
-@onready var hp_bar = $"../CanvasLayer/Control/hp_bar"
+@onready var hp_bar   = $"../CanvasLayer/Control/hp_bar"
 @onready var hp_label = $"../CanvasLayer/Control/hp_bar/Label"
-# ── Здоровье ──────────────────────────────────────────────
+@onready var q_menu   = $"../CanvasLayer/QMenu"
+
 var max_health:     float = 100
 var current_health: float = 100
-var damage:         float = 5
+var damage:         float = 5.0
 
 const WALK_SPEED: float = 100.0
 const RUN_SPEED:  float = 200.0
 
-var current_speed: float = WALK_SPEED
-var idle_dir:      DIRECTION = DIRECTION.DOWN
-var input_direction := Vector2.ZERO
-var can_move:      bool = true
-var is_invincible: bool = false
+var current_speed:    float     = WALK_SPEED
+var idle_dir:         DIRECTION = DIRECTION.DOWN
+var input_direction   := Vector2.ZERO
+var can_move:         bool      = true
+var is_invincible:    bool      = false
+var _q_menu_open:     bool      = false
 
-# ── Реген ─────────────────────────────────────────────────
 var regen_delay:  float = 3.0
 var regen_amount: float = 20
 var regen_timer:  float = 0.0
 
-# ── Стамина ───────────────────────────────────────────────
 @export var max_stamina:       float = 100.0
 @export var stamina_regen:     float = 22.0
 @export var run_stamina_cost:  float = 16.0
 @export var dash_stamina_cost: float = 25.0
 var stamina: float
 
-# ── Рывок (Ctrl) ──────────────────────────────────────────
 @export var dash_speed:    float = 480.0
 @export var dash_duration: float = 0.16
 @export var dash_cooldown: float = 0.9
 
-var _dashing:     bool    = false
-var _dash_timer:  float   = 0.0
-var _dash_cd:     float   = 0.0
-var _dash_dir:    Vector2 = Vector2.ZERO
+var _dashing:    bool    = false
+var _dash_timer: float   = 0.0
+var _dash_cd:    float   = 0.0
+var _dash_dir:   Vector2 = Vector2.ZERO
+
+# ── Кулдаун магии ─────────────────────────────────────────
+var _magic_cd:     float = 0.0
+var _magic_cd_max: float = 0.8   # секунды между выстрелами
 
 func _ready() -> void:
 	current_health = max_health
@@ -52,19 +55,25 @@ func _ready() -> void:
 		hp_bar.max_value = max_health
 		hp_bar.min_value = 0
 		hp_bar.value     = current_health
-	
-	# Отладка: проверяем, найден ли Label
 	if hp_label:
 		print("✅ hp_label найден!")
-		hp_label.text = "100/100"  # Тестовый текст
+		hp_label.text = "100/100"
 		hp_label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
 	else:
-		print("❌ hp_label НЕ найден! Проверь путь.")
-	
+		print("❌ hp_label НЕ найден!")
 	_update_hp_label()
+	damage = GameState.get_active_weapon()["damage"]
+	GameState.weapon_changed.connect(_on_weapon_changed)
+	if q_menu:
+		q_menu.visible = false
+
+func _on_weapon_changed(weapon: Dictionary) -> void:
+	damage = weapon["damage"]
+	print("⚔️ Меч улучшен! Урон:", weapon["damage"])
 
 func _physics_process(delta: float) -> void:
-	_dash_cd = max(0.0, _dash_cd - delta)
+	_dash_cd  = max(0.0, _dash_cd  - delta)
+	_magic_cd = max(0.0, _magic_cd - delta)
 
 	# Рывок
 	if _dashing:
@@ -73,64 +82,142 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		modulate.a = 0.5 if int(_dash_timer * 20) % 2 == 0 else 1.0
 		if _dash_timer <= 0.0:
-			_dashing = false
+			_dashing     = false
 			is_invincible = false
-			modulate.a = 1.0
-			velocity = Vector2.ZERO
+			modulate.a   = 1.0
+			velocity     = Vector2.ZERO
+		return
+
+	# Q — меню
+	if Input.is_action_just_pressed("open_menu"):
+		_toggle_q_menu()
+		return
+
+	if _q_menu_open:
 		return
 
 	if !can_move:
 		return
 
-	# Атака
+	# F — магия огня
+	if Input.is_action_just_pressed("fire_magic"):
+		_cast_magic()  # ← вызываем общую функцию
+		return
+
+	# Пробел — атака мечом
 	if Input.is_action_just_pressed("atack"):
 		handle_attack()
 		return
 
-	# Рывок
+	# Ctrl — рывок
 	if Input.is_action_just_pressed("dash") and _dash_cd <= 0.0 and stamina >= dash_stamina_cost and stamina > max_stamina * 0.1:
 		_start_dash()
 		return
 
 	# Движение
 	input_direction = Input.get_vector("left", "right", "up", "down").normalized()
-	
-	# === НОВАЯ ЛОГИКА ===
-	var is_running_key_pressed = Input.is_action_pressed("run") and input_direction != Vector2.ZERO
-	
-	# Тратим стамину если зажат Shift (ВСЕГДА, даже если стамина = 0)
-	if is_running_key_pressed:
+	var running = Input.is_action_pressed("run") and input_direction != Vector2.ZERO
+
+	if running:
 		stamina = max(0.0, stamina - run_stamina_cost * delta)
 		emit_signal("stamina_changed", stamina, max_stamina)
-	
-	# Определяем скорость:
-	# - Бежим если зажат Shift И стамина > 10% от максимума
-	# - Иначе ходьба
-	if is_running_key_pressed and stamina > max_stamina * 0.1:
-		current_speed = RUN_SPEED  # Бег (быстро)
-	else:
-		current_speed = WALK_SPEED  # Ходьба (медленно)
-	
+
+	current_speed = RUN_SPEED if (running and stamina > max_stamina * 0.1) else WALK_SPEED
 	velocity = input_direction * current_speed
-	
-	# Реген стамины ТОЛЬКО если Shift НЕ зажат
-	if not is_running_key_pressed:
+
+	if not running:
 		var prev := stamina
 		stamina = min(max_stamina, stamina + stamina_regen * delta)
 		if stamina != prev:
 			emit_signal("stamina_changed", stamina, max_stamina)
-	# =======================
 
 	handle_movements()
 	move_and_slide()
 
-	# Реген HP
 	if current_health > 0 and current_health < max_health:
 		regen_timer += delta
 		if regen_timer >= regen_delay:
 			heal(regen_amount)
 			regen_timer = 0.0
-	#print("Stamina: ", stamina, " Speed: ", current_speed)
+
+
+# ── Магия огня ────────────────────────────────────────────
+func _cast_magic() -> void:
+	match GameState.active_magic:
+		"fire":  _cast_fire()
+		"water": _cast_water()
+
+func _cast_fire() -> void:
+	if GameState.fire_magic_level == 0:
+		_show_hint("🔥 Магия не открыта! Открой в меню Q")
+		return
+	if _magic_cd > 0.0:
+		_show_hint("⏳ " + str(snapped(_magic_cd, 0.1)) + "с")
+		return
+
+	_magic_cd = _magic_cd_max
+	var dir = _facing_vector()
+	var lvl = GameState.fire_magic_level
+
+	if lvl == 4:
+		# Три шара веером
+		var angles = [-0.3, 0.0, 0.3]
+		for a in angles:
+			var rotated_dir = dir.rotated(a)
+			_spawn_fireball(lvl, rotated_dir)
+	else:
+		_spawn_fireball(lvl, dir)
+
+func _spawn_fireball(lvl: int, dir: Vector2) -> void:
+	var fireball_script = load("res://magic/FireBall.gd")
+	var fb = Area2D.new()
+	fb.set_script(fireball_script)
+	fb.global_position = global_position + dir * 20.0
+	fb.z_index = 10
+	get_parent().add_child(fb)
+	fb.setup(lvl, dir)
+
+func _cast_water() -> void:
+	if not GameState.water_magic_unlocked:
+		_show_hint("💧 Магия воды не получена!")
+		return
+	if _magic_cd > 0.0:
+		_show_hint("⏳ " + str(snapped(_magic_cd, 0.1)) + "с")
+		return
+
+	_magic_cd = _magic_cd_max
+	var dir = _facing_vector()
+	var water_script = load("res://magic/WaterBall.gd")
+	var wb = Area2D.new()
+	wb.set_script(water_script)
+	wb.global_position = global_position + dir * 20.0
+	wb.z_index = 10
+	get_parent().add_child(wb)
+	wb.setup(GameState.water_magic_level, dir)
+	
+func _show_hint(msg: String) -> void:
+	var lbl := Label.new()
+	lbl.text = msg
+	lbl.add_theme_color_override("font_color", Color.ORANGE)
+	lbl.add_theme_constant_override("outline_size", 2)
+	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
+	lbl.add_theme_font_size_override("font_size", 15)
+	lbl.position = global_position + Vector2(-80, -70)
+	lbl.z_index = 100
+	get_parent().add_child(lbl)
+	var tw = create_tween()
+	tw.tween_property(lbl, "position:y", lbl.position.y - 30, 1.2)
+	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 1.2)
+	tw.tween_callback(lbl.queue_free)
+
+# ── Меню Q ────────────────────────────────────────────────
+func _toggle_q_menu() -> void:
+	if q_menu:
+		_q_menu_open = !_q_menu_open
+		q_menu.visible = _q_menu_open
+		can_move = !_q_menu_open
+		if _q_menu_open:
+			q_menu.refresh()
 
 func _start_dash() -> void:
 	_dash_dir     = input_direction if input_direction != Vector2.ZERO else _facing_vector()
@@ -166,8 +253,9 @@ func handle_movements() -> void:
 
 func handle_attack() -> void:
 	can_move = false
-	velocity = Vector2.ZERO
-	animP.play("attack_1_" + get_direction_string())
+	velocity  = Vector2.ZERO
+	var weapon = GameState.get_active_weapon()
+	animP.play(weapon["anim_prefix"] + get_direction_string())
 	await animP.animation_finished
 	can_move = true
 
@@ -180,10 +268,7 @@ func take_damage(incoming_damage: float) -> void:
 	if hp_bar:
 		hp_bar.value = current_health
 	health_changed.emit(current_health, max_health)
-	
-	# Обновляем текстовое значение
 	_update_hp_label()
-	
 	modulate = Color.RED
 	await get_tree().create_timer(0.1).timeout
 	modulate = Color.WHITE
@@ -195,13 +280,27 @@ func heal(amount: float) -> void:
 	if hp_bar:
 		hp_bar.value = current_health
 	health_changed.emit(current_health, max_health)
-	
-	# Обновляем текстовое значение
 	_update_hp_label()
 
 func die() -> void:
-	await get_tree().create_timer(0.5).timeout
-	get_tree().change_scene_to_file("res://menu/menu.tscn")
+	if current_health > 0:
+		return
+	print("💀 Игрок умер!")
+	set_physics_process(false)
+	set_process_input(false)
+	can_move = false
+	velocity = Vector2.ZERO
+	if GameState.weapon_changed.is_connected(_on_weapon_changed):
+		GameState.weapon_changed.disconnect(_on_weapon_changed)
+	if q_menu:
+		q_menu.visible = false
+	if anim and anim.sprite_frames.has_animation("death"):
+		anim.play("death")
+		await get_tree().create_timer(3.4).timeout
+	else:
+		await get_tree().create_timer(1.0).timeout
+	if is_inside_tree():
+		get_tree().change_scene_to_file("res://menu/menu.tscn")
 
 func get_direction_string() -> String:
 	match idle_dir:
@@ -218,35 +317,21 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 func _update_hp_label() -> void:
 	if hp_label:
 		hp_label.text = str(int(current_health)) + " / " + str(int(max_health))
-		
-		# Очищаем старые стили (на всякий случай)
 		hp_label.remove_theme_color_override("font_color")
 		hp_label.remove_theme_color_override("font_outline_color")
 		hp_label.remove_theme_constant_override("outline_size")
-		
-		# Устанавливаем обводку
 		hp_label.add_theme_constant_override("outline_size", 2)
 		hp_label.add_theme_color_override("font_outline_color", Color.BLACK)
-		
-		# Меняем цвет в зависимости от здоровья
 		var health_percent = current_health / max_health
-		
 		if health_percent <= 0.2:
-			# Критическое здоровье (красный)
 			hp_label.add_theme_color_override("font_color", Color(1.0, 0.2, 0.2))
 		elif health_percent <= 0.5:
-			# Ранен (оранжевый)
 			hp_label.add_theme_color_override("font_color", Color(1.0, 0.7, 0.2))
 		else:
-			# Здоров (белый)
 			hp_label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
-		
-		# Добавляем тень для красоты
 		hp_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.5))
 		hp_label.add_theme_constant_override("shadow_offset_x", 1)
 		hp_label.add_theme_constant_override("shadow_offset_y", 1)
-		
-		# Небольшая анимация при изменении HP
 		hp_label.scale = Vector2(1.1, 1.1)
 		await get_tree().create_timer(0.1).timeout
 		hp_label.scale = Vector2(1.0, 1.0)

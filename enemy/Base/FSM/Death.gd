@@ -10,6 +10,11 @@ func enter():
 	enemy.get_node("Attack_zone").set_deferred("disabled", true)
 	enemy.get_node("Attack_area").set_deferred("monitoring", false)
 
+	# ── Выдаём опыт игроку ──
+	GameState.add_exp(enemy.exp_reward)
+	if not GameState.water_magic_unlocked:
+		GameState.unlock_water_magic()
+		print("💧 Водяная магия выпала с моба!")
 	var anim_name = "death_" + enemy.get_direction_string()
 	enemy.anim.play(anim_name)
 	await enemy.anim.animation_finished

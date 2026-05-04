@@ -30,6 +30,7 @@ var player_in:      bool            = false
 var spawn_position: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
+	randomize()
 	health         = max_health
 	spawn_position = global_position   # ← запоминаем точку спауна
 

@@ -2477,8 +2477,7 @@ shape = SubResource("CapsuleShape2D_mrupb")
 [node name="Movements" parent="." index="1" unique_id=403867546]
 position = Vector2(0, 5.11)
 sprite_frames = SubResource("SpriteFrames_i5kuo")
-animation = &"attack_up"
-frame = 4
+animation = &"Down"
 
 [node name="CollisionShape2D" parent="detector" parent_id_path=PackedInt32Array(963818677) index="0" unique_id=766399847]
 shape = SubResource("CircleShape2D_bmh4x")

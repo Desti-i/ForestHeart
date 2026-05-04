@@ -60,7 +60,7 @@
 [ext_resource type="PackedScene" uid="uid://3vi0ubdpli5a" path="res://portal/Portal.tscn" id="56_6na36"]
 [ext_resource type="AudioStream" uid="uid://bhypob4qlfqk2" path="res://Music/449359103103a80.mp3" id="58_am1wp"]
 [ext_resource type="AudioStream" uid="uid://d308wnakdefqj" path="res://Music/1774464752.mp3" id="59_eyrn7"]
-[ext_resource type="PackedScene" uid="uid://bayjlmyeofonw" path="res://enemy/Spawner.tscn" id="60_k4j2w"]
+[ext_resource type="PackedScene" path="res://enemy/Spawner.tscn" id="60_k4j2w"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onb6d"]
 texture = ExtResource("1_6ql0f")

@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://c55yxtxr6snv2" path="res://iNTERFACE/Stamina.gd" id="8_my0cm"]
 [ext_resource type="Script" path="res://iNTERFACE/ExpBar.gd" id="13_r6np7"]
 [ext_resource type="PackedScene" uid="uid://c4qqnmbhqfdv0" path="res://iNTERFACE/QMenu.tscn" id="14_2kmsi"]
+[ext_resource type="PackedScene" uid="uid://c7pr0xu72a5ti" path="res://enemy/boss/boss_vilage1/boss_vilage1.tscn" id="14_r6np7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x2cgo"]
 texture = ExtResource("2_ycjjl")
@@ -1112,3 +1113,7 @@ collision_mask = 1
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1448543002]
 zoom = Vector2(2.7, 2.7)
+
+[node name="boss_vilage1" parent="." unique_id=355327370 instance=ExtResource("14_r6np7")]
+position = Vector2(-64.00003, -120.000046)
+scale = Vector2(1.67, 1.67)

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ti3fg3gwg4bf"
-path="res://.godot/imported/orc3_run_full.png-bb4a3262da81590fe1e14ff5f3db1361.ctex"
+uid="uid://qmcoyt5q48sk"
+path="res://.godot/imported/image_2026-05-04_08-44-44.png-f1458952504e5bc4cf72f471d83068cf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemy/Orc/Orc3/orc3_run_full.png"
-dest_files=["res://.godot/imported/orc3_run_full.png-bb4a3262da81590fe1e14ff5f3db1361.ctex"]
+source_file="res://enemy/ammo/sword/image_2026-05-04_08-44-44.png"
+dest_files=["res://.godot/imported/image_2026-05-04_08-44-44.png-f1458952504e5bc4cf72f471d83068cf.ctex"]
 
 [params]
 

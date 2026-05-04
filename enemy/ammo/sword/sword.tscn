@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://buphkhfkj8g37"]
+
+[ext_resource type="PackedScene" uid="uid://cbcvjc3lh52nj" path="res://enemy/ammo/arrow/Arrow.tscn" id="1_6qmei"]
+[ext_resource type="Texture2D" uid="uid://qmcoyt5q48sk" path="res://enemy/ammo/sword/image_2026-05-04_08-44-44.png" id="2_ebqra"]
+
+[node name="Sword" unique_id=1330344315 instance=ExtResource("1_6qmei")]
+
+[node name="Sprite2D" parent="." index="0" unique_id=195179330]
+position = Vector2(-0.008726502, 0.9999619)
+rotation = 2.2506704
+texture = ExtResource("2_ebqra")

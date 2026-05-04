@@ -2,7 +2,6 @@ extends EnemyBase
 
 @export var damage_att_1: float
 @export var damage_att_2: float
-@export var range_shot: float
 
 var phase: float = 1
 

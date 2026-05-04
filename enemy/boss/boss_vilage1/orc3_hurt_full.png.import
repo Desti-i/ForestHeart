@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bh182avu6ws35"
-path="res://.godot/imported/orc3_attack_full.png-9ed5a98be40b9d8739ed29ad354475d1.ctex"
+uid="uid://bebhm3he5iup4"
+path="res://.godot/imported/orc3_hurt_full.png-8928950de1644e52696820b3e7ff3115.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemy/Orc/Orc3/orc3_attack_full.png"
-dest_files=["res://.godot/imported/orc3_attack_full.png-9ed5a98be40b9d8739ed29ad354475d1.ctex"]
+source_file="res://enemy/boss/boss_vilage1/orc3_hurt_full.png"
+dest_files=["res://.godot/imported/orc3_hurt_full.png-8928950de1644e52696820b3e7ff3115.ctex"]
 
 [params]
 

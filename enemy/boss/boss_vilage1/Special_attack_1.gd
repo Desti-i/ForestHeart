@@ -12,8 +12,7 @@ func attack_splash():
 	enemy.velocity = Vector2.ZERO
 	enemy.update_attack_direction()
 	
-	var anim_attack = "attack_splash_" + enemy.get_direction_string()
-	enemy.animP.play(anim_attack)
+	enemy.animP.play("special_attack_1")
 	
 	await enemy.animP.animation_finished
 	

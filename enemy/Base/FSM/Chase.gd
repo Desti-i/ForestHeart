@@ -3,29 +3,31 @@ class_name Chase
 
 func update(_delta):
 	if enemy.player == null:
-		state_machine.change_state("Idle")
+		# Возвращаемся к патрулю если есть
+		if state_machine.has_node("Patrol"):
+			state_machine.change_state("Patrol")
+		else:
+			state_machine.change_state("Idle")
 		return
-		
-	var dir = (enemy.player.position - enemy.position).normalized()
-	
+
 	if enemy.use_ranged and enemy.player_in:
 		state_machine.change_state("RangedAttack")
 		return
-	
+
 	if enemy.use_melee and enemy.player_in:
 		state_machine.change_state("Attack")
 		return
-	
+
+	var dir = (enemy.player.position - enemy.position).normalized()
 	enemy.velocity = dir * enemy.speed
-	
-	# Анимация бега
+
 	if abs(dir.x) > abs(dir.y):
-			if dir.x > 0:
-				enemy.anim.play("Right")
-				enemy.idle_dir = enemy.DIRECTION.RIGHT
-			else:
-				enemy.anim.play("Left")
-				enemy.idle_dir = enemy.DIRECTION.LEFT
+		if dir.x > 0:
+			enemy.anim.play("Right")
+			enemy.idle_dir = enemy.DIRECTION.RIGHT
+		else:
+			enemy.anim.play("Left")
+			enemy.idle_dir = enemy.DIRECTION.LEFT
 	else:
 		if dir.y > 0:
 			enemy.anim.play("Down")

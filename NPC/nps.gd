@@ -16,13 +16,50 @@ var next_button: Button
 
 # Диалоги в зависимости от состояния квеста
 func _get_dialog_lines() -> Array[String]:
+	# КОШКА: если квест активен или выполнен
+	match GameState.quest_cat:
+		GameState.QuestState.NOT_TAKEN:
+			# Проверяем, выполнен ли квест с кабанами
+			if GameState.quest_kill_boars == GameState.QuestState.HANDED_IN:
+				return [
+					"А, это ты! Рад тебя видеть!",
+					"У меня есть ещё одна просьба к тебе...",
+					"Старушка из соседнего дома потеряла свою кошку.",
+					"Она сбежала куда-то в лес.",
+					"EXP я тебе не дам, но старушка говорила, что",
+					"угостит тебя чем-то особенным...",
+					"Поможешь старушке? Просто так, от чистого сердца?"
+				]
+		GameState.QuestState.ACTIVE:
+			return [
+				"Ты ещё не нашёл кошку?",
+				"Бедная старушка очень переживает.",
+				"Поищи в лесу, она должна быть где-то там.",
+				"Кошка любит гулять возле деревьев."
+			]
+		GameState.QuestState.COMPLETED:
+			return [
+				"Ты нашёл кошку?! Где она?",
+				"Старушка будет так рада!",
+				"Говорит, что приготовила для тебя награду.",
+				"Открой меню (Q) и посмотри вкладку магии!"
+			]
+		GameState.QuestState.HANDED_IN:
+			return [
+				"Старушка очень благодарна тебе!",
+				"Кошка теперь целыми днями дома.",
+				"Говорят, она даже научила тебя какой-то магии?",
+				"Вот это награда! А я ведь предупреждал, что EXP не дам!"
+			]
+	
+	# КАБАНЫ: если квест с кабанами активен или новый
 	match GameState.quest_kill_boars:
 		GameState.QuestState.NOT_TAKEN:
 			return [
 				"Приветствую тебя, путник!",
 				"В наших лесах развелось много диких кабанов...",
 				"Они топчут поля и пугают жителей!",
-				"Убей 10 кабанов и я щедро награжу тебя!",
+				"Убей 10 кабанов и я щедро награжу тебя 300 EXP!",
 				"Берёшься за это дело?"
 			]
 		GameState.QuestState.ACTIVE:
@@ -38,13 +75,15 @@ func _get_dialog_lines() -> Array[String]:
 				"Чувствую запах крови кабанов от тебя...",
 				"Ты справился! Все 10 кабанов убиты!",
 				"Держи свою награду — 300 EXP!",
-				"Деревня благодарит тебя, герой!"
+				"А теперь у меня к тебе ещё одна просьба...",
+				"Старушке нужна помощь — найди её кошку."
 			]
 		GameState.QuestState.HANDED_IN:
 			return [
 				"Рад видеть тебя снова, герой!",
 				"Благодаря тебе деревня спокойна.",
-				"Если понадобится помощь — я здесь."
+				"Кстати, старушка тебе наверное уже рассказала?",
+				"Хорошую магию она знает... используй с умом!"
 			]
 	return ["Здравствуй!"]
 
@@ -160,15 +199,33 @@ func _on_next_button_pressed() -> void:
 
 	if current_line == lines.size() - 1:
 		# Меняем кнопку на последней реплике
-		match GameState.quest_kill_boars:
-			GameState.QuestState.NOT_TAKEN:
-				next_button.text = "Принять квест"
-			GameState.QuestState.COMPLETED:
-				next_button.text = "Получить награду"
-			_:
-				next_button.text = "Закрыть"
+		if GameState.quest_cat == GameState.QuestState.NOT_TAKEN and GameState.quest_kill_boars == GameState.QuestState.HANDED_IN:
+			next_button.text = "Принять квест (кошка)"
+		elif GameState.quest_kill_boars == GameState.QuestState.NOT_TAKEN:
+			next_button.text = "Принять квест"
+		elif GameState.quest_kill_boars == GameState.QuestState.COMPLETED:
+			next_button.text = "Получить награду"
+		elif GameState.quest_cat == GameState.QuestState.ACTIVE:
+			next_button.text = "Найди кошку"
+		elif GameState.quest_cat == GameState.QuestState.COMPLETED:
+			next_button.text = "Получить награду (магия)"
+		else:
+			next_button.text = "Закрыть"
 
 func _handle_last_line() -> void:
+	# Проверяем кошачий квест (если он предложен)
+	if GameState.quest_cat == GameState.QuestState.NOT_TAKEN and GameState.quest_kill_boars == GameState.QuestState.HANDED_IN:
+		GameState.start_quest_cat()
+		print("🐱 Квест принят! Найди кошку!")
+		return
+	
+	# Проверяем сдачу кошачьего квеста
+	if GameState.quest_cat == GameState.QuestState.COMPLETED:
+		GameState.hand_in_quest_cat()
+		print("💚 Магия лечения открыта! Загляни в меню (Q)")
+		return
+	
+	# Квест на кабанов
 	match GameState.quest_kill_boars:
 		GameState.QuestState.NOT_TAKEN:
 			GameState.start_quest_kill_boars()
@@ -176,6 +233,11 @@ func _handle_last_line() -> void:
 		GameState.QuestState.COMPLETED:
 			GameState.hand_in_quest_kill_boars()
 			print("🎉 Награда получена!")
+			# Принудительно открываем диалог снова для предложения кошки
+			await get_tree().create_timer(0.5).timeout
+			_open_dialog()
+		_:
+			_close_dialog()
 
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

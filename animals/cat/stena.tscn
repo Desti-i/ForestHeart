@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://v6a5e2h41ka0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fe3kc"]
+size = Vector2(7, 200.5)
+
+[node name="Stena" type="StaticBody2D" unique_id=937432554]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2007525722]
+position = Vector2(7.5, 115.75)
+shape = SubResource("RectangleShape2D_fe3kc")

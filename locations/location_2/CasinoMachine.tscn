@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dhqe6eidx6clx"]
+
+[ext_resource type="Script" uid="uid://1wmmg1r75t47" path="res://locations/location_2/casino_machine.gd" id="1_i5l14"]
+
+[node name="CasinoMachine" type="Area2D" unique_id=866154504]
+script = ExtResource("1_i5l14")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2057778197]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1520534872]
+
+[node name="Label" type="Label" parent="." unique_id=165044310]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2118840439]

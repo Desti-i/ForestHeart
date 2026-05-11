@@ -228,6 +228,9 @@ animations = [{
 "speed": 9.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_t6ing"]
+radius = 48.0
+
 [node name="fox" unique_id=1933003742 instance=ExtResource("1_s1kyh")]
 
 [node name="AnimatedSprite2D" parent="." index="2" unique_id=825878637]
@@ -235,3 +238,9 @@ position = Vector2(0, -3)
 sprite_frames = SubResource("SpriteFrames_q7dyn")
 animation = &"Idle"
 frame_progress = 0.358619
+
+[node name="DetectionArea" type="Area2D" parent="." index="3" unique_id=152257916]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" index="0" unique_id=628482131]
+position = Vector2(1, -1)
+shape = SubResource("CircleShape2D_t6ing")

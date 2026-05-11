@@ -15,18 +15,20 @@ func _ready() -> void:
 	GameState.exp_changed.connect(_on_exp_changed)
 	GameState.sword_upgraded.connect(func(_l): refresh())
 	GameState.fire_magic_upgraded.connect(func(_l): refresh())
+	GameState.heal_magic_upgraded.connect(func(_l): refresh())  # 👈 ДОБАВЬ
+	GameState.heal_magic_unlocked_signal.connect(func(): refresh())
 	GameState.quest_updated.connect(func():if current_tab == "quest":refresh())
-	# Панель
+	
 	var panel = Panel.new()
-	panel.position = Vector2(300, 50)
-	panel.size = Vector2(420, 580)
+	panel.position = Vector2(150, 30)      # Сдвигаем левее
+	panel.size = Vector2(700, 680)         # Ширина 700
 	add_child(panel)
 
 	# Заголовок
 	var title := Label.new()
 	title.text = "📋 Меню"
-	title.position = Vector2(300, 58)
-	title.custom_minimum_size = Vector2(420, 30)
+	title.position = Vector2(150, 38)
+	title.custom_minimum_size = Vector2(700, 30)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", Color.YELLOW)
@@ -34,8 +36,8 @@ func _ready() -> void:
 
 	# EXP
 	exp_label = Label.new()
-	exp_label.position = Vector2(300, 90)
-	exp_label.custom_minimum_size = Vector2(420, 24)
+	exp_label.position = Vector2(150, 70)
+	exp_label.custom_minimum_size = Vector2(700, 24)
 	exp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	exp_label.text = "⭐ " + str(GameState.exp) + " EXP"
 	exp_label.add_theme_font_size_override("font_size", 14)
@@ -43,40 +45,42 @@ func _ready() -> void:
 
 	# Вкладки
 	var tab_bar := HBoxContainer.new()
-	tab_bar.position = Vector2(308, 118)
-	tab_bar.custom_minimum_size = Vector2(404, 36)
+	tab_bar.position = Vector2(160, 98)
+	tab_bar.custom_minimum_size = Vector2(680, 36)
 	tab_bar.add_theme_constant_override("separation", 4)
 	add_child(tab_bar)
 
 	tab_weapon_btn = _make_tab_btn("⚔ Оружие", "weapon")
 	tab_magic_btn  = _make_tab_btn("🔥 Магия",  "magic")
 	tab_quest_btn  = _make_tab_btn("📜 Квесты", "quest")
-	tab_weapon_btn.custom_minimum_size = Vector2(130, 34)
-	tab_magic_btn.custom_minimum_size  = Vector2(130, 34)
-	tab_quest_btn.custom_minimum_size  = Vector2(130, 34)
+	
+	tab_weapon_btn.custom_minimum_size = Vector2(220, 34)
+	tab_magic_btn.custom_minimum_size  = Vector2(220, 34)
+	tab_quest_btn.custom_minimum_size  = Vector2(220, 34)
+	
 	tab_bar.add_child(tab_weapon_btn)
 	tab_bar.add_child(tab_magic_btn)
 	tab_bar.add_child(tab_quest_btn)
 
-	# ScrollContainer для контента
+	# ScrollContainer
 	var scroll := ScrollContainer.new()
-	scroll.position = Vector2(308, 158)
-	scroll.custom_minimum_size = Vector2(404, 440)
+	scroll.position = Vector2(160, 138)
+	scroll.custom_minimum_size = Vector2(680, 520)
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(scroll)
 
 	vbox = VBoxContainer.new()
-	vbox.custom_minimum_size = Vector2(400, 0)
+	vbox.custom_minimum_size = Vector2(660, 0)
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_theme_constant_override("separation", 6)
 	scroll.add_child(vbox)
 
-	# Подсказка - теперь ниже скролла
+	# Подсказка
 	var hint := Label.new()
 	hint.text = "[Q] закрыть"
-	hint.position = Vector2(300, 600)
-	hint.custom_minimum_size = Vector2(420, 20)
+	hint.position = Vector2(150, 660)
+	hint.custom_minimum_size = Vector2(700, 20)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
 	hint.add_theme_font_size_override("font_size", 13)
@@ -111,6 +115,10 @@ func refresh() -> void:
 	for child in vbox.get_children():
 		child.queue_free()
 	_update_tab_colors()
+	
+	# Убеждаемся, что vbox достаточно широкий
+	vbox.custom_minimum_size = Vector2(504, 0)
+	
 	match current_tab:
 		"weapon": _draw_weapon_tab()
 		"magic":  _draw_magic_tab()
@@ -212,6 +220,22 @@ func _draw_magic_tab() -> void:
 		water_btn.disabled = true
 	select_row.add_child(water_btn)
 
+	# Кнопка лечения
+	var heal_btn := Button.new()
+	heal_btn.text = "💚 Лечение" if GameState.heal_magic_unlocked else "💚 Лечение 🔒"
+	heal_btn.custom_minimum_size = Vector2(188, 36)
+	heal_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	if GameState.active_magic == "heal":
+		heal_btn.add_theme_color_override("font_color", Color(0.2, 1.0, 0.3))
+	if GameState.heal_magic_unlocked:
+		heal_btn.pressed.connect(func():
+			GameState.set_active_magic("heal")
+			refresh()
+		)
+	else:
+		heal_btn.disabled = true
+	select_row.add_child(heal_btn)
+
 	vbox.add_child(HSeparator.new())
 
 	# ── Огонь ─────────────────────────────────────────────
@@ -237,20 +261,20 @@ func _draw_magic_tab() -> void:
 		for i in range(1, GameState.fire_magic_levels.size()):
 			if i < GameState.fire_magic_level: continue
 			if i > GameState.fire_magic_level + 1: continue
-			var fm  = GameState.fire_magic_levels[i]
+			var fm = GameState.fire_magic_levels[i]
 			var row = _make_row()
 			row.add_child(_make_color_bar(fm["color"]))
 			var info = _make_info_box()
 			var name_lbl = _make_label("", 14)
-			var dmg_lbl  = _make_label("", 12)
+			var dmg_lbl = _make_label("", 12)
 			if i == GameState.fire_magic_level:
 				name_lbl.text = "▶ " + fm["description"]
-				dmg_lbl.text  = "Урон: " + str(fm["damage"]) + "  [ТЕКУЩИЙ]"
+				dmg_lbl.text = "Урон: " + str(fm["damage"]) + "  [ТЕКУЩИЙ]"
 				name_lbl.add_theme_color_override("font_color", fm["color"])
 				dmg_lbl.add_theme_color_override("font_color", Color.WHITE)
 			else:
 				name_lbl.text = "🔒 " + fm["description"]
-				dmg_lbl.text  = "Урон: " + str(fm["damage"]) + "  |  " + str(fm["cost"]) + " EXP"
+				dmg_lbl.text = "Урон: " + str(fm["damage"]) + "  |  " + str(fm["cost"]) + " EXP"
 				name_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 				dmg_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 			info.add_child(name_lbl)
@@ -283,20 +307,20 @@ func _draw_magic_tab() -> void:
 		for i in range(1, GameState.water_magic_levels.size()):
 			if i < GameState.water_magic_level: continue
 			if i > GameState.water_magic_level + 1: continue
-			var wm  = GameState.water_magic_levels[i]
+			var wm = GameState.water_magic_levels[i]
 			var row = _make_row()
 			row.add_child(_make_color_bar(wm["color"]))
 			var info = _make_info_box()
 			var name_lbl = _make_label("", 14)
-			var dmg_lbl  = _make_label("", 12)
+			var dmg_lbl = _make_label("", 12)
 			if i == GameState.water_magic_level:
 				name_lbl.text = "▶ " + wm["description"]
-				dmg_lbl.text  = "Урон: " + str(wm["damage"]) + "  [ТЕКУЩИЙ]"
+				dmg_lbl.text = "Урон: " + str(wm["damage"]) + "  [ТЕКУЩИЙ]"
 				name_lbl.add_theme_color_override("font_color", wm["color"])
 				dmg_lbl.add_theme_color_override("font_color", Color.WHITE)
 			else:
 				name_lbl.text = "🔒 " + wm["description"]
-				dmg_lbl.text  = "Урон: " + str(wm["damage"]) + "  |  " + str(wm["cost"]) + " EXP"
+				dmg_lbl.text = "Урон: " + str(wm["damage"]) + "  |  " + str(wm["cost"]) + " EXP"
 				name_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 				dmg_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 			info.add_child(name_lbl)
@@ -311,6 +335,104 @@ func _draw_magic_tab() -> void:
 						_show_hint("❌ Нужно " + str(GameState.water_magic_levels[idx]["cost"]) + " EXP!")
 				))
 			vbox.add_child(row)
+
+	vbox.add_child(HSeparator.new())
+
+	# ── Лечение ──────────────────────────────────────────────
+	_add_section_title("💚 МАГИЯ ЛЕЧЕНИЯ  [G]")
+
+	if not GameState.heal_magic_unlocked:
+		var row = _make_row()
+		row.add_child(_make_color_bar(Color(0.2, 0.6, 0.2)))
+		var info = _make_info_box()
+		info.add_child(_make_colored_label("🔒 Не получена", 14, Color(0.3, 0.8, 0.3)))
+		info.add_child(_make_colored_label("Награда за квест 'Пропавшая кошка'", 12, Color(0.6, 0.6, 0.6)))
+		row.add_child(info)
+		vbox.add_child(row)
+	else:
+		# Если есть уведомление - показываем его
+		if GameState.heal_magic_notification:
+			var notify_row = _make_row()
+			notify_row.add_child(_make_color_bar(Color(0.2, 1.0, 0.3)))
+			var notify_info = _make_info_box()
+			
+			var notify_title = _make_label("🎉 НОВАЯ МАГИЯ ОТКРЫТА! 🎉", 14)
+			notify_title.add_theme_color_override("font_color", Color(0.2, 1.0, 0.3))
+			notify_info.add_child(notify_title)
+			
+			var notify_desc = _make_label("Старушка научила тебя магии лечения! Нажми, чтобы узнать больше", 11)
+			notify_desc.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
+			notify_info.add_child(notify_desc)
+			
+			notify_row.add_child(notify_info)
+			
+			# Кнопка "Прочитать"
+			var read_btn := Button.new()
+			read_btn.text = "📜 Прочитать"
+			read_btn.custom_minimum_size = Vector2(82, 48)
+			read_btn.pressed.connect(_show_heal_notification)
+			notify_row.add_child(read_btn)
+			
+			vbox.add_child(notify_row)
+		
+		# Список уровней магии лечения
+		for i in range(1, GameState.heal_magic_levels.size()):
+			if i < GameState.heal_magic_level: continue
+			if i > GameState.heal_magic_level + 1: continue
+			var hm = GameState.heal_magic_levels[i]
+			var row = _make_row()
+			row.add_child(_make_color_bar(hm["color"]))
+			var info = _make_info_box()
+			var name_lbl = _make_label("", 14)
+			var heal_lbl = _make_label("", 12)
+			if i == GameState.heal_magic_level:
+				name_lbl.text = "▶ " + hm["description"]
+				heal_lbl.text = "Лечение: +" + str(hm["heal_amount"]) + " HP  [ТЕКУЩИЙ]"
+				name_lbl.add_theme_color_override("font_color", hm["color"])
+				heal_lbl.add_theme_color_override("font_color", Color.WHITE)
+			else:
+				name_lbl.text = "🔒 " + hm["description"]
+				heal_lbl.text = "Лечение: +" + str(hm["heal_amount"]) + " HP  |  " + str(hm["cost"]) + " EXP"
+				name_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+				heal_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+			info.add_child(name_lbl)
+			info.add_child(heal_lbl)
+			row.add_child(info)
+			if i == GameState.heal_magic_level + 1:
+				var idx = i
+				row.add_child(_make_upgrade_btn(func():
+					if GameState.upgrade_heal_magic():
+						refresh()
+					else:
+						_show_hint("❌ Нужно " + str(GameState.heal_magic_levels[idx]["cost"]) + " EXP!")
+				))
+			vbox.add_child(row)
+
+func _show_heal_notification() -> void:
+	# Отмечаем уведомление как прочитанное
+	GameState.mark_heal_notification_seen()
+	
+	# Обновляем вкладку
+	refresh()
+	
+	# Показываем всплывающее сообщение
+	var msg = _make_colored_label("💚 МАГИЯ ЛЕЧЕНИЯ 💚\n\n"
+		+ "Теперь ты можешь лечить себя!\n"
+		+ "Клавиша: G\n\n"
+		+ "Уровни магии:\n"
+		+ "1 ур. - 25 HP\n"
+		+ "2 ур. - 50 HP (200 EXP)\n"
+		+ "3 ур. - 85 HP (400 EXP)\n"
+		+ "4 ур. - 125 HP (650 EXP)", 14, Color(0.2, 1.0, 0.3))
+	msg.position = Vector2(308, 200)
+	msg.custom_minimum_size = Vector2(404, 200)
+	msg.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	msg.autowrap_mode = TextServer.AUTOWRAP_WORD
+	add_child(msg)
+	
+	var tween = create_tween()
+	tween.tween_property(msg, "modulate:a", 0.0, 3.0)
+	tween.tween_callback(msg.queue_free)
 
 # ══════════════════════════════════════════════════════════
 # ВКЛАДКА: КВЕСТЫ
@@ -358,6 +480,7 @@ func _draw_quest_tab() -> void:
 	info.add_child(name_lbl)
 	info.add_child(desc_lbl)
 	row.add_child(info)
+	
 	if GameState.quest_kill_boars == GameState.QuestState.ACTIVE:
 		var abandon_btn := Button.new()
 		abandon_btn.text = "❌"
@@ -368,6 +491,7 @@ func _draw_quest_tab() -> void:
 			refresh()
 		)
 		row.add_child(abandon_btn)
+	
 	vbox.add_child(row)
 
 	# Прогресс бар если квест активен
@@ -383,13 +507,53 @@ func _draw_quest_tab() -> void:
 		progress_fill.custom_minimum_size = Vector2(390 * fill_ratio, 10)
 		progress_fill.color = Color(1.0, 0.8, 0.0)
 		progress_bg.add_child(progress_fill)
+	
+	# ── Квест: найти кошку ──────────────────────────────
+	var quest_cat_color: Color
+	match GameState.quest_cat:
+		GameState.QuestState.NOT_TAKEN:  quest_cat_color = Color(0.5, 0.5, 0.5)
+		GameState.QuestState.ACTIVE:     quest_cat_color = Color(1.0, 0.6, 0.0)
+		GameState.QuestState.COMPLETED:  quest_cat_color = Color(0.0, 1.0, 0.3)
+		GameState.QuestState.HANDED_IN:  quest_cat_color = Color(0.4, 0.4, 0.4)
+
+	var row_cat = _make_row()
+	row_cat.add_child(_make_color_bar(quest_cat_color))
+
+	var info_cat = _make_info_box()
+	var name_lbl_cat = _make_label("", 14)
+	var desc_lbl_cat = _make_label("", 12)
+
+	match GameState.quest_cat:
+		GameState.QuestState.NOT_TAKEN:
+			name_lbl_cat.text = "🐱 Пропавшая кошка"
+			desc_lbl_cat.text = "Поговори со старейшиной"
+			name_lbl_cat.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+		GameState.QuestState.ACTIVE:
+			name_lbl_cat.text = "🐱 Пропавшая кошка"
+			desc_lbl_cat.text = "Найди кошку в лесу"
+			name_lbl_cat.add_theme_color_override("font_color", Color(1.0, 0.7, 0.2))
+		GameState.QuestState.COMPLETED:
+			name_lbl_cat.text = "✅ Пропавшая кошка"
+			desc_lbl_cat.text = "Вернись к старейшине!"
+			name_lbl_cat.add_theme_color_override("font_color", Color(0.2, 1.0, 0.4))
+		GameState.QuestState.HANDED_IN:
+			name_lbl_cat.text = "🏆 Пропавшая кошка"
+			desc_lbl_cat.text = "Выполнено! Старушка счастлива"
+			name_lbl_cat.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+
+	info_cat.add_child(name_lbl_cat)
+	info_cat.add_child(desc_lbl_cat)
+	row_cat.add_child(info_cat)
+	
+	vbox.add_child(row_cat)
+
 
 # ══════════════════════════════════════════════════════════
 # ХЕЛПЕРЫ
 # ══════════════════════════════════════════════════════════
 func _make_row() -> HBoxContainer:
 	var row := HBoxContainer.new()
-	row.custom_minimum_size = Vector2(390, 52)
+	row.custom_minimum_size = Vector2(510, 52)
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_constant_override("separation", 6)
 	return row
@@ -421,7 +585,7 @@ func _make_colored_label(text: String, size: int, color: Color) -> Label:
 func _make_upgrade_btn(callback: Callable, label: String = "Улучшить") -> Button:
 	var btn := Button.new()
 	btn.text = label
-	btn.custom_minimum_size = Vector2(82, 48)
+	btn.custom_minimum_size = Vector2(100, 48)
 	btn.pressed.connect(callback)
 	return btn
 

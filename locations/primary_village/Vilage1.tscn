@@ -60,7 +60,8 @@
 [ext_resource type="PackedScene" uid="uid://3vi0ubdpli5a" path="res://portal/Portal.tscn" id="56_6na36"]
 [ext_resource type="AudioStream" uid="uid://bhypob4qlfqk2" path="res://Music/449359103103a80.mp3" id="58_am1wp"]
 [ext_resource type="AudioStream" uid="uid://d308wnakdefqj" path="res://Music/1774464752.mp3" id="59_eyrn7"]
-[ext_resource type="PackedScene" path="res://enemy/Spawner.tscn" id="60_k4j2w"]
+[ext_resource type="PackedScene" uid="uid://bayjlmyeofonw" path="res://enemy/Spawner.tscn" id="60_k4j2w"]
+[ext_resource type="PackedScene" uid="uid://v6a5e2h41ka0" path="res://animals/cat/stena.tscn" id="62_om1lu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onb6d"]
 texture = ExtResource("1_6ql0f")
@@ -9302,7 +9303,7 @@ tile_set = SubResource("TileSet_l52ty")
 position = Vector2(1242, -1068)
 
 [node name="cat_orange" parent="." unique_id=1933003742 instance=ExtResource("54_6na36")]
-position = Vector2(1005, -1056)
+position = Vector2(-671, 765)
 
 [node name="Nps" parent="." unique_id=962183908 groups=["player"] instance=ExtResource("55_s1xfd")]
 position = Vector2(413, -456)
@@ -9344,3 +9345,23 @@ position = Vector2(-113, -942)
 enemy_scene = ExtResource("55_6na36")
 max_enemies = 2
 spawn_interval = 10.0
+
+[node name="Stena" parent="." unique_id=937432554 instance=ExtResource("62_om1lu")]
+position = Vector2(-189, -3049)
+scale = Vector2(5.67, 28.655)
+constant_linear_velocity = Vector2(0.19, 0)
+
+[node name="Stena2" parent="." unique_id=2043533895 instance=ExtResource("62_om1lu")]
+position = Vector2(-2359, 2726)
+rotation = -3.0455995
+scale = Vector2(1.28, 13.455)
+
+[node name="Stena3" parent="." unique_id=2124209353 instance=ExtResource("62_om1lu")]
+position = Vector2(-2727, 624.00024)
+rotation = -1.7453293
+scale = Vector2(1, 17.375)
+
+[node name="Stena4" parent="." unique_id=627845611 instance=ExtResource("62_om1lu")]
+position = Vector2(-2358, 2462.0002)
+rotation = -1.7453293
+scale = Vector2(1, 11.38)

@@ -94,35 +94,40 @@ var fire_magic_levels: Array = [
 		"damage": 0.0, "cost": 50,
 		"color": Color(0.5, 0.5, 0.5),
 		"description": "Открыть магию огня",
-		"radius": 0.0, "speed": 0.0
+		"radius": 0.0, "speed": 0.0,
+		"cooldown": 0.0
 	},
 	{
 		"level": 1, "name": "Огненный шар",
 		"damage": 10.0, "cost": 0,
 		"color": Color(1.0, 0.5, 0.0),
 		"description": "Маленький огненный шар",
-		"radius": 7.0, "speed": 260.0
+		"radius": 7.0, "speed": 260.0,
+		"cooldown": 2.0
 	},
 	{
 		"level": 2, "name": "Огненный шар II",
 		"damage": 22.0, "cost": 150,
 		"color": Color(1.0, 0.75, 0.0),
 		"description": "Большой горящий шар",
-		"radius": 11.0, "speed": 320.0
+		"radius": 11.0, "speed": 320.0,
+		"cooldown": 1.7
 	},
 	{
 		"level": 3, "name": "Огненный шар III",
 		"damage": 40.0, "cost": 300,
 		"color": Color(1.0, 0.25, 0.0),
 		"description": "Огромный шар с искрами",
-		"radius": 16.0, "speed": 380.0
+		"radius": 16.0, "speed": 380.0,
+		"cooldown": 1.5
 	},
 	{
 		"level": 4, "name": "Адский огонь",
 		"damage": 70.0, "cost": 500,
 		"color": Color(0.8, 0.0, 0.0),
 		"description": "Тёмное пламя ада",
-		"radius": 22.0, "speed": 440.0
+		"radius": 22.0, "speed": 440.0,
+		"cooldown": 1.7
 	},
 ]
 
@@ -167,14 +172,18 @@ var active_magic: String = "fire"
 signal active_magic_changed(magic_type: String)
 
 func set_active_magic(type: String) -> void:
+	if type == "heal" and not heal_magic_unlocked:
+		print("💚 Магия лечения ещё не открыта!")
+		return
 	active_magic = type
 	print("✨ Активная магия:", type)
-	emit_signal("active_magic_changed", type)
+	emit_signal("active_magic_changed", type)  # 👈 ИСПРАВЛЕНО)
 
 func get_active_magic_level() -> int:
 	match active_magic:
 		"fire":  return fire_magic_level
 		"water": return water_magic_level
+		"heal":  return heal_magic_level 
 	return 0
 
 # ─── МАГИЯ ВОДЫ ──────────────────────────────────────────
@@ -190,35 +199,40 @@ var water_magic_levels: Array = [
 		"damage": 0.0, "cost": 0,
 		"color": Color(0.3, 0.6, 1.0),
 		"description": "Выпадает с водных мобов",
-		"radius": 0.0, "speed": 0.0
+		"radius": 0.0, "speed": 0.0,
+		"cooldown": 1.8
 	},
 	{
 		"level": 1, "name": "Водяной шар",
 		"damage": 15.0, "cost": 0,
 		"color": Color(0.2, 0.7, 1.0),
 		"description": "Водяной снаряд",
-		"radius": 8.0, "speed": 240.0
+		"radius": 8.0, "speed": 240.0,
+		"cooldown": 1.5
 	},
 	{
 		"level": 2, "name": "Водяной шар II",
 		"damage": 30.0, "cost": 200,
 		"color": Color(0.0, 0.5, 1.0),
 		"description": "Мощный поток воды",
-		"radius": 13.0, "speed": 300.0
+		"radius": 13.0, "speed": 300.0,
+		"cooldown": 3.0
 	},
 	{
 		"level": 3, "name": "Водяной шар III",
 		"damage": 55.0, "cost": 400,
 		"color": Color(0.0, 0.3, 0.9),
 		"description": "Волна цунами",
-		"radius": 18.0, "speed": 360.0
+		"radius": 18.0, "speed": 360.0,
+		"cooldown": 1.0
 	},
 	{
 		"level": 4, "name": "Океанская мощь",
 		"damage": 90.0, "cost": 700,
 		"color": Color(0.0, 0.1, 0.8),
 		"description": "Сила древнего океана",
-		"radius": 25.0, "speed": 420.0
+		"radius": 25.0, "speed": 420.0,
+		"cooldown": 0.0
 	},
 ]
 
@@ -253,14 +267,133 @@ func upgrade_water_magic() -> bool:
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
 	# ─── КВЕСТЫ ──────────────────────────────────────────────
+# ─── КВЕСТЫ ──────────────────────────────────────────────
 enum QuestState { NOT_TAKEN, ACTIVE, COMPLETED, HANDED_IN }
 
+# Квест 1: Убить кабанов
 var quest_kill_boars: QuestState = QuestState.NOT_TAKEN
 var boars_killed: int = 0
 var boars_needed: int = 10
 
+# Квест 2: Найти кошку (открывается после квеста с кабанами)
+var quest_cat: QuestState = QuestState.NOT_TAKEN
+var cat_found: bool = false
+
 signal quest_updated()
 
+# ─── МАГИЯ ЛЕЧЕНИЯ ──────────────────────────────────────
+var heal_magic_unlocked: bool = false
+var heal_magic_level: int = 0
+
+signal heal_magic_unlocked_signal()
+signal heal_magic_upgraded(new_level: int)
+
+var heal_magic_levels: Array = [
+	{
+		"level": 0, "name": "Не получена",
+		"heal_amount": 0, "cost": 0,
+		"color": Color(0.5, 0.5, 0.5),
+		"description": "Найди пропавшую кошку",
+		"cooldown": 0.0
+	},
+	{
+		"level": 1, "name": "Малая регенерация",
+		"heal_amount": 25, "cost": 0,
+		"color": Color(0.2, 1.0, 0.3),
+		"description": "Восстанавливает 25 HP",
+		"cooldown": 9.0
+	},
+	{
+		"level": 2, "name": "Средняя регенерация",
+		"heal_amount": 50, "cost": 200,
+		"color": Color(0.3, 1.0, 0.5),
+		"description": "Восстанавливает 50 HP",
+		"cooldown": 7.0
+	},
+	{
+		"level": 3, "name": "Сильная регенерация",
+		"heal_amount": 85, "cost": 400,
+		"color": Color(0.4, 1.0, 0.6),
+		"description": "Восстанавливает 85 HP",
+		"cooldown": 5.5
+	},
+	{
+		"level": 4, "name": "Божественное исцеление",
+		"heal_amount": 125, "cost": 650,
+		"color": Color(0.6, 1.0, 0.8),
+		"description": "Восстанавливает 125 HP",
+		"cooldown": 6.0
+	},
+]
+
+# ─── КВЕСТ: ПРОПАВШАЯ КОШКА ──────────────────────────────
+func start_quest_cat() -> void:
+	if quest_cat != QuestState.NOT_TAKEN:
+		return
+	quest_cat = QuestState.ACTIVE
+	cat_found = false
+	print("🐱 Квест начат: Найди пропавшую кошку!")
+	emit_signal("quest_updated")
+
+func find_cat() -> void:
+	if quest_cat != QuestState.ACTIVE:
+		return
+	cat_found = true
+	quest_cat = QuestState.COMPLETED
+	print("🐱 Кошка найдена! Вернись к старейшине!")
+	emit_signal("quest_updated")
+
+func hand_in_quest_cat() -> bool:
+	if quest_cat != QuestState.COMPLETED:
+		return false
+	quest_cat = QuestState.HANDED_IN
+	
+	# 🎁 Открываем магию лечения
+	unlock_heal_magic()
+	
+	print("🐱 Квест сдан! Открыта магия лечения!")
+	emit_signal("quest_updated")
+	return true
+
+# ─── МАГИЯ ЛЕЧЕНИЯ ──────────────────────────────────────
+
+var heal_magic_notification: bool = false  # Новое уведомление о магии
+func unlock_heal_magic() -> void:
+	if heal_magic_unlocked:
+		return
+	heal_magic_unlocked = true
+	heal_magic_level = 1
+	heal_magic_notification = true  # 👈 Включаем уведомление
+	print("💚 Магия лечения получена! Уровень 1")
+	emit_signal("heal_magic_unlocked_signal")
+	emit_signal("heal_magic_upgraded", heal_magic_level)
+
+func mark_heal_notification_seen() -> void:
+	heal_magic_notification = false
+	
+func get_heal_magic() -> Dictionary:
+	return heal_magic_levels[heal_magic_level]
+
+func can_upgrade_heal() -> bool:
+	return heal_magic_level < heal_magic_levels.size() - 1
+
+func upgrade_heal_magic() -> bool:
+	if not heal_magic_unlocked:
+		return false
+	if not can_upgrade_heal():
+		print("💚 Магия лечения максимального уровня!")
+		return false
+	var next_level = heal_magic_level + 1
+	var cost = heal_magic_levels[next_level]["cost"]
+	if spend_exp(cost):
+		heal_magic_level = next_level
+		print("💚 Магия лечения улучшена до уровня:", heal_magic_level)
+		emit_signal("heal_magic_upgraded", heal_magic_level)
+		return true
+	print("❌ Не хватает EXP! Нужно:", cost)
+	return false
+
+# ─── КВЕСТ: КАБАНЫ ──────────────────────────────────────
 func start_quest_kill_boars() -> void:
 	if quest_kill_boars != QuestState.NOT_TAKEN:
 		return
@@ -287,12 +420,9 @@ func hand_in_quest_kill_boars() -> bool:
 	add_exp(300)
 	print("🎉 Квест сдан! +300 EXP!")
 	emit_signal("quest_updated")
-	return true
 	
-func abandon_quest_kill_boars() -> void:
-	if quest_kill_boars != QuestState.ACTIVE:
-		return
-	quest_kill_boars = QuestState.NOT_TAKEN
-	boars_killed = 0
-	print("❌ Квест отменён")
-	emit_signal("quest_updated")
+	# После сдачи квеста с кабанами открывается квест с кошкой
+	if quest_cat == QuestState.NOT_TAKEN:
+		start_quest_cat()
+	
+	return true

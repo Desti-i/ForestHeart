@@ -49,7 +49,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	state_machine.update(delta)
-	_separate_from_others()  # ← добавь эту строку
+	_separate_from_others()  
 	move_and_slide()
 	if hp_bar:
 		hp_bar.global_position = global_position + Vector2(-20, -45)
@@ -68,7 +68,6 @@ func _separate_from_others() -> void:
 		var diff = global_position - body.global_position
 		var dist = diff.length()
 		if dist < separation_radius and dist > 0.1:
-			# Чем ближе - тем сильнее толчок
 			push += diff.normalized() * (separation_radius - dist) / separation_radius * separation_force
 
 	velocity += push

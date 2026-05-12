@@ -177,7 +177,7 @@ func set_active_magic(type: String) -> void:
 		return
 	active_magic = type
 	print("✨ Активная магия:", type)
-	emit_signal("active_magic_changed", type)  # 👈 ИСПРАВЛЕНО)
+	emit_signal("active_magic_changed", type)
 
 func get_active_magic_level() -> int:
 	match active_magic:
@@ -353,6 +353,9 @@ func hand_in_quest_cat() -> bool:
 	
 	print("🐱 Квест сдан! Открыта магия лечения!")
 	emit_signal("quest_updated")
+	
+	update_save_data()
+	
 	return true
 
 # ─── МАГИЯ ЛЕЧЕНИЯ ──────────────────────────────────────
@@ -425,4 +428,58 @@ func hand_in_quest_kill_boars() -> bool:
 	if quest_cat == QuestState.NOT_TAKEN:
 		start_quest_cat()
 	
+	update_save_data()
+	
 	return true
+	
+func update_save_data():
+	var player = get_tree().get_first_node_in_group("player")
+	
+	SaveManager.game_data.player_pos = {"x": player.position.x, "y": player.position.y}
+	SaveManager.game_data.current_scene = get_tree().current_scene.scene_file_path
+	SaveManager.game_data.stats.exp = exp
+	print(SaveManager.game_data.stats.exp)
+	SaveManager.game_data.stats.current_health = player.current_health
+	print(SaveManager.game_data.stats.current_health)
+	SaveManager.game_data.stats.sword_level = sword_level
+	SaveManager.game_data.stats.fire_magic_level = fire_magic_level
+	SaveManager.game_data.stats.water_magic_level= water_magic_level
+	SaveManager.game_data.stats.heal_magic_level= heal_magic_level
+	
+	SaveManager.game_data.quests.quest_kill_boars.state = quest_kill_boars
+	SaveManager.game_data.quests.quest_kill_boars.progress = boars_killed
+	
+	SaveManager.game_data.quests.cat_quest.state = quest_cat
+	SaveManager.game_data.quests.cat_quest.progress = cat_found
+	
+	SaveManager.save_game()
+
+func apply_load_data():
+	SaveManager.load_game()
+	
+	var data = SaveManager.game_data
+	
+	var player = get_tree().get_first_node_in_group("player")
+	
+	if player:
+		player.position = Vector2(data.player_pos.x, data.player_pos.y)
+		player.current_health = data.stats.current_health
+		
+		if player.hp_bar:
+			player.hp_bar.value = player.current_health
+			player._update_hp_label()
+	
+	exp = data.stats.exp
+	emit_signal("exp_changed", exp)
+	sword_level = data.stats.sword_level
+	fire_magic_level = data.stats.fire_magic_level
+	water_magic_level = data.stats.water_magic_level
+	heal_magic_level = data.stats.heal_magic_level
+	
+	if data.quests.has("quest_kill_boars"):
+		quest_kill_boars = data.quests.quest_kill_boars.state
+		boars_killed = data.quests.quest_kill_boars.progress
+		
+	if data.quests.has("cat_quest"):
+		quest_cat = data.quests.cat_quest.state
+		cat_found = data.quests.cat_quest.progress

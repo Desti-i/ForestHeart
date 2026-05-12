@@ -32,5 +32,14 @@ text = "Option"
 
 [node name="Bg" parent="." unique_id=1034420027 instance=ExtResource("2_g18jx")]
 
+[node name="new play" type="Button" parent="." unique_id=91498714]
+offset_left = 916.0
+offset_top = 424.0
+offset_right = 1183.0
+offset_bottom = 523.0
+theme_override_font_sizes/font_size = 60
+text = "new play"
+
 [connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="new play" to="." method="_on_new_play_pressed"]

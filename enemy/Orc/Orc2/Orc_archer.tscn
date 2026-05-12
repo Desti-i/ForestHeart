@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cj7bjdnownrm0" path="res://enemy/Orc/Orc2/Boar/Boar_Attack_with_shadow.png" id="3_3vf20"]
 [ext_resource type="Texture2D" uid="uid://bh7krur22xd7t" path="res://enemy/Orc/Orc2/Boar/Boar_Death_with_shadow.png" id="4_h2qal"]
 [ext_resource type="Texture2D" uid="uid://rklgb85exb2c" path="res://enemy/Orc/Orc2/Boar/Boar_Idle_with_shadow.png" id="5_2ia7e"]
-[ext_resource type="Script" uid="uid://buwog4el4l0uk" path="res://enemy/Patrol.gd" id="7_h2qal"]
+[ext_resource type="Script" path="res://enemy/Patrol.gd" id="7_h2qal"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h2qal"]
 resource_local_to_scene = true

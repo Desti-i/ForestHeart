@@ -12,7 +12,7 @@ enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 @onready var q_menu   = $"../CanvasLayer/QMenu"
 
 var max_health:     float = 100
-var current_health: float = 100
+var current_health: float = max_health
 var damage:         float = 5.0
 
 const WALK_SPEED: float = 100.0
@@ -45,7 +45,6 @@ var _water_cd: float = 0.0
 var _heal_cd:  float = 0.08   # общее время перезарядки для любой магии
 
 func _ready() -> void:
-	current_health = max_health
 	stamina        = max_stamina
 	if hp_bar:
 		hp_bar.max_value = max_health
@@ -342,31 +341,14 @@ func die() -> void:
 	if q_menu:
 		q_menu.visible = false
 
-	if anim and anim.sprite_frames.has_animation("death"):
-		anim.play("death")
-		await get_tree().create_timer(2.8).timeout
-	else:
-		await get_tree().create_timer(0.5).timeout
+	anim.play("death")
+	await anim.animation_finished
+	await get_tree().create_timer(0.5).timeout
 
 	if not is_inside_tree():
 		return
 
-	var overlay := ColorRect.new()
-	overlay.color = Color(0, 0, 0, 0)
-	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
-	overlay.z_index = 200
-	get_tree().current_scene.add_child(overlay)
-
-	var tw = create_tween()
-	tw.tween_property(overlay, "color:a", 1.0, 0.5)
-	await tw.finished
-
 	_respawn()
-
-	var tw2 = create_tween()
-	tw2.tween_property(overlay, "color:a", 0.0, 0.5)
-	await tw2.finished
-	overlay.queue_free()
 
 func _respawn() -> void:
 	current_health = max_health * 0.3

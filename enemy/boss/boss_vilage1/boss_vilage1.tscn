@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://mjfkhcf3s3mv" path="res://enemy/boss/boss_vilage1/image_2026-05-04_00-02-18.png" id="7_umln8"]
 [ext_resource type="Texture2D" uid="uid://bkgyjnplj4pem" path="res://enemy/boss/boss_vilage1/image_2026-05-04_08-27-36.png" id="8_mrupb"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mrupb"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6nhd4"]
 resource_local_to_scene = true
 height = 34.0
 
@@ -663,7 +663,7 @@ region = Rect2(512, 0, 64, 64)
 atlas = ExtResource("8_mrupb")
 region = Rect2(576, 0, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_i5kuo"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_retej"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -1365,11 +1365,11 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_bmh4x"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_upv6c"]
 resource_local_to_scene = true
 radius = 150.0
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_npxbf"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mgrjb"]
 resource_local_to_scene = true
 radius = 8.46
 height = 20.09
@@ -2431,7 +2431,7 @@ tracks/5/path = NodePath("Attack_area/CollisionShape2D:disabled")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.39999944, 3.9145062),
+"times": PackedFloat32Array(0, 0.41501936, 4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [true, false, true]
@@ -2466,24 +2466,25 @@ _data = {
 
 [node name="boss_vilage1" unique_id=355327370 instance=ExtResource("1_g22wy")]
 script = ExtResource("2_8pwrk")
-damage_att_1 = 0.0
-damage_att_2 = 0.0
+damage_att_1 = 40.0
+damage_att_2 = 20.0
 use_melee = false
 bullet_scene = ExtResource("3_6nhd4")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344]
-shape = SubResource("CapsuleShape2D_mrupb")
+shape = SubResource("CapsuleShape2D_6nhd4")
 
 [node name="Movements" parent="." index="1" unique_id=403867546]
 position = Vector2(0, 5.11)
-sprite_frames = SubResource("SpriteFrames_i5kuo")
-animation = &"Down"
+sprite_frames = SubResource("SpriteFrames_retej")
+animation = &"special_attack_2"
+frame = 39
 
 [node name="CollisionShape2D" parent="detector" parent_id_path=PackedInt32Array(963818677) index="0" unique_id=766399847]
-shape = SubResource("CircleShape2D_bmh4x")
+shape = SubResource("CircleShape2D_upv6c")
 
 [node name="CollisionShape2D" parent="Attack_zone" parent_id_path=PackedInt32Array(1428366797) index="0" unique_id=784964863]
-shape = SubResource("CapsuleShape2D_npxbf")
+shape = SubResource("CapsuleShape2D_mgrjb")
 
 [node name="CollisionShape2D" parent="Attack_area" parent_id_path=PackedInt32Array(1858617201) index="0" unique_id=954509707]
 position = Vector2(1, 8)

@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://vxcnpo0xhlxn"]
 
 [ext_resource type="Texture2D" uid="uid://ci6kbf73pmf1r" path="res://assets_0/Tiny Swords (Free Pack)/Terrain/Tileset/Water Background color.png" id="1_6ql0f"]
+[ext_resource type="Script" uid="uid://n117k5a2axf7" path="res://locations/primary_village/vilage_1.gd" id="1_hyxvc"]
 [ext_resource type="Texture2D" uid="uid://dddwk6s0beiql" path="res://assets_0/Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Water.png" id="2_00d8h"]
 [ext_resource type="Texture2D" uid="uid://p6km1qcwgsb5" path="res://assets_0/Tiny Swords (Free Pack)/Terrain/Tileset/Tilemap_color1.png" id="2_072iu"]
 [ext_resource type="Texture2D" uid="uid://8g411gb5mdd7" path="res://assets_0/Tiny Swords/Tiny Swords (Update 010)/Terrain/Ground/Tilemap_Elevation.png" id="3_bfc8f"]
@@ -61,7 +62,8 @@
 [ext_resource type="AudioStream" uid="uid://bhypob4qlfqk2" path="res://Music/449359103103a80.mp3" id="58_am1wp"]
 [ext_resource type="AudioStream" uid="uid://d308wnakdefqj" path="res://Music/1774464752.mp3" id="59_eyrn7"]
 [ext_resource type="PackedScene" uid="uid://bayjlmyeofonw" path="res://enemy/Spawner.tscn" id="60_k4j2w"]
-[ext_resource type="PackedScene" uid="uid://v6a5e2h41ka0" path="res://animals/cat/stena.tscn" id="62_om1lu"]
+[ext_resource type="PackedScene" path="res://animals/cat/stena.tscn" id="62_om1lu"]
+[ext_resource type="PackedScene" uid="uid://dxyshi6j22adl" path="res://enemy/Orc/Orc1/Orc_1.tscn" id="63_vjbjx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onb6d"]
 texture = ExtResource("1_6ql0f")
@@ -9176,6 +9178,7 @@ sources/3 = SubResource("TileSetAtlasSource_xo20n")
 sources/4 = SubResource("TileSetAtlasSource_ln6ko")
 
 [node name="FirstLocation" type="Node2D" unique_id=946760632]
+script = ExtResource("1_hyxvc")
 
 [node name="water" type="TileMapLayer" parent="." unique_id=63207888]
 position = Vector2(-165, 806)
@@ -9365,3 +9368,6 @@ scale = Vector2(1, 17.375)
 position = Vector2(-2358, 2462.0002)
 rotation = -1.7453293
 scale = Vector2(1, 11.38)
+
+[node name="Orc_1" parent="." unique_id=355327370 instance=ExtResource("63_vjbjx")]
+position = Vector2(181, -815)

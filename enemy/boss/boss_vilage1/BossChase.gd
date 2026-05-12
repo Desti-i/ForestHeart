@@ -11,12 +11,6 @@ func update(delta):
 		return
 	
 	timer -= delta
-	if enemy.player:
-		var dist = enemy.global_position.distance_to(enemy.player.global_position)
-	
-		if dist >= 100 and dist <= 149:
-			state_machine.change_state("RangedAttack")
-			return
 		
 	if enemy.player_in:
 		state_machine.change_state("AttackSelect")

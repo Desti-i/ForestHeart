@@ -366,7 +366,7 @@ func unlock_heal_magic() -> void:
 		return
 	heal_magic_unlocked = true
 	heal_magic_level = 1
-	heal_magic_notification = true  # 👈 Включаем уведомление
+	heal_magic_notification = true
 	print("💚 Магия лечения получена! Уровень 1")
 	emit_signal("heal_magic_unlocked_signal")
 	emit_signal("heal_magic_upgraded", heal_magic_level)
@@ -450,7 +450,7 @@ func update_save_data():
 	SaveManager.game_data.quests.quest_kill_boars.progress = boars_killed
 	
 	SaveManager.game_data.quests.cat_quest.state = quest_cat
-	SaveManager.game_data.quests.cat_quest.progress = cat_found
+	SaveManager.game_data.quests.cat_quest.progress = {"cat_found": cat_found, "heal_magic_unlocked": heal_magic_unlocked}
 	
 	SaveManager.save_game()
 
@@ -482,4 +482,5 @@ func apply_load_data():
 		
 	if data.quests.has("cat_quest"):
 		quest_cat = data.quests.cat_quest.state
-		cat_found = data.quests.cat_quest.progress
+		cat_found = data.quests.cat_quest.progress.cat_found
+		heal_magic_unlocked = data.quests.cat_quest.progress.heal_magic_unlocked

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bng0x85go2dky"
-path="res://.godot/imported/Sprite-0003.png-02c8b48759e19fdfd9ad647ec43768ab.ctex"
+uid="uid://biu1bs3kagsa3"
+path="res://.godot/imported/stamina 2.png-a14ab92df63b372d951c08e847f0cfe4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://iNTERFACE/Sprite-0003.png"
-dest_files=["res://.godot/imported/Sprite-0003.png-02c8b48759e19fdfd9ad647ec43768ab.ctex"]
+source_file="res://iNTERFACE/Stamina/stamina 2.png"
+dest_files=["res://.godot/imported/stamina 2.png-a14ab92df63b372d951c08e847f0cfe4.ctex"]
 
 [params]
 

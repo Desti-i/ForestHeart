@@ -14,21 +14,27 @@ func _on_play_pressed():
 
 func _on_new_play_pressed() -> void:
 	SaveManager.game_data = {
-		"current_scene": "res://levels/level_1.tscn",
-		"player_pos": {"x": 300, "y": -400},
-		"stats": {
-			"exp": 0,
-			"current_health": 100,
-			"sword_level": 0,
-			"fire_magic_level": 0,
-			"water_magic_level": 0,
-			"heal_magic_level": 0
+	"current_scene": "res://levels/level_1.tscn",
+	"player_pos": {"x": 0, "y": 0},
+	"stats": {
+		"exp": 0,
+		"current_health": 100,
+		"sword_level": 0,
+		"fire_magic_level": 0,
+		"water_magic_level": 0,
+		"heal_magic_level": 0
+	},
+	"quests": {
+		"quest_kill_boars": {
+			"state": 0,
+			"progress": 0
 		},
-		"quests": {
-			"quest_kill_boars": {"state": 0, "progress": 0},
-			"cat_quest": {"state": 0, "progress": false}
+		"cat_quest": {
+			"state": 0,
+			"progress": {"cat_found": false, "heal_magic_unlocked": false}
 		}
 	}
+}
 	
 	SaveManager.save_game()
 

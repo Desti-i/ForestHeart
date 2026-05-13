@@ -15,7 +15,7 @@ func _ready() -> void:
 	GameState.exp_changed.connect(_on_exp_changed)
 	GameState.sword_upgraded.connect(func(_l): refresh())
 	GameState.fire_magic_upgraded.connect(func(_l): refresh())
-	GameState.heal_magic_upgraded.connect(func(_l): refresh())  # 👈 ДОБАВЬ
+	GameState.heal_magic_upgraded.connect(func(_l): refresh())
 	GameState.heal_magic_unlocked_signal.connect(func(): refresh())
 	GameState.quest_updated.connect(func():if current_tab == "quest":refresh())
 	

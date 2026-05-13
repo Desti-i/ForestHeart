@@ -7,8 +7,8 @@
 [ext_resource type="Script" uid="uid://ck1uqevptvkt7" path="res://enemy/Base/FSM/Attack.gd" id="5_endcf"]
 [ext_resource type="Script" uid="uid://j236rghrxvgi" path="res://enemy/Base/FSM/Death.gd" id="6_2banv"]
 [ext_resource type="Script" uid="uid://ce5g1rn1e0tkm" path="res://enemy/Base/FSM/RangedAttack.gd" id="6_endcf"]
-[ext_resource type="Texture2D" uid="uid://bng0x85go2dky" path="res://iNTERFACE/Sprite-0003.png" id="7_bqu1w"]
-[ext_resource type="Texture2D" uid="uid://ds3q6aaltgei" path="res://iNTERFACE/Sprite-0002 (1).png" id="8_endcf"]
+[ext_resource type="Texture2D" uid="uid://bng0x85go2dky" path="res://iNTERFACE/Stamina/Sprite-0003.png" id="7_bqu1w"]
+[ext_resource type="Texture2D" uid="uid://ds3q6aaltgei" path="res://iNTERFACE/Stamina/Sprite-0002 (1).png" id="8_endcf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5t5nu"]
 resource_local_to_scene = true

@@ -7,7 +7,7 @@ var game_data = {
 	"player_pos": {"x": 0, "y": 0},
 	"stats": {
 		"exp": 0,
-		"current_health": 80,
+		"current_health": 100,
 		"sword_level": 0,
 		"fire_magic_level": 0,
 		"water_magic_level": 0,
@@ -20,7 +20,7 @@ var game_data = {
 		},
 		"cat_quest": {
 			"state": 0,
-			"progress": false
+			"progress": {"cat_found": false, "heal_magic_unlocked": false}
 		}
 	}
 }

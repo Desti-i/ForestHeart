@@ -326,7 +326,87 @@ var heal_magic_levels: Array = [
 		"description": "Восстанавливает 125 HP",
 		"cooldown": 6.0
 	},
+	
+	
 ]
+
+# ─── МАГИЯ ЛЬДА ──────────────────────────────────────────
+var ice_magic_level: int = 0
+
+signal ice_magic_upgraded(new_level: int)
+
+var ice_magic_levels: Array = [
+	{
+		"level": 0, "name": "Не открыта",
+		"damage": 0.0, "cost": 150,
+		"color": Color(0.6, 0.9, 1.0),
+		"description": "Открыть магию льда",
+		"radius": 0.0, "speed": 0.0,
+		"cooldown": 0.0
+	},
+	{
+		"level": 1, "name": "Ледяной осколок",
+		"damage": 18.0, "cost": 0,
+		"color": Color(0.7, 0.95, 1.0),
+		"description": "Острый ледяной снаряд",
+		"radius": 6.0, "speed": 350.0,
+		"cooldown": 1.8
+	},
+	{
+		"level": 2, "name": "Ледяная глыба",
+		"damage": 35.0, "cost": 180,
+		"color": Color(0.5, 0.85, 1.0),
+		"description": "Замедляет врагов",
+		"radius": 12.0, "speed": 280.0,
+		"cooldown": 2.2
+	},
+	{
+		"level": 3, "name": "Ледяной шторм",
+		"damage": 60.0, "cost": 350,
+		"color": Color(0.3, 0.75, 1.0),
+		"description": "Три осколка веером",
+		"radius": 9.0, "speed": 320.0,
+		"cooldown": 2.5
+	},
+	{
+		"level": 4, "name": "Абсолютный ноль",
+		"damage": 95.0, "cost": 600,
+		"color": Color(0.1, 0.6, 1.0),
+		"description": "Замораживает на месте",
+		"radius": 16.0, "speed": 260.0,
+		"cooldown": 4.0
+	},
+]
+
+func get_ice_magic() -> Dictionary:
+	return ice_magic_levels[max(ice_magic_level, 0)]
+
+func can_upgrade_ice() -> bool:
+	return ice_magic_level < ice_magic_levels.size() - 1
+
+func upgrade_ice_magic() -> bool:
+	if ice_magic_level == 0:
+		if spend_exp(ice_magic_levels[0]["cost"]):
+			ice_magic_level = 1
+			print("❄️ Магия льда открыта! Уровень 1")
+			emit_signal("ice_magic_upgraded", ice_magic_level)
+			return true
+		print("❌ Нужно 150 EXP чтобы открыть магию льда")
+		return false
+
+	if not can_upgrade_ice():
+		print("❄️ Магия льда максимального уровня!")
+		return false
+
+	var next_level = ice_magic_level + 1
+	var cost = ice_magic_levels[next_level]["cost"]
+	if spend_exp(cost):
+		ice_magic_level = next_level
+		print("❄️ Магия льда улучшена до уровня:", ice_magic_level)
+		emit_signal("ice_magic_upgraded", ice_magic_level)
+		return true
+	print("❌ Не хватает EXP! Нужно:", cost)
+	return false
 
 # ─── КВЕСТ: ПРОПАВШАЯ КОШКА ──────────────────────────────
 func start_quest_cat() -> void:

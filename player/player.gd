@@ -42,10 +42,11 @@ var _dash_dir:   Vector2 = Vector2.ZERO
 
 var _fire_cd:  float = 0.0
 var _water_cd: float = 0.0
-var _heal_cd:  float = 0.08   # общее время перезарядки для любой магии
+var _ice_cd:   float = 0.0
+var _heal_cd:  float = 0.0
 
 func _ready() -> void:
-	stamina        = max_stamina
+	stamina = max_stamina
 	if hp_bar:
 		hp_bar.max_value = max_health
 		hp_bar.min_value = 0
@@ -68,74 +69,25 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("heal_magic"):
 		_cast_heal()
 
-func _cast_heal() -> void:
-	if not GameState.heal_magic_unlocked:
-		_show_hint("💚 Магия лечения не получена! Выполни квест 'Пропавшая кошка'")
-		return
-	
-	if current_health >= max_health:
-		_show_hint("❤️ У тебя уже полное здоровье!")
-		return
-	
-	var heal_data = GameState.get_heal_magic()
-	if _heal_cd > 0.0:
-		_show_hint("💚 Перезарядка: " + str(snapped(_heal_cd, 0.1)) + "с")
-		return
-	
-	var heal_amount = heal_data["heal_amount"]
-	current_health = min(current_health + heal_amount, max_health)
-	
-	if hp_bar:
-		hp_bar.value = current_health
-	health_changed.emit(current_health, max_health)
-	_update_hp_label()
-	
-	_show_heal_effect(heal_amount)
-	_heal_cd = heal_data["cooldown"]
-	
-	print("💚 Вылечено +", heal_amount, " HP! Следующее лечение через ", _heal_cd, " сек")
-
-func _show_heal_effect(amount: float) -> void:
-	var lbl := Label.new()
-	lbl.text = "+" + str(int(amount)) + " ❤️"
-	lbl.add_theme_color_override("font_color", Color(0.2, 1.0, 0.3))
-	lbl.add_theme_constant_override("outline_size", 2)
-	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
-	lbl.add_theme_font_size_override("font_size", 20)
-	lbl.position = global_position + Vector2(-30, -80)
-	lbl.z_index = 100
-	get_parent().add_child(lbl)
-	
-	var tw = create_tween()
-	tw.tween_property(lbl, "position:y", lbl.position.y - 40, 1.0)
-	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 1.0)
-	tw.tween_callback(lbl.queue_free)
-	
-	# Зелёное свечение
-	modulate = Color(0.5, 1.0, 0.5)
-	await get_tree().create_timer(0.2).timeout
-	modulate = Color.WHITE
-
 func _physics_process(delta: float) -> void:
-	_dash_cd   = max(0.0, _dash_cd   - delta)
-	_fire_cd   = max(0.0, _fire_cd   - delta)
-	_water_cd  = max(0.0, _water_cd  - delta)
-	_heal_cd   = max(0.0, _heal_cd   - delta)
+	_dash_cd  = max(0.0, _dash_cd  - delta)
+	_fire_cd  = max(0.0, _fire_cd  - delta)
+	_water_cd = max(0.0, _water_cd - delta)
+	_ice_cd   = max(0.0, _ice_cd   - delta)
+	_heal_cd  = max(0.0, _heal_cd  - delta)
 
-	# Рывок
 	if _dashing:
 		_dash_timer -= delta
 		velocity = _dash_dir * dash_speed
 		move_and_slide()
 		modulate.a = 0.5 if int(_dash_timer * 20) % 2 == 0 else 1.0
 		if _dash_timer <= 0.0:
-			_dashing     = false
+			_dashing      = false
 			is_invincible = false
-			modulate.a   = 1.0
-			velocity     = Vector2.ZERO
+			modulate.a    = 1.0
+			velocity      = Vector2.ZERO
 		return
 
-	# Q — меню
 	if Input.is_action_just_pressed("open_menu"):
 		_toggle_q_menu()
 		return
@@ -146,22 +98,18 @@ func _physics_process(delta: float) -> void:
 	if !can_move:
 		return
 
-	# F — атакующая магия (огонь/вода)
 	if Input.is_action_just_pressed("fire_magic"):
 		_cast_attack_magic()
 		return
 
-	# Пробел — атака мечом
 	if Input.is_action_just_pressed("atack"):
 		handle_attack()
 		return
 
-	# Ctrl — рывок
 	if Input.is_action_just_pressed("dash") and _dash_cd <= 0.0 and stamina >= dash_stamina_cost and stamina > max_stamina * 0.1:
 		_start_dash()
 		return
 
-	# Движение
 	input_direction = Input.get_vector("left", "right", "up", "down").normalized()
 	var running = Input.is_action_pressed("run") and input_direction != Vector2.ZERO
 
@@ -181,65 +129,120 @@ func _physics_process(delta: float) -> void:
 	handle_movements()
 	move_and_slide()
 
-
-# ── АТАКУЮЩАЯ МАГИЯ (огонь/вода) ─────────────────────────
+# ── МАГИЯ ────────────────────────────────────────────────
 func _cast_attack_magic() -> void:
-	# Общий кулдаун для всех магий
 	match GameState.active_magic:
 		"fire":  _cast_fire()
 		"water": _cast_water()
-		_: _show_hint("⚔️ Сначала выбери магию в меню (Q)")
-
-func _spawn_fireball(lvl: int, dir: Vector2) -> void:
-	var fireball_script = load("res://magic/FireBall.gd")
-	var fb = Area2D.new()
-	fb.set_script(fireball_script)
-	fb.global_position = global_position + dir * 20.0
-	fb.z_index = 10
-	get_parent().add_child(fb)
-	fb.setup(lvl, dir)
+		"ice":   _cast_ice()
+		_: _show_hint("⚔️ Сначала выбери магию в меню Q")
 
 func _cast_fire() -> void:
 	if GameState.fire_magic_level == 0:
 		_show_hint("🔥 Магия огня не открыта! Открой в меню Q")
 		return
-	
 	var fire_data = GameState.get_fire_magic()
 	if _fire_cd > 0.0:
 		_show_hint("🔥 Перезарядка: " + str(snapped(_fire_cd, 0.1)) + "с")
 		return
-
 	_fire_cd = fire_data["cooldown"]
 	var dir = _facing_vector()
 	var lvl = GameState.fire_magic_level
-
 	if lvl == 4:
-		var angles = [-0.3, 0.0, 0.3]
-		for a in angles:
-			var rotated_dir = dir.rotated(a)
-			_spawn_fireball(lvl, rotated_dir)
+		for a in [-0.3, 0.0, 0.3]:
+			_spawn_fireball(lvl, dir.rotated(a))
 	else:
 		_spawn_fireball(lvl, dir)
+
+func _spawn_fireball(lvl: int, dir: Vector2) -> void:
+	var fb = Area2D.new()
+	fb.set_script(load("res://magic/FireBall.gd"))
+	fb.global_position = global_position + dir * 20.0
+	fb.z_index = 10
+	get_parent().add_child(fb)
+	fb.setup(lvl, dir)
+
 func _cast_water() -> void:
 	if not GameState.water_magic_unlocked:
 		_show_hint("💧 Магия воды не получена!")
 		return
-	
 	var water_data = GameState.get_water_magic()
 	if _water_cd > 0.0:
 		_show_hint("💧 Перезарядка: " + str(snapped(_water_cd, 0.1)) + "с")
 		return
-
 	_water_cd = water_data["cooldown"]
 	var dir = _facing_vector()
-	var water_script = load("res://magic/WaterBall.gd")
 	var wb = Area2D.new()
-	wb.set_script(water_script)
+	wb.set_script(load("res://magic/WaterBall.gd"))
 	wb.global_position = global_position + dir * 20.0
 	wb.z_index = 10
 	get_parent().add_child(wb)
 	wb.setup(GameState.water_magic_level, dir)
-	
+
+func _cast_ice() -> void:
+	if GameState.ice_magic_level == 0:
+		_show_hint("❄️ Магия льда не открыта! Открой в меню Q")
+		return
+	var ice_data = GameState.get_ice_magic()
+	if _ice_cd > 0.0:
+		_show_hint("❄️ Перезарядка: " + str(snapped(_ice_cd, 0.1)) + "с")
+		return
+	_ice_cd = ice_data["cooldown"]
+	var dir = _facing_vector()
+	var lvl = GameState.ice_magic_level
+	if lvl == 3:
+		for a in [-0.35, 0.0, 0.35]:
+			_spawn_iceball(lvl, dir.rotated(a))
+	else:
+		_spawn_iceball(lvl, dir)
+
+func _spawn_iceball(lvl: int, dir: Vector2) -> void:
+	var ib = Area2D.new()
+	ib.set_script(load("res://magic/IceBall.gd"))
+	ib.global_position = global_position + dir * 20.0
+	ib.z_index = 10
+	get_parent().add_child(ib)
+	ib.setup(lvl, dir)
+
+func _cast_heal() -> void:
+	if not GameState.heal_magic_unlocked:
+		_show_hint("💚 Магия лечения не получена!")
+		return
+	if current_health >= max_health:
+		_show_hint("❤️ У тебя уже полное здоровье!")
+		return
+	var heal_data = GameState.get_heal_magic()
+	if _heal_cd > 0.0:
+		_show_hint("💚 Перезарядка: " + str(snapped(_heal_cd, 0.1)) + "с")
+		return
+	var heal_amount = heal_data["heal_amount"]
+	current_health = min(current_health + heal_amount, max_health)
+	if hp_bar:
+		hp_bar.value = current_health
+	health_changed.emit(current_health, max_health)
+	_update_hp_label()
+	_show_heal_effect(heal_amount)
+	_heal_cd = heal_data["cooldown"]
+	print("💚 Вылечено +", heal_amount, " HP!")
+
+func _show_heal_effect(amount: float) -> void:
+	var lbl := Label.new()
+	lbl.text = "+" + str(int(amount)) + " ❤️"
+	lbl.add_theme_color_override("font_color", Color(0.2, 1.0, 0.3))
+	lbl.add_theme_constant_override("outline_size", 2)
+	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
+	lbl.add_theme_font_size_override("font_size", 20)
+	lbl.position = global_position + Vector2(-30, -80)
+	lbl.z_index = 100
+	get_parent().add_child(lbl)
+	var tw = create_tween()
+	tw.tween_property(lbl, "position:y", lbl.position.y - 40, 1.0)
+	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 1.0)
+	tw.tween_callback(lbl.queue_free)
+	modulate = Color(0.5, 1.0, 0.5)
+	await get_tree().create_timer(0.2).timeout
+	modulate = Color.WHITE
+
 func _show_hint(msg: String) -> void:
 	var lbl := Label.new()
 	lbl.text = msg
@@ -255,7 +258,7 @@ func _show_hint(msg: String) -> void:
 	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 1.2)
 	tw.tween_callback(lbl.queue_free)
 
-# ── Меню Q ────────────────────────────────────────────────
+# ── МЕНЮ Q ───────────────────────────────────────────────
 func _toggle_q_menu() -> void:
 	if q_menu:
 		_q_menu_open = !_q_menu_open
@@ -335,49 +338,62 @@ func die() -> void:
 	can_move      = false
 	velocity      = Vector2.ZERO
 	is_invincible = true
-
+	remove_from_group("player")
+	add_to_group("dead")
+	_stop_all_enemies()
 	if GameState.weapon_changed.is_connected(_on_weapon_changed):
 		GameState.weapon_changed.disconnect(_on_weapon_changed)
 	if q_menu:
 		q_menu.visible = false
-
-	anim.play("death")
-	await anim.animation_finished
+	if anim and anim.sprite_frames.has_animation("death"):
+		anim.play("death")
+		await anim.animation_finished
 	await get_tree().create_timer(0.5).timeout
-
 	if not is_inside_tree():
 		return
-
 	_respawn()
 
-func _respawn() -> void:
-	current_health = max_health * 1
-	stamina        = max_stamina
+func _stop_all_enemies() -> void:
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if not is_instance_valid(enemy):
+			continue
+		if not enemy is CharacterBody2D:
+			continue
+		enemy.set_physics_process(false)
+		enemy.velocity = Vector2.ZERO
+		if enemy.has_node("StateMachine"):
+			var sm = enemy.get_node("StateMachine")
+			if sm.has_node("Idle"):
+				sm.change_state("Idle")
 
+func _respawn() -> void:
+	print("🔄 Респавн игрока!")
+	remove_from_group("dead")
+	add_to_group("player")
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if is_instance_valid(enemy) and enemy is CharacterBody2D:
+			enemy.set_physics_process(true)
+	current_health = max_health
+	stamina        = max_stamina
 	var spawn = get_tree().current_scene.get_node_or_null("SpawnPoint")
 	if spawn:
 		global_position = spawn.global_position
 		print("✅ Телепортирован к SpawnPoint")
-
 	if hp_bar:
 		hp_bar.max_value = max_health
 		hp_bar.value     = current_health
 	_update_hp_label()
-
 	set_physics_process(true)
 	set_process_input(true)
 	can_move      = true
 	is_invincible = false
 	modulate      = Color.WHITE
 	_q_menu_open  = false
-
 	if not GameState.weapon_changed.is_connected(_on_weapon_changed):
 		GameState.weapon_changed.connect(_on_weapon_changed)
-
 	damage = GameState.get_active_weapon()["damage"]
-
 	print("✅ Игрок возрождён с HP:", current_health)
-	
+
 func get_direction_string() -> String:
 	match idle_dir:
 		DIRECTION.DOWN:  return "down"

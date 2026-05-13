@@ -3,7 +3,7 @@ extends Node
 const SAVE_PATH = "user://savegame.json"
 
 var game_data = {
-	"current_scene": "res://levels/level_1.tscn",
+	"current_scene": "res://locations/primary_village/Vilage1.tscn",
 	"player_pos": {"x": 0, "y": 0},
 	"stats": {
 		"exp": 0,

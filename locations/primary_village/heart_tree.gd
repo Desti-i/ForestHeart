@@ -1,102 +1,254 @@
-extends Area2D
+extends StaticBody2D
 
 @onready var tree_sprite = $TreeSprite
 @onready var heart = $Heart
 @onready var detection_area = $DetectionArea
+@onready var collision_shape = $CollisionShape2D
 
 var player_nearby: bool = false
 var is_alive: bool = true
-
-
+var intro_shown: bool = false
+var countdown_active: bool = false
+var countdown_time: float = 10.0
+var player_left: bool = false
 
 func _ready():
+	print("🌳 HeartTree _ready вызван")
 	heart.visible = true
 	
+	if collision_shape:
+		collision_shape.disabled = false
+		print("✅ CollisionShape2D включен")
+	
 	if detection_area:
+		print("✅ DetectionArea найден")
 		detection_area.body_entered.connect(_on_player_entered)
 		detection_area.body_exited.connect(_on_player_exited)
+		print("✅ Сигналы подключены")
+	else:
+		print("❌ DetectionArea НЕ НАЙДЕН!")
+	
+	if GameState.tree_intro_shown:
+		intro_shown = true
 
 func _process(delta):
-	if player_nearby and Input.is_action_just_pressed("interact") and is_alive:
-		_steal_heart()
+	if countdown_active:
+		countdown_time -= delta
+		if countdown_time <= 0:
+			countdown_active = false
+			_call_player_to_tree()
 
 func _on_player_entered(body):
-	if body.is_in_group("player") and is_alive:
+	print("🔍 _on_player_entered вызван! Тело: ", body.name)
+	if body.is_in_group("player"):
+		print("✅ ЭТО ИГРОК! player_nearby = true")
 		player_nearby = true
-		_show_hint("🌳 Нажми E, чтобы подойти к дереву")
+		
+		if intro_shown and not GameState.monster_encounter_triggered and not GameState.tree_heart_stolen:
+			print("👹 ИГРОК ВЕРНУЛСЯ! ЗАПУСКАЕМ СЦЕНУ С МОНСТРОМ!")
+			_show_monster_scene()
+		elif not intro_shown:
+			print("📖 Показываем историю")
+			_show_tree_intro()
 
 func _on_player_exited(body):
 	if body.is_in_group("player"):
+		print("🚪 Игрок покинул зону дерева!")
 		player_nearby = false
+		player_left = true
 
-func _steal_heart():
-	print("🌳 Сердце дерева украдено!")
-	is_alive = false
-	player_nearby = false
+func _show_tree_intro():
+	intro_shown = true
+	GameState.tree_intro_shown = true
 	
-	# Меняем цвет дерева на серый (засохшее)
-	var tween = create_tween()
-	tween.tween_property(tree_sprite, "modulate", Color(0.5, 0.4, 0.3), 0.5)
+	_show_story_text(
+		"🌳 ДРЕВО ЖИЗНИ 🌳\n\nЭто древнее дерево хранит в себе сердце леса.\nТы чувствуешь, что дерево нуждается в твоей защите...",
+		Color.GREEN
+	)
 	
-	# Сердце исчезает
-	tween.tween_property(heart, "modulate:a", 0.0, 0.3)
-	await tween.finished
+	await get_tree().create_timer(4.0).timeout
+	
+	_show_notification("⚠️ Ты чувствуешь тревогу! Кто-то хочет украсть сердце дерева!", Color.RED, "⚠️")
+	_show_notification("⏰ У тебя есть время, чтобы подготовиться!", Color.YELLOW, "⏰")
+	
+	countdown_active = true
+	print("⏰ ТАЙМЕР ЗАПУЩЕН! countdown_active = ", countdown_active)
+
+func _call_player_to_tree():
+	_show_notification("🌳 ДРЕВО ЗОВЁТ ТЕБЯ! СРОЧНО ВЕРНИСЬ! 🌳", Color.RED, "🌳")
+	_show_notification("❗ Кто-то приближается к дереву! ❗", Color.RED, "❗")
+
+func _show_monster_scene():
+	if GameState.monster_encounter_triggered:
+		return
+	
+	GameState.monster_encounter_triggered = true
+	countdown_active = false
+	
+	_show_story_text(
+		"👹 ЗЛОДЕЙ ПОЯВИЛСЯ У ДРЕВА! 👹\n\nТы видишь таинственное существо в тёмном плаще.\nОно вырывает сердце из дерева и смеётся!\n\nДерево начинает увядать на глазах...",
+		Color.ORANGE
+	)
+	
+	await get_tree().create_timer(5.0).timeout
+	
+	_spawn_monster_npc()
+	
+	tree_sprite.modulate = Color(0.3, 0.3, 0.3)
 	heart.visible = false
-	
-	_show_effect("💔 Сердце дерева украдено! Появился вампир... 💔", Color.RED)
+	is_alive = false
 	
 	GameState.tree_heart_stolen = true
 	GameState.vampire_spawned = true
 	
-	_spawn_vampire()
-
-func _spawn_vampire():
-	var vampire = get_tree().current_scene.find_child("vampire", true, false)
-	if not vampire:
-		vampire = get_tree().current_scene.find_child("Vampire", true, false)
+	await get_tree().create_timer(2.0).timeout
 	
+	_show_notification("🧛 Появляется вампир... Подойди к нему.", Color.PURPLE, "🧛")
+	_activate_vampire()
+
+func _spawn_monster_npc():
+	var monster_scene = preload("res://NPC/MonsterNPC.tscn")
+	var monster = monster_scene.instantiate()
+	
+	# Позиция: правее дерева
+	monster.global_position = global_position + Vector2(-10, 40)
+	
+	# Уменьшаем размер монстра
+	monster.scale = Vector2(1.1, 1.1)
+	
+	monster.z_index = 100
+	get_tree().current_scene.add_child(monster)
+	print("👹 Монстр появился справа от дерева, размер уменьшен!")
+
+func _activate_vampire():
+	var vampire = get_tree().current_scene.find_child("Vampire", true, false)
 	if vampire:
 		vampire.visible = true
 		if vampire.has_method("activate"):
 			vampire.activate()
-		print("🧛 Вампир активирован!")
-	else:
-		print("⚠️ Вампир не найден!")
 
-func restore():
-	is_alive = false
-	var tween = create_tween()
-	tween.tween_property(tree_sprite, "modulate", Color(1, 1, 1), 0.5)
-	heart.visible = true
-	heart.modulate.a = 1.0
-	_show_effect("🌳 Дерево жизни ожило! Спасибо, герой! 🌳", Color.GREEN)
+# ========== КРАСИВЫЕ УВЕДОМЛЕНИЯ ==========
 
-func _show_hint(msg: String):
-	var lbl = Label.new()
-	lbl.text = msg
-	lbl.add_theme_color_override("font_color", Color.YELLOW)
-	lbl.add_theme_constant_override("outline_size", 1)
-	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
-	lbl.add_theme_font_size_override("font_size", 14)
-	lbl.position = global_position + Vector2(-80, -70)
-	lbl.z_index = 100
-	get_parent().add_child(lbl)
-	var tween = create_tween()
-	tween.tween_property(lbl, "modulate:a", 0.0, 2.0)
-	tween.tween_callback(lbl.queue_free)
-
-func _show_effect(msg: String, color: Color):
-	var lbl = Label.new()
-	lbl.text = msg
-	lbl.add_theme_color_override("font_color", color)
-	lbl.add_theme_font_size_override("font_size", 20)
-	lbl.add_theme_constant_override("outline_size", 2)
-	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
-	lbl.position = Vector2(200, 150)
-	lbl.z_index = 200
-	get_tree().current_scene.add_child(lbl)
-	var tween = create_tween()
-	tween.tween_property(lbl, "modulate:a", 0.0, 3.0)
-	tween.tween_callback(lbl.queue_free)
+func _show_notification(msg: String, color: Color, icon: String = ""):
+	var canvas = CanvasLayer.new()
+	canvas.layer = 200
+	get_tree().current_scene.add_child(canvas)
 	
+	var center = Control.new()
+	center.anchor_right = 1.0
+	center.anchor_bottom = 1.0
+	canvas.add_child(center)
 	
+	var panel = Panel.new()
+	panel.size = Vector2(500, 60)
+	panel.position = Vector2((get_viewport().size.x - 500) / 2, 80)
+	panel.z_index = 200
+	center.add_child(panel)
+	
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0, 0, 0, 0.85)
+	style.border_width_left = 2
+	style.border_width_top = 2
+	style.border_width_right = 2
+	style.border_width_bottom = 2
+	style.border_color = color
+	style.corner_radius_top_left = 15
+	style.corner_radius_top_right = 15
+	style.corner_radius_bottom_left = 15
+	style.corner_radius_bottom_right = 15
+	panel.add_theme_stylebox_override("panel", style)
+	
+	var hbox = HBoxContainer.new()
+	hbox.size = Vector2(480, 50)
+	hbox.position = Vector2(10, 5)
+	hbox.add_theme_constant_override("separation", 10)
+	panel.add_child(hbox)
+	
+	if icon != "":
+		var icon_label = Label.new()
+		icon_label.text = icon
+		icon_label.add_theme_font_size_override("font_size", 28)
+		icon_label.add_theme_color_override("font_color", color)
+		hbox.add_child(icon_label)
+	
+	var label = Label.new()
+	label.text = msg
+	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_constant_override("shadow_offset_x", 1)
+	label.add_theme_constant_override("shadow_offset_y", 1)
+	label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hbox.add_child(label)
+	
+	panel.position.y = -100
+	var tween = create_tween()
+	tween.tween_property(panel, "position:y", 80, 0.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BOUNCE)
+	await get_tree().create_timer(2.5).timeout
+	tween = create_tween()
+	tween.tween_property(panel, "modulate:a", 0.0, 0.5)
+	await tween.finished
+	canvas.queue_free()
+
+func _show_story_text(msg: String, color: Color):
+	print("📖 ПОКАЗЫВАЕМ ИСТОРИЮ!")
+	
+	var canvas = CanvasLayer.new()
+	canvas.layer = 100
+	get_tree().current_scene.add_child(canvas)
+	
+	var overlay = ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0.7)
+	overlay.size = get_viewport().size
+	overlay.position = Vector2(0, 0)
+	overlay.z_index = 98
+	canvas.add_child(overlay)
+	
+	var frame = Panel.new()
+	frame.size = Vector2(700, 250)
+	frame.position = Vector2((get_viewport().size.x - 700) / 2, (get_viewport().size.y - 250) / 2)
+	frame.z_index = 100
+	canvas.add_child(frame)
+	
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.05, 0.05, 0.1, 0.95)
+	style.border_width_left = 3
+	style.border_width_top = 3
+	style.border_width_right = 3
+	style.border_width_bottom = 3
+	style.border_color = color
+	style.corner_radius_top_left = 20
+	style.corner_radius_top_right = 20
+	style.corner_radius_bottom_left = 20
+	style.corner_radius_bottom_right = 20
+	style.shadow_size = 10
+	style.shadow_offset = Vector2(3, 3)
+	style.shadow_color = Color(0, 0, 0, 0.5)
+	frame.add_theme_stylebox_override("panel", style)
+	
+	var label = Label.new()
+	label.text = msg
+	label.add_theme_font_size_override("font_size", 20)
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_constant_override("outline_size", 2)
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	label.size = Vector2(640, 200)
+	label.position = Vector2(30, 25)
+	frame.add_child(label)
+	
+	frame.scale = Vector2(0.8, 0.8)
+	frame.modulate.a = 0
+	var tween = create_tween()
+	tween.tween_property(frame, "scale", Vector2(1, 1), 0.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	tween.parallel().tween_property(frame, "modulate:a", 1.0, 0.2)
+	
+	await get_tree().create_timer(4.0).timeout
+	
+	tween = create_tween()
+	tween.tween_property(frame, "scale", Vector2(0.9, 0.9), 0.2)
+	tween.parallel().tween_property(frame, "modulate:a", 0.0, 0.3)
+	tween.parallel().tween_property(overlay, "modulate:a", 0.0, 0.3)
+	await tween.finished
+	canvas.queue_free()

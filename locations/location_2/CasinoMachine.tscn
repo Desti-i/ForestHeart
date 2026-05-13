@@ -1,16 +1,68 @@
 [gd_scene format=3 uid="uid://dhqe6eidx6clx"]
 
 [ext_resource type="Script" uid="uid://1wmmg1r75t47" path="res://locations/location_2/casino_machine.gd" id="1_i5l14"]
+[ext_resource type="Texture2D" uid="uid://bncalpktvkxso" path="res://slot_machine.svg" id="2_14vkk"]
 
-[node name="CasinoMachine" type="Area2D" unique_id=866154504]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_08kp8"]
+size = Vector2(63, 71)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_14vkk"]
+size = Vector2(36, 50)
+
+[node name="Casino" type="Node2D" unique_id=1533771550]
 script = ExtResource("1_i5l14")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2057778197]
-
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1520534872]
+position = Vector2(-131.5, -202)
+scale = Vector2(0.123333335, 0.12173913)
+texture = ExtResource("2_14vkk")
 
-[node name="Label" type="Label" parent="." unique_id=165044310]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=455311823]
+
+[node name="Reel1" type="Label" parent="CanvasLayer" unique_id=165044310]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -710.0
+offset_top = -510.0
+offset_right = -616.0
+offset_bottom = -400.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "7"
+
+[node name="Reel2" type="Label" parent="CanvasLayer" unique_id=1099934421]
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2118840439]
+[node name="Reel3" type="Label" parent="CanvasLayer" unique_id=401996284]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="ResultLabel" type="Label" parent="CanvasLayer" unique_id=625809380]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="ExpLabel" type="Label" parent="CanvasLayer" unique_id=358981402]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="SpinButton" type="Button" parent="CanvasLayer" unique_id=2126700584]
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="Area2D" type="Area2D" parent="." unique_id=983278006]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=54677956]
+position = Vector2(-129.5, -203)
+shape = SubResource("RectangleShape2D_08kp8")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=745547100]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=746668442]
+position = Vector2(-132, -201)
+shape = SubResource("RectangleShape2D_14vkk")

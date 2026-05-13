@@ -5,6 +5,15 @@
 [ext_resource type="Texture2D" uid="uid://ks8pb7j7aabw" path="res://2D Pixel Dungeon Asset Pack/interface/arrow_1.png" id="3_cj32w"]
 [ext_resource type="Texture2D" uid="uid://c456jigbys10q" path="res://2D Pixel Dungeon Asset Pack/interface/square_up_down_1.png" id="4_u5pkn"]
 [ext_resource type="PackedScene" uid="uid://cqsqmkqeedok4" path="res://player/Player.tscn" id="5_2r15a"]
+[ext_resource type="PackedScene" uid="uid://dhqe6eidx6clx" path="res://locations/location_2/CasinoMachine.tscn" id="6_grl81"]
+[ext_resource type="Texture2D" uid="uid://bng0x85go2dky" path="res://iNTERFACE/Sprite-0003.png" id="7_6qcf2"]
+[ext_resource type="Texture2D" uid="uid://mgmbgp6dioba" path="res://iNTERFACE/Sprite-0001.png" id="8_s0mju"]
+[ext_resource type="Texture2D" uid="uid://ds3q6aaltgei" path="res://iNTERFACE/Sprite-0002 (1).png" id="9_rnqqk"]
+[ext_resource type="Texture2D" uid="uid://dnap6em57shmx" path="res://iNTERFACE/stamina 1.png" id="10_5y8qd"]
+[ext_resource type="Texture2D" uid="uid://biu1bs3kagsa3" path="res://iNTERFACE/stamina 2.png" id="11_1ty7v"]
+[ext_resource type="Script" uid="uid://c55yxtxr6snv2" path="res://iNTERFACE/Stamina.gd" id="12_pgmms"]
+[ext_resource type="Script" path="res://iNTERFACE/ExpBar.gd" id="13_kg2sf"]
+[ext_resource type="PackedScene" uid="uid://c4qqnmbhqfdv0" path="res://iNTERFACE/QMenu.tscn" id="14_uvcf1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gpf0v"]
 texture = ExtResource("1_14gif")
@@ -328,6 +337,39 @@ sources/2 = SubResource("TileSetAtlasSource_vp2yu")
 sources/3 = SubResource("TileSetAtlasSource_y76by")
 sources/4 = SubResource("TileSetAtlasSource_6qcf2")
 
+[sub_resource type="Theme" id="Theme_7hk07"]
+
+[sub_resource type="FontFile" id="FontFile_k4j2w"]
+cache/0/variation_coordinates = {}
+cache/0/face_index = 0
+cache/0/embolden = 0.0
+cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
+cache/0/spacing_top = 0
+cache/0/spacing_bottom = 0
+cache/0/spacing_space = 0
+cache/0/spacing_glyph = 0
+cache/0/baseline_offset = 0.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/28/0/ascent = 0.0
+cache/0/28/0/descent = 0.0
+cache/0/28/0/underline_position = 0.0
+cache/0/28/0/underline_thickness = 0.0
+cache/0/28/0/scale = 1.0
+cache/0/17/0/ascent = 0.0
+cache/0/17/0/descent = 0.0
+cache/0/17/0/underline_position = 0.0
+cache/0/17/0/underline_thickness = 0.0
+cache/0/17/0/scale = 1.0
+
+[sub_resource type="Theme" id="Theme_vlmtn"]
+default_font = SubResource("FontFile_k4j2w")
+
+[sub_resource type="Theme" id="Theme_r3is5"]
+
 [node name="Location3" type="Node2D" unique_id=917482722]
 
 [node name="pol" type="TileMapLayer" parent="." unique_id=1157009]
@@ -339,8 +381,91 @@ tile_map_data = PackedByteArray("AADt/wcAAgAGAA8AAADu/wcAAgAHAA8AAADv/wcAAgAIAA8
 tile_set = SubResource("TileSet_s0mju")
 
 [node name="Player" parent="." unique_id=627426411 instance=ExtResource("5_2r15a")]
-position = Vector2(-236, -49)
+position = Vector2(552, -394)
 collision_mask = 1
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1036942600]
 zoom = Vector2(2.7, 2.7)
+
+[node name="Casino" parent="." unique_id=1533771550 instance=ExtResource("6_grl81")]
+position = Vector2(1005, -207)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1783466305]
+layer = 12
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=1256353213]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="hp_bar" type="TextureProgressBar" parent="CanvasLayer/Control" unique_id=430965707]
+modulate = Color(1, 0.08235294, 0.19215687, 1)
+self_modulate = Color(1, 1, 0.03529412, 1)
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.83100003
+anchor_top = 0.5
+anchor_right = 0.83100003
+anchor_bottom = 0.5
+offset_left = -19.240002
+offset_top = -4.0
+offset_right = 280.76
+offset_bottom = 30.0
+theme = SubResource("Theme_7hk07")
+value = 50.0
+nine_patch_stretch = true
+texture_under = ExtResource("7_6qcf2")
+texture_over = ExtResource("8_s0mju")
+texture_progress = ExtResource("9_rnqqk")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/hp_bar" unique_id=828685653]
+layout_mode = 0
+offset_left = 95.0
+offset_top = -4.0
+offset_right = 359.0
+offset_bottom = 35.0
+theme = SubResource("Theme_vlmtn")
+theme_type_variation = &"HeaderLarge"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "100/100"
+
+[node name="StaminaBar" type="TextureProgressBar" parent="CanvasLayer/Control" unique_id=1837180651]
+modulate = Color(1, 1, 0, 1)
+layout_mode = 0
+offset_left = 27.0
+offset_top = 41.0
+offset_right = 227.0
+offset_bottom = 71.0
+scale = Vector2(8.62, 4.455)
+pivot_offset = Vector2(2, 0)
+value = 50.0
+texture_under = ExtResource("10_5y8qd")
+texture_progress = ExtResource("11_1ty7v")
+script = ExtResource("12_pgmms")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/StaminaBar" unique_id=1700686014]
+layout_mode = 0
+offset_left = 12.672853
+offset_top = 2.9180694
+offset_right = 88.94508
+offset_bottom = 107.08474
+scale = Vector2(0.26, 0.215)
+theme = SubResource("Theme_r3is5")
+theme_override_colors/font_color = Color(2.7140994, 0.06894164, 3.7251358, 1)
+text = "100/100"
+
+[node name="exp_display" type="Label" parent="CanvasLayer/Control" unique_id=863789670]
+layout_mode = 0
+offset_left = 390.0
+offset_top = 36.0
+offset_right = 463.0
+offset_bottom = 86.0
+scale = Vector2(2, 2)
+text = "0 EXP"
+script = ExtResource("13_kg2sf")
+
+[node name="QMenu" parent="CanvasLayer" unique_id=13317859 instance=ExtResource("14_uvcf1")]

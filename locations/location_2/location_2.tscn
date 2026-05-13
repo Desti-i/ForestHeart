@@ -1440,7 +1440,7 @@ sources/4 = SubResource("TileSetAtlasSource_5v5qx")
 
 [sub_resource type="Theme" id="Theme_x2cgo"]
 
-[sub_resource type="FontFile" id="FontFile_k4j2w"]
+[sub_resource type="FontFile" id="FontFile_x2cgo"]
 cache/0/variation_coordinates = {}
 cache/0/face_index = 0
 cache/0/embolden = 0.0
@@ -1467,7 +1467,7 @@ cache/0/17/0/underline_thickness = 0.0
 cache/0/17/0/scale = 1.0
 
 [sub_resource type="Theme" id="Theme_5v5qx"]
-default_font = SubResource("FontFile_k4j2w")
+default_font = SubResource("FontFile_x2cgo")
 
 [sub_resource type="Theme" id="Theme_c6afi"]
 
@@ -2091,7 +2091,7 @@ script = ExtResource("13_r6np7")
 [node name="QMenu" parent="CanvasLayer" unique_id=13317859 instance=ExtResource("14_2kmsi")]
 
 [node name="Player" parent="." unique_id=627426411 instance=ExtResource("2_61x7o")]
-position = Vector2(-331, -299)
+position = Vector2(-2500, -322)
 collision_mask = 1
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1448543002]

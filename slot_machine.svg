@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="460" viewBox="0 0 300 460">
+
+<!-- Тело машины -->
+<rect x="0" y="0" width="300" height="460" rx="18" fill="#2a1f4a" stroke="#6a4fa0" stroke-width="2"/>
+
+<!-- Верхняя панель -->
+<rect x="10" y="10" width="280" height="60" rx="10" fill="#1a1235"/>
+<rect x="20" y="18" width="260" height="44" rx="8" fill="#0d0920"/>
+<text x="150" y="47" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="22" fill="#f0c040" letter-spacing="3">LUCKY EXP</text>
+<polygon points="30,37 34,27 38,37 29,31 39,31" fill="#f0c040" opacity="0.9"/>
+<polygon points="262,37 266,27 270,37 261,31 271,31" fill="#f0c040" opacity="0.9"/>
+
+<!-- Огни вверху -->
+<circle cx="22" cy="8" r="5" fill="#f04040"/>
+<circle cx="42" cy="8" r="5" fill="#f0c040"/>
+<circle cx="62" cy="8" r="5" fill="#40f060"/>
+<circle cx="238" cy="8" r="5" fill="#40f060"/>
+<circle cx="258" cy="8" r="5" fill="#f0c040"/>
+<circle cx="278" cy="8" r="5" fill="#f04040"/>
+
+<!-- Дисплей барабанов -->
+<rect x="15" y="80" width="270" height="130" rx="10" fill="#0d0920" stroke="#4a3a7a" stroke-width="1.5"/>
+
+<!-- Барабан 1 -->
+<rect x="22" y="88" width="78" height="114" rx="6" fill="#1a1235" stroke="#3a2a6a" stroke-width="1"/>
+<rect x="24" y="125" width="74" height="40" rx="4" fill="#0a0818"/>
+<text x="61" y="153" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="32" fill="#f0c040">7</text>
+<line x1="24" y1="123" x2="98" y2="123" stroke="#2a2050" stroke-width="1"/>
+<line x1="24" y1="167" x2="98" y2="167" stroke="#2a2050" stroke-width="1"/>
+<text x="61" y="115" text-anchor="middle" font-family="monospace" font-size="20" fill="#444">★</text>
+<text x="61" y="188" text-anchor="middle" font-family="monospace" font-size="20" fill="#444">◆</text>
+
+<!-- Барабан 2 -->
+<rect x="111" y="88" width="78" height="114" rx="6" fill="#1a1235" stroke="#3a2a6a" stroke-width="1"/>
+<rect x="113" y="125" width="74" height="40" rx="4" fill="#0a0818"/>
+<text x="150" y="153" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="32" fill="#f0c040">7</text>
+<line x1="113" y1="123" x2="187" y2="123" stroke="#2a2050" stroke-width="1"/>
+<line x1="113" y1="167" x2="187" y2="167" stroke="#2a2050" stroke-width="1"/>
+<text x="150" y="115" text-anchor="middle" font-family="monospace" font-size="20" fill="#444">★</text>
+<text x="150" y="188" text-anchor="middle" font-family="monospace" font-size="20" fill="#444">◆</text>
+
+<!-- Барабан 3 -->
+<rect x="200" y="88" width="78" height="114" rx="6" fill="#1a1235" stroke="#3a2a6a" stroke-width="1"/>
+<rect x="202" y="125" width="74" height="40" rx="4" fill="#0a0818"/>
+<text x="239" y="153" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="32" fill="#f0c040">7</text>
+<line x1="202" y1="123" x2="276" y2="123" stroke="#2a2050" stroke-width="1"/>
+<line x1="202" y1="167" x2="276" y2="167" stroke="#2a2050" stroke-width="1"/>
+<text x="239" y="115" text-anchor="middle" font-family="monospace" font-size="20" fill="#444">★</text>
+<text x="239" y="188" text-anchor="middle" font-family="monospace" font-size="20" fill="#444">◆</text>
+
+<!-- Линия выигрыша -->
+<line x1="15" y1="145" x2="285" y2="145" stroke="#f0c040" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+
+<!-- Боковые рычаги -->
+<rect x="6" y="100" width="12" height="20" rx="3" fill="#3a2a7a"/>
+<rect x="6" y="130" width="12" height="20" rx="3" fill="#3a2a7a"/>
+<rect x="6" y="160" width="12" height="20" rx="3" fill="#3a2a7a"/>
+<rect x="282" y="100" width="12" height="20" rx="3" fill="#3a2a7a"/>
+<rect x="282" y="130" width="12" height="20" rx="3" fill="#3a2a7a"/>
+<rect x="282" y="160" width="12" height="20" rx="3" fill="#3a2a7a"/>
+
+<!-- Результат -->
+<rect x="15" y="222" width="270" height="36" rx="8" fill="#0d0920" stroke="#3a2a6a" stroke-width="1"/>
+<text x="150" y="245" text-anchor="middle" font-family="monospace" font-size="13" fill="#f0c040">Удачи, путник!</text>
+
+<!-- Ставка / EXP -->
+<rect x="15" y="266" width="128" height="34" rx="8" fill="#1a1235" stroke="#3a2a6a" stroke-width="1"/>
+<text x="29" y="279" font-family="monospace" font-size="11" fill="#888">Ставка</text>
+<text x="29" y="293" font-family="monospace" font-weight="bold" font-size="13" fill="#f0c040">50 EXP</text>
+
+<rect x="157" y="266" width="128" height="34" rx="8" fill="#1a1235" stroke="#3a2a6a" stroke-width="1"/>
+<text x="171" y="279" font-family="monospace" font-size="11" fill="#888">Ваш EXP</text>
+<text x="171" y="293" font-family="monospace" font-weight="bold" font-size="13" fill="#a0e060">500</text>
+
+<!-- Кнопка -->
+<rect x="35" y="310" width="230" height="52" rx="12" fill="#5a3a9e" stroke="#7a5ac0" stroke-width="2"/>
+<rect x="37" y="312" width="226" height="24" rx="10" fill="#6a4ab0" opacity="0.4"/>
+<text x="150" y="341" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="17" fill="#fff" letter-spacing="2">КРУТИТЬ</text>
+
+<!-- Монетный слот -->
+<rect x="120" y="370" width="60" height="14" rx="7" fill="#0d0920" stroke="#4a3a7a" stroke-width="1.5"/>
+
+<!-- Ножки -->
+<rect x="40" y="385" width="30" height="24" rx="4" fill="#1a1235" stroke="#3a2a6a" stroke-width="1"/>
+<rect x="230" y="385" width="30" height="24" rx="4" fill="#1a1235" stroke="#3a2a6a" stroke-width="1"/>
+
+<!-- Таблица выплат -->
+<rect x="5" y="415" width="290" height="42" rx="8" fill="#1a1235" stroke="#2a1f4a" stroke-width="1"/>
+<text x="15" y="430" font-family="monospace" font-size="11" fill="#f0c040">7 7 7 = x20</text>
+<text x="110" y="430" font-family="monospace" font-size="11" fill="#aaa">★★★ = x10</text>
+<text x="210" y="430" font-family="monospace" font-size="11" fill="#888">☠☠☠ = x8</text>
+<text x="15" y="449" font-family="monospace" font-size="11" fill="#888">◆◆◆ = x5</text>
+<text x="110" y="449" font-family="monospace" font-size="11" fill="#666">Два = x1</text>
+<text x="210" y="449" font-family="monospace" font-size="11" fill="#555">Нет = -ст.</text>
+
+</svg>

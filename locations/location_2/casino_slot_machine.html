@@ -1,0 +1,209 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.machine{background:#1a1a2e;border-radius:16px;border:2px solid #4a3f6b;padding:24px;max-width:420px;margin:0 auto}
+.title-bar{text-align:center;color:#f0c040;font-size:20px;font-weight:500;letter-spacing:2px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #2a2a4e}
+.exp-display{display:flex;justify-content:space-between;align-items:center;background:#0d0d1a;border-radius:8px;padding:10px 16px;margin-bottom:16px;border:1px solid #2a2a4e}
+.exp-label{color:#888;font-size:13px}
+.exp-val{color:#f0c040;font-size:18px;font-weight:500}
+.reels-wrap{background:#0d0d1a;border-radius:12px;padding:12px;margin-bottom:16px;border:2px solid #2a2a4e;position:relative;overflow:hidden}
+.win-line{position:absolute;top:50%;left:0;right:0;height:2px;background:#f0c04044;transform:translateY(-50%);pointer-events:none;z-index:2}
+.reels{display:flex;gap:8px;justify-content:center}
+.reel-outer{width:88px;height:88px;overflow:hidden;border-radius:8px;border:1px solid #3a3a5e;background:#111128;position:relative}
+.reel-inner{display:flex;flex-direction:column;transition:transform 0.05s linear}
+.symbol{width:88px;height:88px;display:flex;align-items:center;justify-content:center;font-size:44px;flex-shrink:0}
+.result-msg{text-align:center;height:28px;font-size:15px;font-weight:500;margin-bottom:12px;color:#f0c040;letter-spacing:1px}
+.bet-row{display:flex;gap:8px;align-items:center;margin-bottom:12px;justify-content:center}
+.bet-btn{background:#1a1a3e;border:1px solid #3a3a6e;color:#aaa;font-size:13px;padding:6px 14px;border-radius:6px;cursor:pointer;transition:all .15s}
+.bet-btn.active{background:#2a2a5e;border-color:#7777cc;color:#fff}
+.bet-btn:hover{background:#222244}
+.spin-btn{width:100%;padding:14px;background:#4a3a8e;border:none;border-radius:10px;color:#fff;font-size:16px;font-weight:500;cursor:pointer;letter-spacing:1px;transition:all .15s}
+.spin-btn:hover{background:#5a4a9e}
+.spin-btn:active{transform:scale(0.98)}
+.spin-btn:disabled{background:#2a2a4e;color:#555;cursor:not-allowed}
+.odds-table{margin-top:14px;background:#0d0d1a;border-radius:8px;padding:10px 14px;border:1px solid #1e1e3e}
+.odds-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:#888;border-bottom:1px solid #1a1a2e}
+.odds-row:last-child{border-bottom:none}
+.odds-sym{font-size:14px}
+.odds-pay{color:#f0c040}
+</style>
+
+<div class="machine">
+  <div class="title-bar">LUCKY EXP</div>
+
+  <div class="exp-display">
+    <span class="exp-label">Ваш EXP</span>
+    <span class="exp-val" id="exp-val">500</span>
+    <span class="exp-label">Ставка:</span>
+    <span class="exp-val" id="bet-display">50</span>
+  </div>
+
+  <div class="reels-wrap">
+    <div class="win-line"></div>
+    <div class="reels">
+      <div class="reel-outer"><div class="reel-inner" id="r0"></div></div>
+      <div class="reel-outer"><div class="reel-inner" id="r1"></div></div>
+      <div class="reel-outer"><div class="reel-inner" id="r2"></div></div>
+    </div>
+  </div>
+
+  <div class="result-msg" id="msg">Удачи, путник!</div>
+
+  <div class="bet-row">
+    <span style="color:#888;font-size:13px">Ставка:</span>
+    <button class="bet-btn active" data-bet="25" onclick="setBet(25,this)">25</button>
+    <button class="bet-btn" data-bet="50" onclick="setBet(50,this)">50</button>
+    <button class="bet-btn" data-bet="100" onclick="setBet(100,this)">100</button>
+    <button class="bet-btn" data-bet="200" onclick="setBet(200,this)">200</button>
+  </div>
+
+  <button class="spin-btn" id="spin-btn" onclick="spin()">КРУТИТЬ</button>
+
+  <div class="odds-table">
+    <div class="odds-row"><span><span class="odds-sym">7 7 7</span> — три семёрки</span><span class="odds-pay">x20</span></div>
+    <div class="odds-row"><span><span class="odds-sym">S S S</span> — три звезды</span><span class="odds-pay">x10</span></div>
+    <div class="odds-row"><span><span class="odds-sym">C C C</span> — три черепа</span><span class="odds-pay">x8</span></div>
+    <div class="odds-row"><span><span class="odds-sym">D D D</span> — три алмаза</span><span class="odds-pay">x5</span></div>
+    <div class="odds-row"><span>Любые три одинаковых</span><span class="odds-pay">x3</span></div>
+    <div class="odds-row"><span>Два одинаковых</span><span class="odds-pay">x1</span></div>
+    <div class="odds-row"><span>Нет совпадений</span><span class="odds-pay">-ставка</span></div>
+  </div>
+</div>
+
+<script>
+const SYMS = ['7','S','C','D','X','O'];
+const SYM_ICONS = {'7':'7️','S':'⭐','C':'💀','D':'💎','X':'🗡️','O':'🔮'};
+const WEIGHTS = [5,15,15,15,25,25];
+
+let exp = 500;
+let bet = 25;
+let spinning = false;
+let intervals = [];
+let finalSyms = ['7','7','7'];
+
+function weightedRand(){
+  const total = WEIGHTS.reduce((a,b)=>a+b,0);
+  let r = Math.floor(Math.random()*total);
+  for(let i=0;i<SYMS.length;i++){r-=WEIGHTS[i];if(r<0)return SYMS[i];}
+  return SYMS[SYMS.length-1];
+}
+
+function buildReel(id, count){
+  const el = document.getElementById(id);
+  el.innerHTML='';
+  for(let i=0;i<count;i++){
+    const d=document.createElement('div');
+    d.className='symbol';
+    d.textContent=SYM_ICONS[weightedRand()];
+    el.appendChild(d);
+  }
+  el.style.transform='translateY(0px)';
+}
+
+function initReels(){
+  for(let i=0;i<3;i++) buildReel('r'+i, 12);
+  for(let i=0;i<3;i++){
+    const el=document.getElementById('r'+i);
+    el.style.transform='translateY(-'+(88*4)+'px)';
+  }
+}
+
+function setBet(val, btn){
+  bet=val;
+  document.getElementById('bet-display').textContent=val;
+  document.querySelectorAll('.bet-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function getResult(s){
+  if(s[0]===s[1]&&s[1]===s[2]){
+    if(s[0]==='7') return {mult:20,msg:'ДЖЕКПОТ! x20!'};
+    if(s[0]==='S') return {mult:10,msg:'ТРИ ЗВЕЗДЫ! x10!'};
+    if(s[0]==='C') return {mult:8,msg:'ТРИ ЧЕРЕПА! x8!'};
+    if(s[0]==='D') return {mult:5,msg:'ТРИ АЛМАЗА! x5!'};
+    return {mult:3,msg:'ТРИ В РЯД! x3!'};
+  }
+  if(s[0]===s[1]||s[1]===s[2]||s[0]===s[2]) return {mult:1,msg:'ДВА СОВПАДЕНИЯ! x1'};
+  return {mult:0,msg:'Не повезло...'};
+}
+
+function spin(){
+  if(spinning) return;
+  if(exp < bet){document.getElementById('msg').textContent='Не хватает EXP!';return;}
+  exp -= bet;
+  updateExp();
+  spinning = true;
+  document.getElementById('spin-btn').disabled = true;
+  document.getElementById('msg').textContent = '...';
+
+  finalSyms = [weightedRand(), weightedRand(), weightedRand()];
+
+  const stops = [800+Math.random()*400, 1000+Math.random()*400, 1200+Math.random()*400];
+
+  for(let i=0;i<3;i++){
+    const el = document.getElementById('r'+i);
+    const items = el.children;
+    const last = items[items.length-1];
+    last.textContent = SYM_ICONS[finalSyms[i]];
+  }
+
+  let pos = [0,0,0];
+  let done = [false,false,false];
+  const speed = [18,16,14];
+
+  intervals = [];
+  for(let i=0;i<3;i++){
+    (function(idx){
+      let traveled = 0;
+      const totalTravel = stops[idx];
+      const reel = document.getElementById('r'+idx);
+      const totalH = reel.children.length * 88;
+      let currentPos = 88*4;
+
+      const iv = setInterval(()=>{
+        let step = speed[idx];
+        if(traveled > totalTravel - 200) step = Math.max(2, step * 0.88);
+        currentPos += step;
+        traveled += step;
+        if(currentPos >= totalH - 88) currentPos = currentPos % (totalH - 88*2) + 88;
+        reel.style.transform = 'translateY(-'+Math.round(currentPos)+'px)';
+
+        if(traveled >= totalTravel){
+          clearInterval(iv);
+          const targetY = (reel.children.length - 2) * 88;
+          reel.style.transition = 'transform 0.2s cubic-bezier(.2,1.4,.4,1)';
+          reel.style.transform = 'translateY(-'+targetY+'px)';
+          setTimeout(()=>{reel.style.transition='';},220);
+          done[idx] = true;
+          if(done.every(Boolean)) finalize();
+        }
+      }, 16);
+      intervals.push(iv);
+    })(i);
+  }
+}
+
+function finalize(){
+  spinning = false;
+  const res = getResult(finalSyms);
+  if(res.mult > 0){
+    const win = Math.round(bet * res.mult);
+    exp += win;
+    document.getElementById('msg').textContent = res.msg + ' +' + win + ' EXP';
+  } else {
+    document.getElementById('msg').textContent = res.msg;
+  }
+  updateExp();
+  document.getElementById('spin-btn').disabled = false;
+  if(exp <= 0){
+    document.getElementById('msg').textContent = 'EXP закончился!';
+    document.getElementById('spin-btn').disabled = true;
+  }
+}
+
+function updateExp(){
+  document.getElementById('exp-val').textContent = exp;
+}
+
+initReels();
+</script>

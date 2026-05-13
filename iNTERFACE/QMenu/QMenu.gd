@@ -546,7 +546,63 @@ func _draw_quest_tab() -> void:
 	row_cat.add_child(info_cat)
 	
 	vbox.add_child(row_cat)
+	# ── Квест: вампир и гоблины ──────────────────────────────
+	var quest_vampire_color: Color
+	match GameState.quest_vampire:
+		GameState.QuestState.NOT_TAKEN:  quest_vampire_color = Color(0.5, 0.5, 0.5)
+		GameState.QuestState.ACTIVE:     quest_vampire_color = Color(0.8, 0.3, 0.8)
+		GameState.QuestState.COMPLETED:  quest_vampire_color = Color(0.0, 1.0, 0.3)
+		GameState.QuestState.HANDED_IN:  quest_vampire_color = Color(0.4, 0.4, 0.4)
 
+	var row_vampire = _make_row()
+	row_vampire.add_child(_make_color_bar(quest_vampire_color))
+
+	var info_vampire = _make_info_box()
+	var name_lbl_vampire = _make_label("", 14)
+	var desc_lbl_vampire = _make_label("", 12)
+
+	match GameState.quest_vampire:
+		GameState.QuestState.NOT_TAKEN:
+			name_lbl_vampire.text = "🧛 Загадочный вампир"
+			desc_lbl_vampire.text = "Найди вампира в лесу"
+			name_lbl_vampire.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+			desc_lbl_vampire.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+		GameState.QuestState.ACTIVE:
+			var left = GameState.goblins_needed - GameState.goblins_killed
+			name_lbl_vampire.text = "🧛 Помощь вампирам"
+			desc_lbl_vampire.text = "Гоблинов убито: " + str(GameState.goblins_killed) + " / " + str(GameState.goblins_needed)
+			name_lbl_vampire.add_theme_color_override("font_color", Color(0.8, 0.3, 0.8))
+			desc_lbl_vampire.add_theme_color_override("font_color", Color.WHITE)
+		GameState.QuestState.COMPLETED:
+			name_lbl_vampire.text = "✅ Помощь вампирам"
+			desc_lbl_vampire.text = "Вернись к вампиру за наградой! (+500 EXP, 2 локация)"
+			name_lbl_vampire.add_theme_color_override("font_color", Color(0.2, 1.0, 0.4))
+			desc_lbl_vampire.add_theme_color_override("font_color", Color(0.2, 1.0, 0.4))
+		GameState.QuestState.HANDED_IN:
+			name_lbl_vampire.text = "🏆 Помощь вампирам"
+			desc_lbl_vampire.text = "Выполнено! Вторая локация открыта +500 EXP"
+			name_lbl_vampire.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+			desc_lbl_vampire.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+
+	info_vampire.add_child(name_lbl_vampire)
+	info_vampire.add_child(desc_lbl_vampire)
+	row_vampire.add_child(info_vampire)
+	
+	vbox.add_child(row_vampire)
+	
+	# Прогресс бар если квест активен
+	if GameState.quest_vampire == GameState.QuestState.ACTIVE:
+		var progress_bg_vampire := ColorRect.new()
+		progress_bg_vampire.custom_minimum_size = Vector2(390, 10)
+		progress_bg_vampire.color = Color(0.2, 0.2, 0.2)
+		progress_bg_vampire.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		vbox.add_child(progress_bg_vampire)
+
+		var fill_ratio_vampire = float(GameState.goblins_killed) / float(GameState.goblins_needed)
+		var progress_fill_vampire := ColorRect.new()
+		progress_fill_vampire.custom_minimum_size = Vector2(390 * fill_ratio_vampire, 10)
+		progress_fill_vampire.color = Color(0.8, 0.3, 0.8)  # Фиолетовый цвет
+		progress_bg_vampire.add_child(progress_fill_vampire)
 
 # ══════════════════════════════════════════════════════════
 # ХЕЛПЕРЫ

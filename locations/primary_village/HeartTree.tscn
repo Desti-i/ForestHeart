@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://6ar5avmdhlny"]
+
+[ext_resource type="Script" uid="uid://bm04tkdvtro24" path="res://locations/primary_village/heart_tree.gd" id="1_xse57"]
+[ext_resource type="Texture2D" uid="uid://bn02vts3veaep" path="res://Sprite-0001.png" id="2_mrqyk"]
+[ext_resource type="Texture2D" uid="uid://dg1gl084kgec7" path="res://Sprite-0003.png" id="4_pp8ft"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rbtws"]
+radius = 30.0
+height = 122.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_caxci"]
+radius = 144.03125
+
+[node name="HeartTree" type="Area2D" unique_id=2061265749]
+script = ExtResource("1_xse57")
+metadata/_edit_vertical_guides_ = [-307.0]
+
+[node name="TreeSprite" type="Sprite2D" parent="." unique_id=1918920277]
+position = Vector2(672, 626)
+scale = Vector2(1.6386719, 1.6103514)
+texture = ExtResource("2_mrqyk")
+
+[node name="Heart" type="Sprite2D" parent="." unique_id=1937814934]
+position = Vector2(-37.499992, -63.999992)
+scale = Vector2(1.2411348, 1.4230769)
+texture = ExtResource("4_pp8ft")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1211397749]
+shape = SubResource("CapsuleShape2D_rbtws")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=101981036]
+position = Vector2(-69, -33)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1298146557]
+position = Vector2(70, 31)
+shape = SubResource("CircleShape2D_caxci")

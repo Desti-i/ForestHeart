@@ -484,3 +484,41 @@ func apply_load_data():
 		quest_cat = data.quests.cat_quest.state
 		cat_found = data.quests.cat_quest.progress.cat_found
 		heal_magic_unlocked = data.quests.cat_quest.progress.heal_magic_unlocked
+
+# ─── КВЕСТ: ДЕРЕВО И ВАМПИР ──────────────────────────────
+var tree_heart_stolen: bool = false
+var vampire_spawned: bool = false
+var quest_vampire: QuestState = QuestState.NOT_TAKEN
+var goblins_killed: int = 0
+var goblins_needed: int = 10
+var second_location_unlocked: bool = false
+
+func start_vampire_quest() -> void:
+	if quest_vampire != QuestState.NOT_TAKEN:
+		return
+	quest_vampire = QuestState.ACTIVE
+	goblins_killed = 0
+	print("🧛 Квест начат: Убей 10 гоблинов!")
+	emit_signal("quest_updated")
+
+func register_goblin_kill() -> void:
+	if quest_vampire != QuestState.ACTIVE:
+		return
+	goblins_killed += 1
+	print("👺 Гоблинов убито:", goblins_killed, "/", goblins_needed)
+	emit_signal("quest_updated")
+	if goblins_killed >= goblins_needed:
+		quest_vampire = QuestState.COMPLETED
+		second_location_unlocked = true
+		print("✅ Квест выполнен! Вернись к вампиру!")
+		emit_signal("quest_updated")
+
+func hand_in_vampire_quest() -> bool:
+	if quest_vampire != QuestState.COMPLETED:
+		return false
+	quest_vampire = QuestState.HANDED_IN
+	vampire_spawned = false
+	add_exp(500)
+	print("🎉 Квест сдан! +500 EXP! Открыта вторая локация!")
+	emit_signal("quest_updated")
+	return true

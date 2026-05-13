@@ -57,8 +57,6 @@ var sword_levels: Array = [
 	},
 ]
 
-
-
 func get_active_weapon() -> Dictionary:
 	return sword_levels[sword_level]
 
@@ -487,9 +485,7 @@ func apply_load_data():
 		cat_found = data.quests.cat_quest.progress.cat_found
 		heal_magic_unlocked = data.quests.cat_quest.progress.heal_magic_unlocked
 
-# ─── ДЕРЕВО И МОНСТР ──────────────────────────────────────
-var tree_intro_shown: bool = false
-var monster_encounter_triggered: bool = false
+# ─── КВЕСТ: ДЕРЕВО И ВАМПИР ──────────────────────────────
 var tree_heart_stolen: bool = false
 var vampire_spawned: bool = false
 var quest_vampire: QuestState = QuestState.NOT_TAKEN

@@ -65,7 +65,8 @@
 [ext_resource type="PackedScene" uid="uid://v6a5e2h41ka0" path="res://animals/cat/stena.tscn" id="62_om1lu"]
 [ext_resource type="PackedScene" uid="uid://snp7um1x1xl6" path="res://NPC/nps3.tscn" id="64_hyxvc"]
 [ext_resource type="PackedScene" uid="uid://6ar5avmdhlny" path="res://locations/primary_village/HeartTree.tscn" id="65_00f6k"]
-[ext_resource type="PackedScene" uid="uid://270ucbyfias7" path="res://NPC/nps2.tscn" id="65_iuklk"]
+[ext_resource type="PackedScene" path="res://NPC/nps2.tscn" id="65_iuklk"]
+[ext_resource type="PackedScene" uid="uid://daq7uf70pi21g" path="res://iNTERFACE/EscMenu/EscMenu.tscn" id="67_jbup7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onb6d"]
 texture = ExtResource("1_6ql0f")
@@ -9381,3 +9382,5 @@ position = Vector2(-335, -162.00006)
 [node name="Nps3" parent="." unique_id=1249700640 instance=ExtResource("64_hyxvc")]
 position = Vector2(-576, 362)
 scale = Vector2(3.2580247, 3.2580247)
+
+[node name="EscMenu" parent="." unique_id=2061204431 instance=ExtResource("67_jbup7")]

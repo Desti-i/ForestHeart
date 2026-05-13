@@ -351,7 +351,7 @@ func die() -> void:
 	_respawn()
 
 func _respawn() -> void:
-	current_health = max_health * 0.3
+	current_health = max_health * 1
 	stamina        = max_stamina
 
 	var spawn = get_tree().current_scene.get_node_or_null("SpawnPoint")

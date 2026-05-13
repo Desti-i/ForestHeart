@@ -1,0 +1,134 @@
+[gd_scene format=3 uid="uid://270ucbyfias7"]
+
+[ext_resource type="Script" uid="uid://2my6p37jeog0" path="res://NPC/nps.gd" id="1_sg5qc"]
+[ext_resource type="Texture2D" uid="uid://cc50aqpghfhtj" path="res://2D Pixel Dungeon Asset Pack/Character_animation/monsters_idle/vampire/v2/vampire_v2_1.png" id="2_ydq6w"]
+[ext_resource type="Texture2D" uid="uid://pe635pqoj6jd" path="res://2D Pixel Dungeon Asset Pack/Character_animation/monsters_idle/vampire/v2/vampire_v2_2.png" id="3_0nj8n"]
+[ext_resource type="Texture2D" uid="uid://bqlgdjhc182ek" path="res://2D Pixel Dungeon Asset Pack/Character_animation/monsters_idle/vampire/v2/vampire_v2_3.png" id="4_j36qr"]
+[ext_resource type="Texture2D" uid="uid://dwung2o1fkq78" path="res://2D Pixel Dungeon Asset Pack/Character_animation/monsters_idle/vampire/v2/vampire_v2_4.png" id="5_xpc0p"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r0ded"]
+size = Vector2(14.95845, 17.174517)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ey6xs"]
+atlas = ExtResource("2_ydq6w")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n56yr"]
+atlas = ExtResource("3_0nj8n")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cy6aa"]
+atlas = ExtResource("4_j36qr")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wdg1u"]
+atlas = ExtResource("5_xpc0p")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m8lyf"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ey6xs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n56yr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cy6aa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wdg1u")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_338yd"]
+radius = 52.08935
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r0ded"]
+content_margin_left = 20.0
+content_margin_top = 15.0
+content_margin_right = 20.0
+content_margin_bottom = 15.0
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_fd83g"]
+
+[node name="Nps" type="CharacterBody2D" unique_id=962183908]
+scale = Vector2(1.805, 1.805)
+script = ExtResource("1_sg5qc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1272258675]
+position = Vector2(-0.2770082, 7.479224)
+shape = SubResource("RectangleShape2D_r0ded")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=341612634]
+scale = Vector2(1.3900001, 1.3900001)
+sprite_frames = SubResource("SpriteFrames_m8lyf")
+animation = &"idle"
+frame_progress = 0.37658837
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=353370793]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=283953989]
+position = Vector2(0.55401665, 7.7562327)
+shape = SubResource("CircleShape2D_338yd")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=353910223]
+layer = 3
+follow_viewport_enabled = true
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer" unique_id=567968701]
+custom_minimum_size = Vector2(400, 150)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 4386.0
+offset_top = 2822.0002
+offset_right = 4786.0
+offset_bottom = 3022.0002
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.145, 0.145)
+theme_override_styles/panel = SubResource("StyleBoxFlat_r0ded")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer" unique_id=1821307802]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameLabel" type="Label" parent="CanvasLayer/PanelContainer/VBoxContainer" unique_id=1326383003]
+layout_mode = 2
+theme = SubResource("Theme_fd83g")
+text = "Старейшина"
+
+[node name="DialogLabel" type="Label" parent="CanvasLayer/PanelContainer/VBoxContainer" unique_id=1724764604]
+layout_mode = 2
+text = "..."
+autowrap_mode = 2
+
+[node name="NextButton" type="Button" parent="CanvasLayer/PanelContainer/VBoxContainer" unique_id=539605021]
+layout_mode = 2
+text = "Далее
+"
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]
+[connection signal="pressed" from="CanvasLayer/PanelContainer/VBoxContainer/NextButton" to="." method="_on_next_button_pressed"]

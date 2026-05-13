@@ -6,6 +6,7 @@ func _on_quit_pressed():
 func _on_play_pressed():
 	if SaveManager.has_save_file():
 		SaveManager.load_game()
+		
 		var saved_scene = SaveManager.game_data.current_scene
 		get_tree().change_scene_to_file(saved_scene)
 	else:
@@ -14,7 +15,7 @@ func _on_play_pressed():
 
 func _on_new_play_pressed() -> void:
 	SaveManager.game_data = {
-	"current_scene": "res://levels/level_1.tscn",
+	"current_scene": "res://locations/primary_village/Vilage1.tscn",
 	"player_pos": {"x": 0, "y": 0},
 	"stats": {
 		"exp": 0,

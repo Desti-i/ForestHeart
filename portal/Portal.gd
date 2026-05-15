@@ -63,10 +63,10 @@ func _teleport():
 	get_tree().change_scene_to_file(next_scene)
 
 func _show_locked_message():
-	print("🔒 Попытка войти в заблокированный портал!")
+	print("🔒 Попытка войти в заблокированный данж!")
 	
 	var lbl = Label.new()
-	lbl.text = "🔒 Портал закрыт! Поговори с вампиром в деревне и выполни его квест."
+	lbl.text = "🔒 Вход закрыт! Поговори с вампиром в деревне и выполни его квест."
 	lbl.add_theme_font_size_override("font_size", 18)
 	lbl.add_theme_color_override("font_color", Color.RED)
 	lbl.add_theme_constant_override("outline_size", 2)

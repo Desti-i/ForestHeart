@@ -5,8 +5,8 @@ extends EnemyBase
 
 var phase: float = 1
 
-func take_damage(amount: float):
-	super(amount)
+func take_damage(amount: float, damage_type: String = "physical") -> void:
+	super(amount, damage_type)
 	
 	if health <= max_health * 0.5 and phase == 1:
 		phase2()

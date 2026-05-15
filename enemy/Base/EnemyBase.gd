@@ -40,7 +40,8 @@ func _ready() -> void:
 	randomize()
 	health         = max_health
 	spawn_position = global_position   # ← запоминаем точку спауна
-
+	add_to_group("orc")
+	add_to_group("enemy")
 	if hp_bar:
 		hp_bar.max_value = max_health
 		hp_bar.min_value = 0
@@ -87,20 +88,32 @@ func take_damage(amount: float, damage_type: String = "physical") -> void:
 	var final_damage: float = amount * multiplier
 		
 	health -= final_damage
-	health  = max(health, 0)
+	health = max(health, 0)
+	
 	if hp_bar:
-		hp_bar.value   = health
+		hp_bar.value = health
 		hp_bar.visible = true
+	
 	_show_damage_number(final_damage)
+	
+	# Эффект получения урона
 	modulate = Color.RED
 	await get_tree().create_timer(0.1).timeout
 	modulate = Color.WHITE
+	
+	# Если здоровье закончилось - умираем
 	if health <= 0:
 		if hp_bar:
 			hp_bar.visible = false
+		
+		# Регистрируем убийство для квестов
 		if is_in_group("boar"):
 			GameState.register_boar_kill()
+		if is_in_group("orc"):
+			GameState.register_goblin_kill()
+		
 		state_machine.change_state("Death")
+		return  # 👈 ВАЖНО: выходим, чтобы не продолжать
 
 func _show_damage_number(amount: float) -> void:
 	var lbl := Label.new()

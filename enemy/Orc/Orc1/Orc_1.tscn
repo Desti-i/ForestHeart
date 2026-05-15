@@ -1486,7 +1486,7 @@ _data = {
 &"idle_up": SubResource("Animation_icg1k")
 }
 
-[node name="Orc_1" unique_id=355327370 instance=ExtResource("1_smupm")]
+[node name="Orc_1" unique_id=355327370 groups=["goblin"] instance=ExtResource("1_smupm")]
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344]
 shape = SubResource("CapsuleShape2D_n3hj8")

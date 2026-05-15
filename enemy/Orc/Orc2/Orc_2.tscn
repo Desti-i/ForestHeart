@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bw8acjfravta3" path="res://enemy/Orc/Orc2/orc2_death_full.png" id="4_hvalr"]
 [ext_resource type="Texture2D" uid="uid://bx7b607iw54d1" path="res://enemy/Orc/Orc2/orc2_idle_full.png" id="5_uoq6i"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_knkkf"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xb5hq"]
 resource_local_to_scene = true
 height = 34.0
 
@@ -458,7 +458,7 @@ region = Rect2(128, 64, 64, 64)
 atlas = ExtResource("5_uoq6i")
 region = Rect2(192, 64, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_o7cei"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_234go"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -878,16 +878,16 @@ animations = [{
 "speed": 4.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_p830f"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_hvalr"]
 resource_local_to_scene = true
 radius = 72.02777
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1knhe"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uoq6i"]
 resource_local_to_scene = true
 radius = 8.46
 height = 20.09
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_rrdwd"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_knkkf"]
 resource_local_to_scene = true
 
 [sub_resource type="Animation" id="Animation_xb5hq"]
@@ -1486,26 +1486,26 @@ _data = {
 &"idle_up": SubResource("Animation_3pv82")
 }
 
-[node name="Orc_2" unique_id=355327370 instance=ExtResource("1_sxbjt")]
+[node name="Orc_2" unique_id=355327370 groups=["orc"] instance=ExtResource("1_sxbjt")]
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344]
-shape = SubResource("CapsuleShape2D_knkkf")
+shape = SubResource("CapsuleShape2D_xb5hq")
 
 [node name="Movements" parent="." index="1" unique_id=403867546]
-sprite_frames = SubResource("SpriteFrames_o7cei")
+sprite_frames = SubResource("SpriteFrames_234go")
 animation = &"attack_up"
 frame = 7
 
 [node name="CollisionShape2D" parent="detector" parent_id_path=PackedInt32Array(963818677) index="0" unique_id=766399847]
-shape = SubResource("CircleShape2D_p830f")
+shape = SubResource("CircleShape2D_hvalr")
 
 [node name="CollisionShape2D" parent="Attack_zone" parent_id_path=PackedInt32Array(1428366797) index="0" unique_id=784964863]
-shape = SubResource("CapsuleShape2D_1knhe")
+shape = SubResource("CapsuleShape2D_uoq6i")
 
 [node name="CollisionShape2D" parent="Attack_area" parent_id_path=PackedInt32Array(1858617201) index="0" unique_id=954509707]
 position = Vector2(0, 7.505)
 scale = Vector2(1.305, 1.305)
-shape = SubResource("CircleShape2D_rrdwd")
+shape = SubResource("CircleShape2D_knkkf")
 
 [node name="AnimationPlayer" parent="." index="7" unique_id=1403558373]
 libraries/ = SubResource("AnimationLibrary_r00uw")

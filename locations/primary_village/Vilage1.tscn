@@ -61,11 +61,12 @@
 [ext_resource type="AudioStream" uid="uid://bhypob4qlfqk2" path="res://Music/449359103103a80.mp3" id="58_am1wp"]
 [ext_resource type="AudioStream" uid="uid://d308wnakdefqj" path="res://Music/1774464752.mp3" id="59_eyrn7"]
 [ext_resource type="PackedScene" uid="uid://bayjlmyeofonw" path="res://enemy/Spawner.tscn" id="60_k4j2w"]
+[ext_resource type="PackedScene" uid="uid://dacbf762c616w" path="res://enemy/Boar/Boar_archer.tscn" id="62_g8er5"]
 [ext_resource type="PackedScene" uid="uid://v6a5e2h41ka0" path="res://animals/cat/stena.tscn" id="62_om1lu"]
-[ext_resource type="PackedScene" uid="uid://snp7um1x1xl6" path="res://NPC/MonsterNPC.tscn" id="64_hyxvc"]
+[ext_resource type="PackedScene" uid="uid://snp7um1x1xl6" path="res://NPC/nps3.tscn" id="64_hyxvc"]
 [ext_resource type="PackedScene" uid="uid://6ar5avmdhlny" path="res://locations/primary_village/HeartTree.tscn" id="65_00f6k"]
-[ext_resource type="PackedScene" path="res://NPC/nps2.tscn" id="65_iuklk"]
-[ext_resource type="Script" path="res://locations/primary_village/Tutorial.gd" id="67_5xuji"]
+[ext_resource type="PackedScene" uid="uid://270ucbyfias7" path="res://NPC/nps2.tscn" id="65_iuklk"]
+[ext_resource type="Script" uid="uid://dr380vn5k7phn" path="res://locations/primary_village/Tutorial.gd" id="67_5xuji"]
 [ext_resource type="PackedScene" uid="uid://daq7uf70pi21g" path="res://iNTERFACE/EscMenu/EscMenu.tscn" id="67_jbup7"]
 [ext_resource type="PackedScene" uid="uid://dxyshi6j22adl" path="res://enemy/Orc/Orc1/Orc_1.tscn" id="68_5xuji"]
 [ext_resource type="PackedScene" uid="uid://b1h4hrkw57x73" path="res://enemy/Orc/Orc2/Orc_2.tscn" id="69_fqymq"]
@@ -9182,19 +9183,7 @@ sources/2 = SubResource("TileSetAtlasSource_0t5bd")
 sources/3 = SubResource("TileSetAtlasSource_xo20n")
 sources/4 = SubResource("TileSetAtlasSource_ln6ko")
 
-[sub_resource type="Resource" id="Resource_iuklk"]
-metadata/__load_path__ = "res://enemy/Orc/Orc2/Orc_archer.tscn"
-
-[sub_resource type="Resource" id="Resource_jbup7"]
-metadata/__load_path__ = "res://enemy/Orc/Orc2/Orc_archer.tscn"
-
-[sub_resource type="Resource" id="Resource_5xuji"]
-metadata/__load_path__ = "res://enemy/Orc/Orc2/Orc_archer.tscn"
-
 [sub_resource type="Resource" id="Resource_fqymq"]
-metadata/__load_path__ = "res://enemy/Orc/Orc2/Orc_archer.tscn"
-
-[sub_resource type="Resource" id="Resource_g8er5"]
 metadata/__load_path__ = "res://enemy/Orc/Orc2/Orc_archer.tscn"
 
 [node name="FirstLocation" type="Node2D" unique_id=946760632]
@@ -9342,33 +9331,39 @@ stream = ExtResource("58_am1wp")
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1064877412]
 stream = ExtResource("59_eyrn7")
 
-[node name="Spawner" parent="." unique_id=1258643216 groups=["boar"] instance=ExtResource("60_k4j2w")]
+[node name="boar2" parent="." unique_id=1258643216 groups=["boar"] instance=ExtResource("60_k4j2w")]
 position = Vector2(-1582.3588, -1164.8042)
-enemy_scene = SubResource("Resource_iuklk")
+enemy_scene = ExtResource("62_g8er5")
 max_enemies = 2
 spawn_interval = 10.0
-spawn_radius = 160.0
+spawn_radius = 300.0
 
-[node name="Spawner2" parent="." unique_id=1179290615 groups=["boar"] instance=ExtResource("60_k4j2w")]
-position = Vector2(-1548, -806)
-enemy_scene = SubResource("Resource_jbup7")
+[node name="boar" parent="." unique_id=1179290615 groups=["boar"] instance=ExtResource("60_k4j2w")]
+position = Vector2(-1553, -863)
+enemy_scene = ExtResource("62_g8er5")
+spawn_radius = 300.0
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=911503928]
 position = Vector2(329, -969)
 
-[node name="Spawner3" parent="." unique_id=846023257 groups=["boar"] instance=ExtResource("60_k4j2w")]
+[node name="boar3" parent="." unique_id=846023257 groups=["boar"] instance=ExtResource("60_k4j2w")]
 position = Vector2(-1359, -1106)
-enemy_scene = SubResource("Resource_5xuji")
+enemy_scene = ExtResource("62_g8er5")
+spawn_radius = 300.0
 
-[node name="Spawner4" parent="." unique_id=294586525 groups=["boar"] instance=ExtResource("60_k4j2w")]
-position = Vector2(-1568.7178, -954.34265)
-enemy_scene = SubResource("Resource_fqymq")
+[node name="boar4" parent="." unique_id=294586525 groups=["boar"] instance=ExtResource("60_k4j2w")]
+position = Vector2(2988, -725)
+enemy_scene = ExtResource("69_fqymq")
+max_enemies = 2
+spawn_interval = 60.0
+spawn_radius = 300.0
 
-[node name="Spawner5" parent="." unique_id=136479698 groups=["boar"] instance=ExtResource("60_k4j2w")]
-position = Vector2(-113, -942)
-enemy_scene = SubResource("Resource_g8er5")
+[node name="boar5" parent="." unique_id=136479698 groups=["boar"] instance=ExtResource("60_k4j2w")]
+position = Vector2(-1807, -760)
+enemy_scene = ExtResource("62_g8er5")
 max_enemies = 2
 spawn_interval = 10.0
+spawn_radius = 300.0
 
 [node name="Stena" parent="." unique_id=937432554 instance=ExtResource("62_om1lu")]
 position = Vector2(-189, -3049)
@@ -9405,26 +9400,23 @@ visible = false
 [node name="Tutorial" type="CanvasLayer" parent="." unique_id=1972613088]
 script = ExtResource("67_5xuji")
 
-[node name="Orc_1" parent="." unique_id=355327370 instance=ExtResource("68_5xuji")]
-position = Vector2(2873, -383)
+[node name="orc\\" parent="." unique_id=1396956761 instance=ExtResource("60_k4j2w")]
+position = Vector2(2863, -326)
+enemy_scene = ExtResource("68_5xuji")
+max_enemies = 4
+spawn_radius = 300.0
 
-[node name="Orc_2" parent="." unique_id=335485993 instance=ExtResource("68_5xuji")]
-position = Vector2(2724, -667)
+[node name="orc" parent="." unique_id=127619732 instance=ExtResource("60_k4j2w")]
+position = Vector2(2757, -838)
+enemy_scene = ExtResource("68_5xuji")
+max_enemies = 4
+spawn_interval = 20.0
+spawn_radius = 300.0
 
-[node name="Orc_3" parent="." unique_id=1692800102 instance=ExtResource("68_5xuji")]
-position = Vector2(3035, -690)
+[node name="orc2" parent="." unique_id=1982974762 instance=ExtResource("60_k4j2w")]
+position = Vector2(3626, -1200)
+enemy_scene = SubResource("Resource_fqymq")
 
-[node name="Orc_4" parent="." unique_id=215874552 instance=ExtResource("68_5xuji")]
-position = Vector2(3050, -13)
-
-[node name="Orc_5" parent="." unique_id=628587000 instance=ExtResource("68_5xuji")]
-position = Vector2(2518, -304)
-
-[node name="Orc_6" parent="." unique_id=702697908 instance=ExtResource("68_5xuji")]
-position = Vector2(2670, -42)
-
-[node name="Orc_7" parent="." unique_id=1826741742 instance=ExtResource("69_fqymq")]
-position = Vector2(2745, -273)
-
-[node name="Orc_8" parent="." unique_id=1772354565 instance=ExtResource("69_fqymq")]
-position = Vector2(3155, -474)
+[node name="orc3" parent="." unique_id=1306199811 groups=["boar"] instance=ExtResource("60_k4j2w")]
+position = Vector2(-1571, -697)
+enemy_scene = ExtResource("62_g8er5")

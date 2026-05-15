@@ -7,52 +7,49 @@ extends CharacterBody2D
 var current_line: int = 0
 var player_nearby: bool = false
 var dialog_open: bool = false
+var showing_choice: bool = false
 
 var canvas_layer: CanvasLayer
 var dialog_panel: PanelContainer
 var name_label: Label
 var dialog_label: Label
 var next_button: Button
+var choice_container: HBoxContainer
+var choice_btn_1: Button
+var choice_btn_2: Button
 
-# Диалоги в зависимости от состояния квеста
 func _get_dialog_lines() -> Array[String]:
-	# КОШКА: если квест активен или выполнен
 	match GameState.quest_cat:
 		GameState.QuestState.NOT_TAKEN:
-			# Проверяем, выполнен ли квест с кабанами
 			if GameState.quest_kill_boars == GameState.QuestState.HANDED_IN:
 				return [
 					"А, это ты! Рад тебя видеть!",
 					"У меня есть ещё одна просьба к тебе...",
 					"Старушка из соседнего дома потеряла свою кошку.",
 					"Она сбежала куда-то в лес.",
-					"EXP я тебе не дам, но старушка говорила, что",
-					"угостит тебя чем-то особенным...",
-					"Поможешь старушке? Просто так, от чистого сердца?"
+					"EXP я тебе не дам, но старушка говорила что угостит чем-то особенным...",
+					"Поможешь старушке?"
 				]
 		GameState.QuestState.ACTIVE:
 			return [
 				"Ты ещё не нашёл кошку?",
 				"Бедная старушка очень переживает.",
-				"Поищи в лесу, она должна быть где-то там.",
-				"Кошка любит гулять возле деревьев."
+				"Поищи в лесу, она должна быть где-то там."
 			]
 		GameState.QuestState.COMPLETED:
 			return [
 				"Ты нашёл кошку?! Где она?",
 				"Старушка будет так рада!",
-				"Говорит, что приготовила для тебя награду.",
-				"Открой меню (Q) и посмотри вкладку магии!"
+				"Говорит что приготовила для тебя награду.",
+				"Открой меню Q и посмотри вкладку магии!"
 			]
 		GameState.QuestState.HANDED_IN:
 			return [
 				"Старушка очень благодарна тебе!",
-				"Кошка теперь целыми днями дома.",
-				"Говорят, она даже научила тебя какой-то магии?",
-				"Вот это награда! А я ведь предупреждал, что EXP не дам!"
+				"Говорят она даже научила тебя какой-то магии?",
+				"Используй с умом!"
 			]
-	
-	# КАБАНЫ: если квест с кабанами активен или новый
+
 	match GameState.quest_kill_boars:
 		GameState.QuestState.NOT_TAKEN:
 			return [
@@ -66,13 +63,11 @@ func _get_dialog_lines() -> Array[String]:
 			var left = GameState.boars_needed - GameState.boars_killed
 			return [
 				"А, это снова ты!",
-				"Как продвигается охота?",
 				"Кабанов осталось убить: " + str(left),
 				"Удачи, я жду тебя!"
 			]
 		GameState.QuestState.COMPLETED:
 			return [
-				"Чувствую запах крови кабанов от тебя...",
 				"Ты справился! Все 10 кабанов убиты!",
 				"Держи свою награду — 300 EXP!",
 				"А теперь у меня к тебе ещё одна просьба...",
@@ -82,10 +77,9 @@ func _get_dialog_lines() -> Array[String]:
 			return [
 				"Рад видеть тебя снова, герой!",
 				"Благодаря тебе деревня спокойна.",
-				"Кстати, старушка тебе наверное уже рассказала?",
-				"Хорошую магию она знает... используй с умом!"
+				"Хорошую магию та старушка знает... используй с умом!"
 			]
-	return ["Здравствуй!"]
+	return ["Здравствуй, путник!"]
 
 func _ready():
 	_create_ui()
@@ -98,7 +92,6 @@ func _ready():
 	print("NPC готов!")
 
 func _on_quest_updated() -> void:
-	# Обновляем диалог если он открыт
 	if dialog_open:
 		_close_dialog()
 
@@ -123,7 +116,7 @@ func _create_ui():
 
 	dialog_panel = PanelContainer.new()
 	dialog_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	dialog_panel.offset_top = -200
+	dialog_panel.offset_top = -220
 	dialog_panel.offset_left = 100
 	dialog_panel.offset_right = -100
 	dialog_panel.visible = false
@@ -162,82 +155,179 @@ func _create_ui():
 	dialog_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 	vbox.add_child(dialog_label)
 
+	# Кнопка "Далее"
 	next_button = Button.new()
 	next_button.text = "Далее →"
 	next_button.custom_minimum_size = Vector2(120, 40)
 	next_button.pressed.connect(_on_next_button_pressed)
 	vbox.add_child(next_button)
 
+	# Контейнер для выбора
+	choice_container = HBoxContainer.new()
+	choice_container.add_theme_constant_override("separation", 10)
+	choice_container.visible = false
+	vbox.add_child(choice_container)
+
+	choice_btn_1 = Button.new()
+	choice_btn_1.custom_minimum_size = Vector2(180, 44)
+	choice_btn_1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	choice_container.add_child(choice_btn_1)
+
+	choice_btn_2 = Button.new()
+	choice_btn_2.custom_minimum_size = Vector2(180, 44)
+	choice_btn_2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	choice_container.add_child(choice_btn_2)
+
+func _show_choice(text1: String, text2: String, cb1: Callable, cb2: Callable) -> void:
+	showing_choice = true
+	next_button.visible = false
+	choice_container.visible = true
+
+	# Очищаем старые коннекты
+	if choice_btn_1.pressed.is_connected(_dummy):
+		pass
+	for c in choice_btn_1.pressed.get_connections():
+		choice_btn_1.pressed.disconnect(c["callable"])
+	for c in choice_btn_2.pressed.get_connections():
+		choice_btn_2.pressed.disconnect(c["callable"])
+
+	choice_btn_1.text = text1
+	choice_btn_2.text = text2
+	choice_btn_1.add_theme_color_override("font_color", Color(0.3, 1.0, 0.4))
+	choice_btn_2.add_theme_color_override("font_color", Color(1.0, 0.4, 0.4))
+
+	choice_btn_1.pressed.connect(func():
+		_hide_choice()
+		cb1.call()
+	)
+	choice_btn_2.pressed.connect(func():
+		_hide_choice()
+		cb2.call()
+	)
+
+func _dummy() -> void:
+	pass
+
+func _hide_choice() -> void:
+	showing_choice = false
+	choice_container.visible = false
+	next_button.visible = true
+
 func _open_dialog():
 	dialog_open = true
 	current_line = 0
 	var lines = _get_dialog_lines()
 	dialog_label.text = lines[current_line]
+	next_button.text = "Далее →"
+	next_button.visible = true
+	choice_container.visible = false
 	if lines.size() == 1:
 		next_button.text = "Закрыть"
-	else:
-		next_button.text = "Далее →"
 	dialog_panel.visible = true
 
 func _close_dialog():
 	dialog_open = false
+	showing_choice = false
 	dialog_panel.visible = false
 	current_line = 0
 	next_button.text = "Далее →"
+	next_button.visible = true
+	choice_container.visible = false
 
 func _on_next_button_pressed() -> void:
+	if showing_choice:
+		return
 	var lines = _get_dialog_lines()
-	
-	# Последняя реплика - особые действия
+
 	if current_line == lines.size() - 1:
 		_handle_last_line()
-		_close_dialog()
 		return
 
 	current_line += 1
 	dialog_label.text = lines[current_line]
 
 	if current_line == lines.size() - 1:
-		# Меняем кнопку на последней реплике
-		if GameState.quest_cat == GameState.QuestState.NOT_TAKEN and GameState.quest_kill_boars == GameState.QuestState.HANDED_IN:
-			next_button.text = "Принять квест (кошка)"
-		elif GameState.quest_kill_boars == GameState.QuestState.NOT_TAKEN:
-			next_button.text = "Принять квест"
-		elif GameState.quest_kill_boars == GameState.QuestState.COMPLETED:
-			next_button.text = "Получить награду"
-		elif GameState.quest_cat == GameState.QuestState.ACTIVE:
-			next_button.text = "Найди кошку"
-		elif GameState.quest_cat == GameState.QuestState.COMPLETED:
-			next_button.text = "Получить награду (магия)"
-		else:
-			next_button.text = "Закрыть"
+		_show_last_line_button()
+
+func _show_last_line_button() -> void:
+	# Квест кошка - предложение
+	if GameState.quest_cat == GameState.QuestState.NOT_TAKEN and \
+	   GameState.quest_kill_boars == GameState.QuestState.HANDED_IN:
+		_show_choice(
+			"✅ Помочь старушке",
+			"❌ Отказать",
+			func():
+				GameState.start_quest_cat()
+				_show_notification("🐱 Квест принят! Найди кошку!")
+				_close_dialog(),
+			func():
+				dialog_label.text = "Ну что ж... старушка будет огорчена."
+				next_button.visible = true
+				choice_container.visible = false
+				next_button.text = "Закрыть"
+				GameState.change_reputation(-10)
+		)
+		return
+
+	# Квест кошка - сдача
+	if GameState.quest_cat == GameState.QuestState.COMPLETED:
+		next_button.text = "Получить награду"
+		return
+
+	# Квест кабаны - предложение
+	if GameState.quest_kill_boars == GameState.QuestState.NOT_TAKEN:
+		_show_choice(
+			"✅ Принять квест",
+			"❌ Отказать",
+			func():
+				GameState.start_quest_kill_boars()
+				_show_notification("📜 Квест принят! Убей 10 кабанов!")
+				_close_dialog(),
+			func():
+				dialog_label.text = "Жаль... деревня нуждается в помощи."
+				next_button.visible = true
+				choice_container.visible = false
+				next_button.text = "Закрыть"
+				GameState.change_reputation(-5)
+		)
+		return
+
+	# Квест кабаны - сдача
+	if GameState.quest_kill_boars == GameState.QuestState.COMPLETED:
+		next_button.text = "Получить награду"
+		return
+
+	next_button.text = "Закрыть"
 
 func _handle_last_line() -> void:
-	# Проверяем кошачий квест (если он предложен)
-	if GameState.quest_cat == GameState.QuestState.NOT_TAKEN and GameState.quest_kill_boars == GameState.QuestState.HANDED_IN:
-		GameState.start_quest_cat()
-		print("🐱 Квест принят! Найди кошку!")
-		return
-	
-	# Проверяем сдачу кошачьего квеста
 	if GameState.quest_cat == GameState.QuestState.COMPLETED:
 		GameState.hand_in_quest_cat()
-		print("💚 Магия лечения открыта! Загляни в меню (Q)")
+		_show_notification("💚 Магия лечения открыта!")
+		_close_dialog()
 		return
-	
-	# Квест на кабанов
-	match GameState.quest_kill_boars:
-		GameState.QuestState.NOT_TAKEN:
-			GameState.start_quest_kill_boars()
-			print("📜 Квест принят!")
-		GameState.QuestState.COMPLETED:
-			GameState.hand_in_quest_kill_boars()
-			print("🎉 Награда получена!")
-			# Принудительно открываем диалог снова для предложения кошки
-			await get_tree().create_timer(0.5).timeout
-			_open_dialog()
-		_:
-			_close_dialog()
+
+	if GameState.quest_kill_boars == GameState.QuestState.COMPLETED:
+		GameState.hand_in_quest_kill_boars()
+		_show_notification("🎉 +300 EXP получено!")
+		await get_tree().create_timer(0.5).timeout
+		_open_dialog()
+		return
+
+	_close_dialog()
+
+func _show_notification(msg: String) -> void:
+	var lbl = Label.new()
+	lbl.text = msg
+	lbl.add_theme_color_override("font_color", Color.YELLOW)
+	lbl.add_theme_font_size_override("font_size", 16)
+	lbl.add_theme_constant_override("outline_size", 2)
+	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
+	lbl.position = Vector2(200, 80)
+	lbl.z_index = 200
+	get_tree().current_scene.add_child(lbl)
+	var tw = create_tween()
+	tw.tween_property(lbl, "modulate:a", 0.0, 2.5)
+	tw.tween_callback(lbl.queue_free)
 
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

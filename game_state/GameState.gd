@@ -6,6 +6,16 @@ var spawn_point_name: String = "SpawnPoint"
 # ─── ОБУЧЕНИЕ ────────────────────────────────────────────
 var tutorial_completed: bool = false  # Пройдено ли обучение
 
+# Репутация
+var reputation: int = 0
+signal reputation_changed(value: int)
+
+func change_reputation(amount: int) -> void:
+	reputation = clamp(reputation + amount, -100, 100)
+	print("👤 Репутация:", reputation)
+	emit_signal("reputation_changed", reputation)
+
+
 # ─── EXP ─────────────────────────────────────────────────
 var exp: int = 0
 signal exp_changed(new_amount: int)

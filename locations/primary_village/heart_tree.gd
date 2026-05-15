@@ -11,6 +11,7 @@ var intro_shown: bool = false
 var countdown_active: bool = false
 var countdown_time: float = 10.0
 var player_left: bool = false
+var waiting_for_return: bool = false
 
 func _ready():
 	print("🌳 HeartTree _ready вызван")
@@ -36,6 +37,7 @@ func _process(delta):
 		countdown_time -= delta
 		if countdown_time <= 0:
 			countdown_active = false
+			waiting_for_return = true
 			_call_player_to_tree()
 
 func _on_player_entered(body):
@@ -44,18 +46,24 @@ func _on_player_entered(body):
 		print("✅ ЭТО ИГРОК! player_nearby = true")
 		player_nearby = true
 		
-		if intro_shown and not GameState.monster_encounter_triggered and not GameState.tree_heart_stolen:
-			print("👹 ИГРОК ВЕРНУЛСЯ! ЗАПУСКАЕМ СЦЕНУ С МОНСТРОМ!")
-			_show_monster_scene()
-		elif not intro_shown:
+		# Если история не показана - показываем
+		if not intro_shown:
 			print("📖 Показываем историю")
 			_show_tree_intro()
+		# Если ждём возвращения после таймера - показываем монстра
+		elif waiting_for_return and not GameState.monster_encounter_triggered and not GameState.tree_heart_stolen:
+			print("👹 ИГРОК ВЕРНУЛСЯ ПОСЛЕ ТАЙМЕРА! ПОКАЗЫВАЕМ МОНСТРА!")
+			_show_monster_scene()
 
 func _on_player_exited(body):
 	if body.is_in_group("player"):
 		print("🚪 Игрок покинул зону дерева!")
 		player_nearby = false
-		player_left = true
+		
+		# Если история показана и таймер активен - отмечаем, что игрок ушёл
+		if intro_shown and countdown_active and not GameState.monster_encounter_triggered:
+			player_left = true
+			print("⏰ Игрок ушёл во время таймера")
 
 func _show_tree_intro():
 	intro_shown = true
@@ -68,21 +76,23 @@ func _show_tree_intro():
 	
 	await get_tree().create_timer(4.0).timeout
 	
+
 	countdown_active = true
 
 func _call_player_to_tree():
-	_show_notification("🌳 ДРЕВО ЗОВЁТ ТЕБЯ! СРОЧНО ВЕРНИСЬ! 🌳", Color.RED, "🌳")
-	_show_notification("❗ Кто-то приближается к дереву! ❗", Color.RED, "❗")
+	_show_notification("❗ Кто-то приближается к дереву! ВЕРНИСЬ СЕЙЧАС! ❗", Color.RED, "❗")
 
 func _show_monster_scene():
 	if GameState.monster_encounter_triggered:
 		return
 	
+	print("👹 НАЧАЛО СЦЕНЫ С МОНСТРОМ!")
 	GameState.monster_encounter_triggered = true
 	countdown_active = false
+	waiting_for_return = false
 	
 	_show_story_text(
-		"👹 ЗЛОДЕЙ ПОЯВИЛСЯ У ДРЕВА! 👹\n\nТы видишь таинственное существо в тёмном плаще.\nОно вырывает сердце из дерева и скрывается в пустоте!\n\nДерево начинает увядать на глазах на деревню наступает мрак...",
+		"👹 ЗЛОДЕЙ ПОЯВИЛСЯ У ДРЕВА! 👹\n\nТы видишь таинственную фигуру в тёмном плаще.\nОно вырывает сердце из дерева и скрывается в пустоте!\n\nДерево начинает увядать на глазах на деревню наступает мрак...",
 		Color.ORANGE
 	)
 	
@@ -99,19 +109,15 @@ func _show_monster_scene():
 	
 	await get_tree().create_timer(2.0).timeout
 	
-	_show_notification("🧛 На карте появился таинственный странник...Найди его.", Color.PURPLE, "🧛")
+	_show_notification("🧛 На карте появился таинственный странник... Найди его на другом берегу, чтобы узнать правду.", Color.PURPLE, "🧛")
 	_activate_vampire()
 
 func _spawn_monster_npc():
 	var monster_scene = preload("res://NPC/MonsterNPC.tscn")
 	var monster = monster_scene.instantiate()
 	
-	# Позиция: правее дерева
 	monster.global_position = global_position + Vector2(-10, 40)
-	
-	# Уменьшаем размер монстра
 	monster.scale = Vector2(1.1, 1.1)
-	
 	monster.z_index = 100
 	get_tree().current_scene.add_child(monster)
 
@@ -122,7 +128,7 @@ func _activate_vampire():
 		if vampire.has_method("activate"):
 			vampire.activate()
 
-# ========== КРАСИВЫЕ УВЕДОМЛЕНИЯ ==========
+# ========== КРАСИВЫЕ УВЕДОМЛЕНИЯ (увеличенная ширина) ==========
 
 func _show_notification(msg: String, color: Color, icon: String = ""):
 	var canvas = CanvasLayer.new()
@@ -135,8 +141,8 @@ func _show_notification(msg: String, color: Color, icon: String = ""):
 	canvas.add_child(center)
 	
 	var panel = Panel.new()
-	panel.size = Vector2(500, 60)
-	panel.position = Vector2((get_viewport().size.x - 500) / 2, 80)
+	panel.size = Vector2(800, 70)  # Увеличено с 500 до 800
+	panel.position = Vector2((get_viewport().size.x - 800) / 2, 80)
 	panel.z_index = 200
 	center.add_child(panel)
 	
@@ -154,15 +160,15 @@ func _show_notification(msg: String, color: Color, icon: String = ""):
 	panel.add_theme_stylebox_override("panel", style)
 	
 	var hbox = HBoxContainer.new()
-	hbox.size = Vector2(480, 50)
+	hbox.size = Vector2(780, 60)
 	hbox.position = Vector2(10, 5)
-	hbox.add_theme_constant_override("separation", 10)
+	hbox.add_theme_constant_override("separation", 15)
 	panel.add_child(hbox)
 	
 	if icon != "":
 		var icon_label = Label.new()
 		icon_label.text = icon
-		icon_label.add_theme_font_size_override("font_size", 28)
+		icon_label.add_theme_font_size_override("font_size", 32)
 		icon_label.add_theme_color_override("font_color", color)
 		hbox.add_child(icon_label)
 	
@@ -175,12 +181,13 @@ func _show_notification(msg: String, color: Color, icon: String = ""):
 	label.add_theme_color_override("font_shadow_color", Color.BLACK)
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD  # Добавлен перенос текста
 	hbox.add_child(label)
 	
 	panel.position.y = -100
 	var tween = create_tween()
 	tween.tween_property(panel, "position:y", 80, 0.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BOUNCE)
-	await get_tree().create_timer(2.5).timeout
+	await get_tree().create_timer(3.0).timeout
 	tween = create_tween()
 	tween.tween_property(panel, "modulate:a", 0.0, 0.5)
 	await tween.finished
@@ -201,8 +208,8 @@ func _show_story_text(msg: String, color: Color):
 	canvas.add_child(overlay)
 	
 	var frame = Panel.new()
-	frame.size = Vector2(700, 250)
-	frame.position = Vector2((get_viewport().size.x - 700) / 2, (get_viewport().size.y - 250) / 2)
+	frame.size = Vector2(700, 280)  # Увеличено с 250 до 280
+	frame.position = Vector2((get_viewport().size.x - 700) / 2, (get_viewport().size.y - 280) / 2)
 	frame.z_index = 100
 	canvas.add_child(frame)
 	
@@ -229,7 +236,7 @@ func _show_story_text(msg: String, color: Color):
 	label.add_theme_constant_override("outline_size", 2)
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	label.size = Vector2(640, 200)
+	label.size = Vector2(640, 230)
 	label.position = Vector2(30, 25)
 	frame.add_child(label)
 	
@@ -239,7 +246,7 @@ func _show_story_text(msg: String, color: Color):
 	tween.tween_property(frame, "scale", Vector2(1, 1), 0.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 	tween.parallel().tween_property(frame, "modulate:a", 1.0, 0.2)
 	
-	await get_tree().create_timer(4.0).timeout
+	await get_tree().create_timer(5.0).timeout
 	
 	tween = create_tween()
 	tween.tween_property(frame, "scale", Vector2(0.9, 0.9), 0.2)

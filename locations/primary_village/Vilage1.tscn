@@ -65,6 +65,7 @@
 [ext_resource type="PackedScene" uid="uid://snp7um1x1xl6" path="res://NPC/nps3.tscn" id="64_hyxvc"]
 [ext_resource type="PackedScene" uid="uid://6ar5avmdhlny" path="res://locations/primary_village/HeartTree.tscn" id="65_00f6k"]
 [ext_resource type="PackedScene" uid="uid://270ucbyfias7" path="res://NPC/nps2.tscn" id="65_iuklk"]
+[ext_resource type="Script" uid="uid://dr380vn5k7phn" path="res://locations/primary_village/Tutorial.gd" id="67_5xuji"]
 [ext_resource type="PackedScene" uid="uid://daq7uf70pi21g" path="res://iNTERFACE/EscMenu/EscMenu.tscn" id="67_jbup7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onb6d"]
@@ -9398,3 +9399,6 @@ position = Vector2(2009, 742)
 
 [node name="MonsterNPC" parent="." unique_id=1960495709 instance=ExtResource("64_hyxvc")]
 visible = false
+
+[node name="Tutorial" type="CanvasLayer" parent="." unique_id=1972613088]
+script = ExtResource("67_5xuji")

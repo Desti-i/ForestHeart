@@ -3,6 +3,9 @@ extends Node
 var has_boss_key: bool = false
 var spawn_point_name: String = "SpawnPoint"
 
+# ─── ОБУЧЕНИЕ ────────────────────────────────────────────
+var tutorial_completed: bool = false  # Пройдено ли обучение
+
 # ─── EXP ─────────────────────────────────────────────────
 var exp: int = 0
 signal exp_changed(new_amount: int)

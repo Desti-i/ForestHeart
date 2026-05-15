@@ -34,7 +34,7 @@ func update(delta):
 		damage_timer = damage_tick
 		
 		if enemy.player_in:
-			enemy.player.take_damage(enemy.damage, "physical")
+			enemy.player.take_damage(enemy.damage)
 	
 	if timer <= 0:
 		state_machine.change_state("Chase")

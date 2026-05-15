@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://rklgb85exb2c"
-path="res://.godot/imported/Boar_Idle_with_shadow.png-7e8bd99b8c152ba3467546987f25c039.ctex"
+uid="uid://7fpgyv60vx4i"
+path="res://.godot/imported/Boar_Hurt_with_shadow.png-12ce0d612f92340b08fc9bf63847baca.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemy/Orc/Orc2/Boar/Boar_Idle_with_shadow.png"
-dest_files=["res://.godot/imported/Boar_Idle_with_shadow.png-7e8bd99b8c152ba3467546987f25c039.ctex"]
+source_file="res://enemy/Boar/Boar_Hurt_with_shadow.png"
+dest_files=["res://.godot/imported/Boar_Hurt_with_shadow.png-12ce0d612f92340b08fc9bf63847baca.ctex"]
 
 [params]
 

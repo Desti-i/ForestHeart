@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cj7bjdnownrm0"
-path="res://.godot/imported/Boar_Attack_with_shadow.png-bff24766ae53873569b2f04bd441724b.ctex"
+path="res://.godot/imported/Boar_Attack_with_shadow.png-9143d808d88f9326436d4347b5c4735e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemy/Orc/Orc2/Boar/Boar_Attack_with_shadow.png"
-dest_files=["res://.godot/imported/Boar_Attack_with_shadow.png-bff24766ae53873569b2f04bd441724b.ctex"]
+source_file="res://enemy/Boar/Boar_Attack_with_shadow.png"
+dest_files=["res://.godot/imported/Boar_Attack_with_shadow.png-9143d808d88f9326436d4347b5c4735e.ctex"]
 
 [params]
 

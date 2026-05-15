@@ -62,11 +62,13 @@
 [ext_resource type="AudioStream" uid="uid://d308wnakdefqj" path="res://Music/1774464752.mp3" id="59_eyrn7"]
 [ext_resource type="PackedScene" uid="uid://bayjlmyeofonw" path="res://enemy/Spawner.tscn" id="60_k4j2w"]
 [ext_resource type="PackedScene" uid="uid://v6a5e2h41ka0" path="res://animals/cat/stena.tscn" id="62_om1lu"]
-[ext_resource type="PackedScene" uid="uid://snp7um1x1xl6" path="res://NPC/nps3.tscn" id="64_hyxvc"]
+[ext_resource type="PackedScene" uid="uid://snp7um1x1xl6" path="res://NPC/MonsterNPC.tscn" id="64_hyxvc"]
 [ext_resource type="PackedScene" uid="uid://6ar5avmdhlny" path="res://locations/primary_village/HeartTree.tscn" id="65_00f6k"]
-[ext_resource type="PackedScene" uid="uid://270ucbyfias7" path="res://NPC/nps2.tscn" id="65_iuklk"]
-[ext_resource type="Script" uid="uid://dr380vn5k7phn" path="res://locations/primary_village/Tutorial.gd" id="67_5xuji"]
+[ext_resource type="PackedScene" path="res://NPC/nps2.tscn" id="65_iuklk"]
+[ext_resource type="Script" path="res://locations/primary_village/Tutorial.gd" id="67_5xuji"]
 [ext_resource type="PackedScene" uid="uid://daq7uf70pi21g" path="res://iNTERFACE/EscMenu/EscMenu.tscn" id="67_jbup7"]
+[ext_resource type="PackedScene" uid="uid://dxyshi6j22adl" path="res://enemy/Orc/Orc1/Orc_1.tscn" id="68_5xuji"]
+[ext_resource type="PackedScene" uid="uid://b1h4hrkw57x73" path="res://enemy/Orc/Orc2/Orc_2.tscn" id="69_fqymq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onb6d"]
 texture = ExtResource("1_6ql0f")
@@ -9402,3 +9404,27 @@ visible = false
 
 [node name="Tutorial" type="CanvasLayer" parent="." unique_id=1972613088]
 script = ExtResource("67_5xuji")
+
+[node name="Orc_1" parent="." unique_id=355327370 instance=ExtResource("68_5xuji")]
+position = Vector2(2873, -383)
+
+[node name="Orc_2" parent="." unique_id=335485993 instance=ExtResource("68_5xuji")]
+position = Vector2(2724, -667)
+
+[node name="Orc_3" parent="." unique_id=1692800102 instance=ExtResource("68_5xuji")]
+position = Vector2(3035, -690)
+
+[node name="Orc_4" parent="." unique_id=215874552 instance=ExtResource("68_5xuji")]
+position = Vector2(3050, -13)
+
+[node name="Orc_5" parent="." unique_id=628587000 instance=ExtResource("68_5xuji")]
+position = Vector2(2518, -304)
+
+[node name="Orc_6" parent="." unique_id=702697908 instance=ExtResource("68_5xuji")]
+position = Vector2(2670, -42)
+
+[node name="Orc_7" parent="." unique_id=1826741742 instance=ExtResource("69_fqymq")]
+position = Vector2(2745, -273)
+
+[node name="Orc_8" parent="." unique_id=1772354565 instance=ExtResource("69_fqymq")]
+position = Vector2(3155, -474)

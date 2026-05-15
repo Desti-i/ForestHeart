@@ -56,7 +56,7 @@
 [ext_resource type="Texture2D" uid="uid://ds3q6aaltgei" path="res://iNTERFACE/Stamina/Sprite-0002 (1).png" id="48_03m2q"]
 [ext_resource type="PackedScene" uid="uid://dq8rnl158fhs3" path="res://animals/fox/fox.tscn" id="52_tn8ok"]
 [ext_resource type="PackedScene" uid="uid://bsd32bmuluket" path="res://animals/cat/cat_orange.tscn" id="54_6na36"]
-[ext_resource type="PackedScene" uid="uid://dacbf762c616w" path="res://enemy/Orc/Orc2/Orc_archer.tscn" id="55_6na36"]
+[ext_resource type="PackedScene" uid="uid://dacbf762c616w" path="res://enemy/Orc/Orc2/Boar_archer.tscn" id="55_6na36"]
 [ext_resource type="PackedScene" uid="uid://g61rj1s4lhk6" path="res://NPC/nps.tscn" id="55_s1xfd"]
 [ext_resource type="PackedScene" uid="uid://3vi0ubdpli5a" path="res://portal/Portal.tscn" id="56_6na36"]
 [ext_resource type="AudioStream" uid="uid://bhypob4qlfqk2" path="res://Music/449359103103a80.mp3" id="58_am1wp"]
@@ -65,7 +65,7 @@
 [ext_resource type="PackedScene" uid="uid://v6a5e2h41ka0" path="res://animals/cat/stena.tscn" id="62_om1lu"]
 [ext_resource type="PackedScene" uid="uid://snp7um1x1xl6" path="res://NPC/nps3.tscn" id="64_hyxvc"]
 [ext_resource type="PackedScene" uid="uid://6ar5avmdhlny" path="res://locations/primary_village/HeartTree.tscn" id="65_00f6k"]
-[ext_resource type="PackedScene" uid="uid://270ucbyfias7" path="res://NPC/nps2.tscn" id="65_iuklk"]
+[ext_resource type="PackedScene" path="res://NPC/nps2.tscn" id="65_iuklk"]
 [ext_resource type="PackedScene" uid="uid://daq7uf70pi21g" path="res://iNTERFACE/EscMenu/EscMenu.tscn" id="67_jbup7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onb6d"]

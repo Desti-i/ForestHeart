@@ -678,7 +678,7 @@ radius = 39.79793
 [sub_resource type="CircleShape2D" id="CircleShape2D_55e7o"]
 resource_local_to_scene = true
 
-[node name="Orc_archer" unique_id=355327370 groups=["boar"] instance=ExtResource("1_171lw")]
+[node name="boar_archer" unique_id=355327370 groups=["boar"] instance=ExtResource("1_171lw")]
 max_health = 30.0
 speed = 90.0
 exp_reward = 200

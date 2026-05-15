@@ -200,7 +200,7 @@ func _do_explosion() -> void:
 	for result in results:
 		var body = result["collider"]
 		if body.has_method("take_damage") and not body.is_in_group("player"):
-			body.take_damage(damage)
+			body.take_damage(damage, "fire")
 			print("💥 Взрыв нанёс урон:", body.name)
 
 	queue_redraw()
@@ -209,7 +209,7 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
 		return
 	if body.has_method("take_damage"):
-		body.take_damage(damage)
+		body.take_damage(damage, "fire")
 
 	# Уровень 3 — взрыв вместо исчезновения
 	if level == 3 and not _exploded:

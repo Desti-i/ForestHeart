@@ -101,11 +101,11 @@ func _update_dialog():
 			dialog_lines = [
 				"Приветствую, странник...",
 				"Я видел, как тот злодей украл сердце дерева.",
-				"Без него наше племя погибнет.",
+				"Он побежал в лес гоблинов.",
 				"Помоги моему племени...",
 				"Эти проклятые гоблины мешают нам жить.",
-				"Убей 10 гоблинов, и я открою тебе путь",
-				"во вторую локацию, где ты сможешь стать сильнее.",
+				"Убей 10 гоблинов, что мешают мне вернуться домой",
+				"Я покажу куда ушёл босс и открою тебе данж.",
 				"Согласен помочь?"
 			]
 		GameState.QuestState.ACTIVE:
@@ -173,7 +173,7 @@ func _on_next_pressed():
 			if GameState.quest_vampire == GameState.QuestState.NOT_TAKEN:
 				next_button.text = "Принять квест"
 			elif GameState.quest_vampire == GameState.QuestState.COMPLETED:
-				next_button.text = "Вернуть сердце"
+				next_button.text = "Получить ключ"
 			else:
 				next_button.text = "Закрыть"
 	else:
@@ -203,7 +203,6 @@ func _show_notification(msg: String, color: Color):
 func _on_body_entered(body):
 	if body.is_in_group("player"):
 		player_nearby = true
-		print("🧛 Игрок рядом с вампиром")
 
 func _on_body_exited(body):
 	if body.is_in_group("player"):

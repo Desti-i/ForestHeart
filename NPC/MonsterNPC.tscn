@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://snp7um1x1xl6"]
 
 [ext_resource type="Script" uid="uid://cycqearffi5jx" path="res://NPC/MonsterNPC.gd" id="1_8ssh3"]
-[ext_resource type="Texture2D" uid="uid://iteracay0ps8" path="res://ChatGPT Image 6 мая 2026 г., 17_04_09.png" id="2_qctge"]
+[ext_resource type="Texture2D" uid="uid://iteracay0ps8" path="res://Boss3Final.png" id="2_qctge"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r0ded"]
 size = Vector2(14.95845, 17.174517)

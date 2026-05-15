@@ -68,11 +68,7 @@ func _show_tree_intro():
 	
 	await get_tree().create_timer(4.0).timeout
 	
-	_show_notification("⚠️ Ты чувствуешь тревогу! Кто-то хочет украсть сердце дерева!", Color.RED, "⚠️")
-	_show_notification("⏰ У тебя есть время, чтобы подготовиться!", Color.YELLOW, "⏰")
-	
 	countdown_active = true
-	print("⏰ ТАЙМЕР ЗАПУЩЕН! countdown_active = ", countdown_active)
 
 func _call_player_to_tree():
 	_show_notification("🌳 ДРЕВО ЗОВЁТ ТЕБЯ! СРОЧНО ВЕРНИСЬ! 🌳", Color.RED, "🌳")
@@ -86,7 +82,7 @@ func _show_monster_scene():
 	countdown_active = false
 	
 	_show_story_text(
-		"👹 ЗЛОДЕЙ ПОЯВИЛСЯ У ДРЕВА! 👹\n\nТы видишь таинственное существо в тёмном плаще.\nОно вырывает сердце из дерева и смеётся!\n\nДерево начинает увядать на глазах...",
+		"👹 ЗЛОДЕЙ ПОЯВИЛСЯ У ДРЕВА! 👹\n\nТы видишь таинственное существо в тёмном плаще.\nОно вырывает сердце из дерева и скрывается в пустоте!\n\nДерево начинает увядать на глазах на деревню наступает мрак...",
 		Color.ORANGE
 	)
 	
@@ -103,7 +99,7 @@ func _show_monster_scene():
 	
 	await get_tree().create_timer(2.0).timeout
 	
-	_show_notification("🧛 Появляется вампир... Подойди к нему.", Color.PURPLE, "🧛")
+	_show_notification("🧛 На карте появился таинственный странник...Найди его.", Color.PURPLE, "🧛")
 	_activate_vampire()
 
 func _spawn_monster_npc():
@@ -118,7 +114,6 @@ func _spawn_monster_npc():
 	
 	monster.z_index = 100
 	get_tree().current_scene.add_child(monster)
-	print("👹 Монстр появился справа от дерева, размер уменьшен!")
 
 func _activate_vampire():
 	var vampire = get_tree().current_scene.find_child("Vampire", true, false)

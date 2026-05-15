@@ -9206,7 +9206,7 @@ tile_map_data = PackedByteArray("AAB+ACcABgAdAAMAAAB+ACgABgAdAAQAAAB+ACkABgAdAAU
 tile_set = SubResource("TileSet_ah1mw")
 
 [node name="Player" parent="." unique_id=627426411 instance=ExtResource("25_j64ij")]
-position = Vector2(3837, 584)
+position = Vector2(667, -1071)
 collision_mask = 1
 max_stamina = 10000.0
 

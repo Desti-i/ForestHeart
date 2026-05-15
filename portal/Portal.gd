@@ -2,16 +2,109 @@ extends Area2D
 
 @export var next_scene: String = "res://locations/location_2/location_2.tscn"
 
-func _ready() -> void:
+var player_nearby: bool = false
+
+func _ready():
 	print("🟣 ПОРТАЛ ЗАПУЩЕН!")
-	monitoring = true
-	collision_mask = 0xFFFFFFFF
 	
+	# Подключаем сигналы
 	if not body_entered.is_connected(_on_body_entered):
 		body_entered.connect(_on_body_entered)
+	if not body_exited.is_connected(_on_body_exited):
+		body_exited.connect(_on_body_exited)
+	
+	# Обновляем внешний вид портала в зависимости от статуса
+	_update_portal_appearance()
 
-func _on_body_entered(body: Node2D) -> void:
+func _update_portal_appearance():
+	if GameState.second_location_unlocked:
+		# Активный портал
+		modulate = Color(1, 1, 1, 1)
+		print("🟢 Портал АКТИВЕН! Можно переходить.")
+	else:
+		# Заблокированный портал (серый/полупрозрачный)
+		modulate = Color(0.4, 0.4, 0.6, 0.7)
+		print("🔴 Портал ЗАБЛОКИРОВАН! Нужно выполнить квест вампира.")
+
+func _on_body_entered(body: Node2D):
 	print("🔴 ВОШЁЛ:", body.name)
 	if body.is_in_group("player"):
-		print("🌀 ПЕРЕХОД!")
-		get_tree().call_deferred("change_scene_to_file", next_scene)
+		player_nearby = true
+		
+		if GameState.second_location_unlocked:
+			_show_hint("🗝️ Нажми E, чтобы перейти во вторую локацию!", Color.CYAN)
+		else:
+			_show_hint("🔒 Портал закрыт! Поговори с вампиром в деревне.", Color.RED)
+
+func _on_body_exited(body: Node2D):
+	if body.is_in_group("player"):
+		player_nearby = false
+
+func _input(event):
+	if event.is_action_pressed("interact") and player_nearby:
+		if GameState.second_location_unlocked:
+			_teleport()
+		else:
+			_show_locked_message()
+
+func _teleport():
+	print("🌀 ТЕЛЕПОРТАЦИЯ во вторую локацию!")
+	
+	# Эффект телепортации
+	_show_flash_effect()
+	await get_tree().create_timer(0.3).timeout
+	
+	# Сохраняем позицию игрока для следующего раза
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		SaveManager.game_data.player_pos = {"x": player.position.x, "y": player.position.y}
+		SaveManager.save_game()
+	
+	get_tree().change_scene_to_file(next_scene)
+
+func _show_locked_message():
+	print("🔒 Попытка войти в заблокированный портал!")
+	
+	var lbl = Label.new()
+	lbl.text = "🔒 Портал закрыт! Поговори с вампиром в деревне и выполни его квест."
+	lbl.add_theme_font_size_override("font_size", 18)
+	lbl.add_theme_color_override("font_color", Color.RED)
+	lbl.add_theme_constant_override("outline_size", 2)
+	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.size = Vector2(600, 60)
+	lbl.position = Vector2(150, 100)
+	lbl.z_index = 200
+	get_tree().current_scene.add_child(lbl)
+	
+	var tween = create_tween()
+	tween.tween_property(lbl, "modulate:a", 0.0, 2.5)
+	tween.tween_callback(lbl.queue_free)
+
+func _show_hint(msg: String, color: Color):
+	var lbl = Label.new()
+	lbl.text = msg
+	lbl.add_theme_font_size_override("font_size", 16)
+	lbl.add_theme_color_override("font_color", color)
+	lbl.add_theme_constant_override("outline_size", 2)
+	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
+	lbl.position = global_position + Vector2(-100, -60)
+	lbl.z_index = 100
+	get_tree().current_scene.add_child(lbl)
+	
+	var tween = create_tween()
+	tween.tween_property(lbl, "modulate:a", 0.0, 2.0)
+	tween.tween_callback(lbl.queue_free)
+
+func _show_flash_effect():
+	var rect = ColorRect.new()
+	rect.color = Color(1, 1, 1, 0)
+	rect.size = get_viewport().size
+	rect.position = Vector2(0, 0)
+	rect.z_index = 1000
+	get_tree().current_scene.add_child(rect)
+	
+	var tween = create_tween()
+	tween.tween_property(rect, "color:a", 1.0, 0.2)
+	tween.tween_property(rect, "color:a", 0.0, 0.3)
+	tween.tween_callback(rect.queue_free)

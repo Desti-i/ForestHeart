@@ -241,7 +241,7 @@ func _on_body_entered(body: Node) -> void:
 		return
 
 	if body.has_method("take_damage"):
-		body.take_damage(damage)
+		body.take_damage(damage, "ice")
 
 	# Уровень 2 - замедление
 	if level >= 2 and body.has_node("StateMachine"):

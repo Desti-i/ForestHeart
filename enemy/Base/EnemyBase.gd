@@ -1,6 +1,13 @@
 extends CharacterBody2D
 class_name EnemyBase
 
+@export var resistances := {
+	"physical": 1.0,
+	"fire": 1.0,
+	"ice": 1.0,
+	"water": 1.0
+}
+
 var health: float
 @export var max_health:      float = 50.0
 @export var damage:          float = 10.0
@@ -72,15 +79,19 @@ func _separate_from_others() -> void:
 
 	velocity += push
 
-func take_damage(amount: float) -> void:
+func take_damage(amount: float, damage_type: String = "physical") -> void:
 	if state_machine.current_state.name == "Death":
 		return
-	health -= amount
+		
+	var multiplier: float = resistances.get(damage_type, 1.0)
+	var final_damage: float = amount * multiplier
+		
+	health -= final_damage
 	health  = max(health, 0)
 	if hp_bar:
 		hp_bar.value   = health
 		hp_bar.visible = true
-	_show_damage_number(amount)
+	_show_damage_number(final_damage)
 	modulate = Color.RED
 	await get_tree().create_timer(0.1).timeout
 	modulate = Color.WHITE

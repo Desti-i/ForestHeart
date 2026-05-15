@@ -404,7 +404,7 @@ func get_direction_string() -> String:
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.has_method("take_damage"):
-		body.take_damage(damage)
+		body.take_damage(damage, "physical")
 
 func _update_hp_label() -> void:
 	if hp_label:

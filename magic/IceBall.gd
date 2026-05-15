@@ -77,76 +77,141 @@ func _draw_ice_shard(t: float) -> void:
 # ── Уровень 2: ледяная глыба (замедляет) ─────────────────
 func _draw_ice_block(t: float) -> void:
 	var r = LEVEL_DATA[2]["radius"]
-	var pulse = 1.0 + sin(t * 6.0) * 0.05
 
-	# Внешнее свечение
-	draw_circle(Vector2.ZERO, r * pulse * 2.0, Color(0.4, 0.8, 1.0, 0.08))
-	draw_circle(Vector2.ZERO, r * pulse * 1.5, Color(0.5, 0.85, 1.0, 0.18))
-	draw_circle(Vector2.ZERO, r * pulse * 1.2, Color(0.5, 0.85, 1.0, 0.35))
-	# Основная глыба
-	draw_circle(Vector2.ZERO, r * pulse, Color(0.5, 0.85, 1.0, 1.0))
-	draw_circle(Vector2.ZERO, r * pulse * 0.65, Color(0.7, 0.93, 1.0, 0.9))
-	draw_circle(Vector2.ZERO, r * pulse * 0.3, Color(0.9, 1.0, 1.0, 1.0))
-	# Кристаллы льда (вращаются)
+	draw_circle(Vector2.ZERO, r * 2.5, Color(0.5, 0.9, 1.0, 0.08))
+	draw_circle(Vector2.ZERO, r * 1.8, Color(0.5, 0.85, 1.0, 0.18))
+
+	var poly = PackedVector2Array()
+
+	for i in 8:
+		var angle = rotation * 0.5 + i * TAU / 8.0
+
+		var dist = r
+
+		if i % 2 == 0:
+			dist *= 1.4
+
+		poly.append(
+			Vector2(cos(angle), sin(angle)) * dist
+		)
+
+	draw_colored_polygon(
+		poly,
+		Color(0.6, 0.92, 1.0, 0.95)
+	)
+
+	draw_circle(
+		Vector2.ZERO,
+		r * 0.45,
+		Color(0.95, 1.0, 1.0, 0.95)
+	)
+
 	for i in 6:
-		var angle = _angle * 0.5 + i * (TAU / 6.0)
-		var sp = Vector2(cos(angle), sin(angle)) * r * 0.8
-		draw_circle(sp, r * 0.15, Color(0.8, 0.96, 1.0, 0.8))
-	# Индикатор "замедление" (снежинка)
-	for i in 3:
-		var angle = i * (TAU / 3.0)
-		var sp1 = Vector2(cos(angle), sin(angle)) * r * 0.55
-		var sp2 = Vector2(cos(angle + PI), sin(angle + PI)) * r * 0.55
-		draw_line(sp1, sp2, Color(1.0, 1.0, 1.0, 0.6), 1.5)
+		var angle = _angle + i * TAU / 6.0
+
+		var pos = Vector2(
+			cos(angle),
+			sin(angle)
+		) * r * 1.5
+
+		draw_circle(
+			pos,
+			r * 0.12,
+			Color(0.8, 1.0, 1.0, 0.7)
+		)
 
 # ── Уровень 3: ледяной шторм (три осколка) ───────────────
 func _draw_ice_storm(t: float) -> void:
 	var r = LEVEL_DATA[3]["radius"]
 
-	draw_circle(Vector2.ZERO, r * 2.2, Color(0.3, 0.75, 1.0, 0.10))
-	draw_circle(Vector2.ZERO, r * 1.6, Color(0.3, 0.75, 1.0, 0.25))
-	draw_circle(Vector2.ZERO, r, Color(0.3, 0.75, 1.0, 1.0))
-	draw_circle(Vector2.ZERO, r * 0.55, Color(0.6, 0.9, 1.0, 0.95))
-	draw_circle(Vector2.ZERO, r * 0.22, Color(1.0, 1.0, 1.0, 1.0))
+	draw_circle(Vector2.ZERO, r * 3.0, Color(0.3, 0.75, 1.0, 0.08))
+	draw_circle(Vector2.ZERO, r * 2.0, Color(0.3, 0.8, 1.0, 0.16))
 
-	# Вращающиеся осколки
-	for i in 8:
-		var angle = _angle * 2.0 + i * (TAU / 8.0)
-		var sp = Vector2(cos(angle), sin(angle)) * r * 1.4
-		draw_circle(sp, r * 0.14, Color(0.7, 0.95, 1.0, 0.85))
+	for i in 12:
+		var angle = _angle * 2.0 + i * TAU / 12.0
 
-	# Мигающий контур
-	if sin(t * 12.0) > 0.2:
-		draw_circle(Vector2.ZERO, r * 1.9, Color(0.5, 0.85, 1.0, 0.12))
+		var dist = r * (1.2 + sin(t * 4.0 + i) * 0.4)
+
+		var pos = Vector2(
+			cos(angle),
+			sin(angle)
+		) * dist
+
+		var shard = PackedVector2Array()
+
+		for j in 4:
+			var a = angle + j * TAU / 4.0
+
+			var d = r * 0.35
+
+			if j % 2 == 0:
+				d *= 1.8
+
+			shard.append(
+				pos + Vector2(cos(a), sin(a)) * d
+			)
+
+		draw_colored_polygon(
+			shard,
+			Color(0.7, 0.95, 1.0, 0.85)
+		)
+
+	draw_circle(
+		Vector2.ZERO,
+		r * 0.5,
+		Color(1.0, 1.0, 1.0, 0.9)
+	)
 
 # ── Уровень 4: абсолютный ноль (заморозка) ───────────────
 func _draw_absolute_zero(t: float) -> void:
 	var r = LEVEL_DATA[4]["radius"]
 
-	# Ореол заморозки
-	draw_circle(Vector2.ZERO, r * 3.0, Color(0.0, 0.5, 1.0, 0.06))
-	draw_circle(Vector2.ZERO, r * 2.2, Color(0.1, 0.6, 1.0, 0.15))
-	draw_circle(Vector2.ZERO, r * 1.6, Color(0.1, 0.6, 1.0, 0.30))
-	draw_circle(Vector2.ZERO, r, Color(0.1, 0.6, 1.0, 1.0))
-	draw_circle(Vector2.ZERO, r * 0.6, Color(0.4, 0.8, 1.0, 0.95))
-	# Тёмное ледяное ядро
-	draw_circle(Vector2.ZERO, r * 0.25, Color(0.0, 0.15, 0.4, 0.95))
+	draw_circle(Vector2.ZERO, r * 4.0, Color(0.1, 0.6, 1.0, 0.04))
+	draw_circle(Vector2.ZERO, r * 2.8, Color(0.1, 0.6, 1.0, 0.10))
+	draw_circle(Vector2.ZERO, r * 1.8, Color(0.2, 0.75, 1.0, 0.25))
 
-	# Двойное вращение осколков
-	for i in 6:
-		var angle = _angle * 1.5 + i * (TAU / 6.0)
-		var sp = Vector2(cos(angle), sin(angle)) * r * 1.5
-		draw_circle(sp, r * 0.18, Color(0.5, 0.85, 1.0, 0.80))
-	for i in 4:
-		var angle = -_angle * 2.0 + i * (TAU / 4.0)
-		var sp = Vector2(cos(angle), sin(angle)) * r * 0.75
-		draw_circle(sp, r * 0.12, Color(0.8, 0.96, 1.0, 0.70))
+	var crystal = PackedVector2Array()
 
-	# Пульсирующий внешний круг
-	var pulse_r = r * (2.5 + sin(t * 8.0) * 0.3)
-	draw_circle(Vector2.ZERO, pulse_r, Color(0.2, 0.7, 1.0, 0.08))
+	for i in 10:
+		var angle = rotation + i * TAU / 10.0
 
+		var dist = r
+
+		if i % 2 == 0:
+			dist *= 2.0
+
+		crystal.append(
+			Vector2(cos(angle), sin(angle)) * dist
+		)
+
+	draw_colored_polygon(
+		crystal,
+		Color(0.5, 0.9, 1.0, 0.95)
+	)
+
+	draw_circle(
+		Vector2.ZERO,
+		r * 0.55,
+		Color(0.95, 1.0, 1.0, 1.0)
+	)
+
+	for i in 14:
+		var angle = -_angle * 1.5 + i * TAU / 14.0
+
+		var dist = r * 2.5
+
+		var pos = Vector2(
+			cos(angle),
+			sin(angle)
+		) * dist
+
+		draw_circle(
+			pos,
+			r * 0.10,
+			Color(0.9, 1.0, 1.0, 0.65)
+		)
 func _physics_process(delta: float) -> void:
+	rotation += delta * 4.0
 	_lifetime += delta
 	_angle    += delta * 3.5
 

@@ -2,7 +2,8 @@ extends Node
 
 var has_boss_key: bool = false
 var spawn_point_name: String = "SpawnPoint"
-
+# ─── БОСС И ПОРТАЛЫ ──────────────────────────────────────
+var boss_defeated: bool = false
 # ─── ОБУЧЕНИЕ ────────────────────────────────────────────
 var tutorial_completed: bool = false  # Пройдено ли обучение
 
@@ -41,7 +42,7 @@ var sword_levels: Array = [
 	{
 		"level": 0,
 		"name": "Меч",
-		"damage": 5.0,
+		"damage": 25.0,
 		"anim_prefix": "attack_1_",
 		"idle_prefix": "",        # пустой = стандартные анимации (Down, Up, idle_down...)
 		"cost": 0,

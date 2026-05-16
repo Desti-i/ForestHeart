@@ -6,14 +6,14 @@
 [ext_resource type="Texture2D" uid="uid://c456jigbys10q" path="res://2D Pixel Dungeon Asset Pack/interface/square_up_down_1.png" id="4_u5pkn"]
 [ext_resource type="PackedScene" uid="uid://cqsqmkqeedok4" path="res://player/Player.tscn" id="5_2r15a"]
 [ext_resource type="PackedScene" uid="uid://dhqe6eidx6clx" path="res://locations/location_2/CasinoMachine.tscn" id="6_grl81"]
-[ext_resource type="Texture2D" uid="uid://bng0x85go2dky" path="res://iNTERFACE/Sprite-0003.png" id="7_6qcf2"]
-[ext_resource type="Texture2D" uid="uid://mgmbgp6dioba" path="res://iNTERFACE/Sprite-0001.png" id="8_s0mju"]
-[ext_resource type="Texture2D" uid="uid://ds3q6aaltgei" path="res://iNTERFACE/Sprite-0002 (1).png" id="9_rnqqk"]
-[ext_resource type="Texture2D" uid="uid://dnap6em57shmx" path="res://iNTERFACE/stamina 1.png" id="10_5y8qd"]
-[ext_resource type="Texture2D" uid="uid://biu1bs3kagsa3" path="res://iNTERFACE/stamina 2.png" id="11_1ty7v"]
-[ext_resource type="Script" uid="uid://c55yxtxr6snv2" path="res://iNTERFACE/Stamina.gd" id="12_pgmms"]
-[ext_resource type="Script" path="res://iNTERFACE/ExpBar.gd" id="13_kg2sf"]
-[ext_resource type="PackedScene" uid="uid://c4qqnmbhqfdv0" path="res://iNTERFACE/QMenu.tscn" id="14_uvcf1"]
+[ext_resource type="Texture2D" uid="uid://bng0x85go2dky" path="res://iNTERFACE/Stamina/Sprite-0003.png" id="7_6qcf2"]
+[ext_resource type="Texture2D" uid="uid://mgmbgp6dioba" path="res://iNTERFACE/Stamina/Sprite-0001.png" id="8_s0mju"]
+[ext_resource type="Texture2D" uid="uid://ds3q6aaltgei" path="res://iNTERFACE/Stamina/Sprite-0002 (1).png" id="9_rnqqk"]
+[ext_resource type="Texture2D" uid="uid://dnap6em57shmx" path="res://iNTERFACE/Stamina/stamina 1.png" id="10_5y8qd"]
+[ext_resource type="Texture2D" uid="uid://biu1bs3kagsa3" path="res://iNTERFACE/Stamina/stamina 2.png" id="11_1ty7v"]
+[ext_resource type="Script" uid="uid://c55yxtxr6snv2" path="res://iNTERFACE/Stamina/Stamina.gd" id="12_pgmms"]
+[ext_resource type="PackedScene" uid="uid://daq7uf70pi21g" path="res://iNTERFACE/EscMenu/EscMenu.tscn" id="14_6qcf2"]
+[ext_resource type="PackedScene" uid="uid://c4qqnmbhqfdv0" path="res://iNTERFACE/QMenu/QMenu.tscn" id="14_uvcf1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gpf0v"]
 texture = ExtResource("1_14gif")
@@ -466,6 +466,7 @@ offset_right = 463.0
 offset_bottom = 86.0
 scale = Vector2(2, 2)
 text = "0 EXP"
-script = ExtResource("13_kg2sf")
 
 [node name="QMenu" parent="CanvasLayer" unique_id=13317859 instance=ExtResource("14_uvcf1")]
+
+[node name="EscMenu" parent="." unique_id=2061204431 instance=ExtResource("14_6qcf2")]

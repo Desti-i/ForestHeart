@@ -349,16 +349,17 @@ var heal_magic_levels: Array = [
 ]
 
 # ─── МАГИЯ ЛЬДА ──────────────────────────────────────────
+var ice_magic_unlocked: bool = false
 var ice_magic_level: int = 0
 
 signal ice_magic_upgraded(new_level: int)
 
 var ice_magic_levels: Array = [
 	{
-		"level": 0, "name": "Не открыта",
-		"damage": 0.0, "cost": 150,
-		"color": Color(0.6, 0.9, 1.0),
-		"description": "Открыть магию льда",
+		"level": 0, "name": "Не получена",
+		"damage": 0.0, "cost": 0,
+		"color": Color(0.5, 0.5, 0.5),
+		"description": "Выпадает с ледяных слизей",
 		"radius": 0.0, "speed": 0.0,
 		"cooldown": 0.0
 	},
@@ -397,25 +398,29 @@ var ice_magic_levels: Array = [
 ]
 
 func get_ice_magic() -> Dictionary:
-	return ice_magic_levels[max(ice_magic_level, 0)]
+	if ice_magic_level == 0:
+		return ice_magic_levels[0]
+	return ice_magic_levels[ice_magic_level]
 
 func can_upgrade_ice() -> bool:
-	return ice_magic_level < ice_magic_levels.size() - 1
+	return ice_magic_unlocked and ice_magic_level < ice_magic_levels.size() - 1
+
+func unlock_ice_magic() -> void:
+	if ice_magic_unlocked:
+		return
+	ice_magic_unlocked = true
+	ice_magic_level = 1
+	print("❄️ Магия льда получена! Уровень 1")
+	emit_signal("ice_magic_upgraded", ice_magic_level)
 
 func upgrade_ice_magic() -> bool:
-	if ice_magic_level == 0:
-		if spend_exp(ice_magic_levels[0]["cost"]):
-			ice_magic_level = 1
-			print("❄️ Магия льда открыта! Уровень 1")
-			emit_signal("ice_magic_upgraded", ice_magic_level)
-			return true
-		print("❌ Нужно 150 EXP чтобы открыть магию льда")
+	# 👇 УБИРАЕМ ПРОВЕРКУ НА ОТКРЫТИЕ ЗА EXP
+	if not ice_magic_unlocked:
+		print("❄️ Магия льда ещё не получена! Убей ледяную слизь!")
 		return false
-
 	if not can_upgrade_ice():
 		print("❄️ Магия льда максимального уровня!")
 		return false
-
 	var next_level = ice_magic_level + 1
 	var cost = ice_magic_levels[next_level]["cost"]
 	if spend_exp(cost):
@@ -425,7 +430,6 @@ func upgrade_ice_magic() -> bool:
 		return true
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
-
 # ─── МАГИЯ КРОВИ ──────────────────────────────────────────
 var blood_magic_level: int = 1
 

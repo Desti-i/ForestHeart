@@ -236,23 +236,16 @@ func _draw_magic_tab() -> void:
 
 	vbox.add_child(HSeparator.new())
 
-	# ── Секция: Лёд ───────────────────────────────────────
+		# ── Секция: Лёд ───────────────────────────────────────
 	_add_section_title("❄️ МАГИЯ ЛЬДА")
 
-	if GameState.ice_magic_level == 0:
+	if not GameState.ice_magic_unlocked:
 		var row = _make_row()
 		row.add_child(_make_color_bar(Color(0.6, 0.9, 1.0)))
 		var info = _make_info_box()
-		info.add_child(_make_colored_label("🔒 Магия льда не открыта", 14, Color(0.6, 0.9, 1.0)))
-		info.add_child(_make_label("Открыть за 150 EXP", 12))
+		info.add_child(_make_colored_label("🔒 Не получена", 14, Color(0.6, 0.9, 1.0)))
+		info.add_child(_make_colored_label("Выпадает с ледяных слизей", 12, Color(0.6, 0.6, 0.6)))
 		row.add_child(info)
-		row.add_child(_make_upgrade_btn(func():
-			if GameState.upgrade_ice_magic():
-				GameState.set_active_magic("ice")
-				refresh()
-			else:
-				_show_hint("❌ Нужно 150 EXP!")
-		, "Открыть"))
 		vbox.add_child(row)
 	else:
 		for i in range(1, GameState.ice_magic_levels.size()):
@@ -263,15 +256,15 @@ func _draw_magic_tab() -> void:
 			row.add_child(_make_color_bar(im["color"]))
 			var info = _make_info_box()
 			var name_lbl = _make_label("", 14)
-			var dmg_lbl  = _make_label("", 12)
+			var dmg_lbl = _make_label("", 12)
 			if i == GameState.ice_magic_level:
 				name_lbl.text = "▶ " + im["description"]
-				dmg_lbl.text  = "Урон: " + str(im["damage"]) + "  [ТЕКУЩИЙ]"
+				dmg_lbl.text = "Урон: " + str(im["damage"]) + "  [ТЕКУЩИЙ]"
 				name_lbl.add_theme_color_override("font_color", im["color"])
 				dmg_lbl.add_theme_color_override("font_color", Color.WHITE)
 			else:
 				name_lbl.text = "🔒 " + im["description"]
-				dmg_lbl.text  = "Урон: " + str(im["damage"]) + "  |  " + str(im["cost"]) + " EXP"
+				dmg_lbl.text = "Урон: " + str(im["damage"]) + "  |  " + str(im["cost"]) + " EXP"
 				name_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 				dmg_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 			info.add_child(name_lbl)
@@ -286,8 +279,6 @@ func _draw_magic_tab() -> void:
 						_show_hint("❌ Нужно " + str(GameState.ice_magic_levels[idx]["cost"]) + " EXP!")
 				))
 			vbox.add_child(row)
-
-	vbox.add_child(HSeparator.new())
 
 	# ── Секция: Огонь ─────────────────────────────────────
 	_add_section_title("🔥 МАГИЯ ОГНЯ")

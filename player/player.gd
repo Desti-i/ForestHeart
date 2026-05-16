@@ -367,27 +367,30 @@ func die() -> void:
 	
 	print("💀 Игрок умер!")
 	
+	# Сохраняем путь
+	var target_scene = "res://locations/primary_village/Vilage1.tscn"
+	
+	if get_tree() and get_tree().current_scene:
+		var current = get_tree().current_scene.scene_file_path
+		if current.find("Location3") != -1:
+			target_scene = current
+	
 	# Отключаем управление
 	set_physics_process(false)
 	set_process_input(false)
 	can_move = false
-	velocity = Vector2.ZERO
-	is_invincible = true
 	
-	# Анимация смерти
+	# Анимация смерти (если есть)
 	if anim and anim.sprite_frames.has_animation("death"):
 		anim.play("death")
 		await anim.animation_finished
 	
-	# Определяем сцену для респавна
-	var current_scene_path = get_tree().current_scene.scene_file_path
-	var target_scene = "res://locations/primary_village/Vilage1.tscn"
-	
-	if current_scene_path.find("Location3") != -1:
-		target_scene = current_scene_path
-	
-	# Перезагружаем сцену
-	get_tree().change_scene_to_file(target_scene)
+	# Используем call_deferred для безопасного вызова
+	call_deferred("_do_respawn", target_scene)
+
+func _do_respawn(target_scene: String) -> void:
+	if is_inside_tree():
+		get_tree().change_scene_to_file(target_scene)
 
 func _stop_all_enemies() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):

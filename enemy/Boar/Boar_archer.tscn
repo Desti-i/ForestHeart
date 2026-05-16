@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://rklgb85exb2c" path="res://enemy/Boar/Boar_Idle_with_shadow.png" id="5_2ia7e"]
 [ext_resource type="Script" path="res://enemy/Patrol.gd" id="7_h2qal"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tuf8h"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jiywy"]
 resource_local_to_scene = true
 height = 34.0
 
@@ -332,7 +332,7 @@ region = Rect2(64, 32, 32, 32)
 atlas = ExtResource("5_2ia7e")
 region = Rect2(96, 32, 32, 32)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_tl7xw"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_y2twd"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -668,14 +668,14 @@ animations = [{
 "speed": 4.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_o73c1"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_xrc6m"]
 resource_local_to_scene = true
 radius = 118.016945
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_h2qal"]
 radius = 39.79793
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_bssce"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_3kule"]
 resource_local_to_scene = true
 
 [node name="boar_archer" unique_id=355327370 groups=["boar"] instance=ExtResource("1_171lw")]
@@ -688,20 +688,20 @@ speed_ammo = 120.0
 bullet_scene = ExtResource("2_3vf20")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344 groups=["enemy"]]
-shape = SubResource("CapsuleShape2D_tuf8h")
+shape = SubResource("CapsuleShape2D_jiywy")
 
 [node name="Movements" parent="." index="1" unique_id=403867546]
-sprite_frames = SubResource("SpriteFrames_tl7xw")
+sprite_frames = SubResource("SpriteFrames_y2twd")
 animation = &"attack_rang_up"
 
 [node name="CollisionShape2D" parent="detector" parent_id_path=PackedInt32Array(963818677) index="0" unique_id=766399847]
-shape = SubResource("CircleShape2D_o73c1")
+shape = SubResource("CircleShape2D_xrc6m")
 
 [node name="CollisionShape2D" parent="Attack_zone" parent_id_path=PackedInt32Array(1428366797) index="0" unique_id=784964863]
 shape = SubResource("CircleShape2D_h2qal")
 
 [node name="CollisionShape2D" parent="Attack_area" parent_id_path=PackedInt32Array(1858617201) index="0" unique_id=954509707]
-shape = SubResource("CircleShape2D_bssce")
+shape = SubResource("CircleShape2D_3kule")
 
 [node name="Patrol" type="Node" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="5" unique_id=473682340]
 script = ExtResource("7_h2qal")

@@ -287,16 +287,9 @@ func _draw_magic_tab() -> void:
 		var row = _make_row()
 		row.add_child(_make_color_bar(Color(0.8, 0.3, 0.0)))
 		var info = _make_info_box()
-		info.add_child(_make_colored_label("🔒 Магия огня не открыта", 14, Color(0.8, 0.5, 0.2)))
-		info.add_child(_make_label("Открыть за 50 EXP", 12))
+		info.add_child(_make_colored_label("🔒 Не получена", 14, Color(0.8, 0.5, 0.2)))
+		info.add_child(_make_colored_label("Открывается после квеста 'Осмотреть Древо'", 12, Color(0.6, 0.6, 0.6)))
 		row.add_child(info)
-		row.add_child(_make_upgrade_btn(func():
-			if GameState.upgrade_fire_magic():
-				GameState.set_active_magic("fire")
-				refresh()
-			else:
-				_show_hint("❌ Нужно 50 EXP!")
-		, "Открыть"))
 		vbox.add_child(row)
 	else:
 		for i in range(1, GameState.fire_magic_levels.size()):
@@ -307,15 +300,15 @@ func _draw_magic_tab() -> void:
 			row.add_child(_make_color_bar(fm["color"]))
 			var info = _make_info_box()
 			var name_lbl = _make_label("", 14)
-			var dmg_lbl  = _make_label("", 12)
+			var dmg_lbl = _make_label("", 12)
 			if i == GameState.fire_magic_level:
 				name_lbl.text = "▶ " + fm["description"]
-				dmg_lbl.text  = "Урон: " + str(fm["damage"]) + "  [ТЕКУЩИЙ]"
+				dmg_lbl.text = "Урон: " + str(fm["damage"]) + "  [ТЕКУЩИЙ]"
 				name_lbl.add_theme_color_override("font_color", fm["color"])
 				dmg_lbl.add_theme_color_override("font_color", Color.WHITE)
 			else:
 				name_lbl.text = "🔒 " + fm["description"]
-				dmg_lbl.text  = "Урон: " + str(fm["damage"]) + "  |  " + str(fm["cost"]) + " EXP"
+				dmg_lbl.text = "Урон: " + str(fm["damage"]) + "  |  " + str(fm["cost"]) + " EXP"
 				name_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 				dmg_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 			info.add_child(name_lbl)
@@ -526,6 +519,48 @@ func _draw_quest_tab() -> void:
 		progress_fill.color = Color(1.0, 0.8, 0.0)
 		progress_bg.add_child(progress_fill)
 
+	# ── Квест: осмотр дерева ──────────────────────────────────────
+	var quest_tree_color: Color
+	match GameState.quest_tree_inspect:
+		GameState.QuestState.NOT_TAKEN:  quest_tree_color = Color(0.5, 0.5, 0.5)
+		GameState.QuestState.ACTIVE:     quest_tree_color = Color(0.3, 0.8, 0.3)
+		GameState.QuestState.COMPLETED:  quest_tree_color = Color(0.0, 1.0, 0.3)
+		GameState.QuestState.HANDED_IN:  quest_tree_color = Color(0.4, 0.4, 0.4)
+
+	var row_tree = _make_row()
+	row_tree.add_child(_make_color_bar(quest_tree_color))
+	var info_tree = _make_info_box()
+	var name_lbl_tree = _make_label("", 14)
+	var desc_lbl_tree = _make_label("", 12)
+
+	match GameState.quest_tree_inspect:
+		GameState.QuestState.NOT_TAKEN:
+			name_lbl_tree.text = "🌳 Таинственное Древо"
+			desc_lbl_tree.text = "Поговори со Старейшиной"
+			name_lbl_tree.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+			desc_lbl_tree.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+		GameState.QuestState.ACTIVE:
+			name_lbl_tree.text = "🌳 Осмотреть Древо"
+			desc_lbl_tree.text = "Найди Древо Жизни за лесом"
+			name_lbl_tree.add_theme_color_override("font_color", Color(0.3, 0.8, 0.3))
+			desc_lbl_tree.add_theme_color_override("font_color", Color.WHITE)
+		GameState.QuestState.COMPLETED:
+			name_lbl_tree.text = "✅ Осмотреть Древо"
+			desc_lbl_tree.text = "Вернись к Старейшине!"
+			name_lbl_tree.add_theme_color_override("font_color", Color(0.2, 1.0, 0.4))
+			desc_lbl_tree.add_theme_color_override("font_color", Color(0.2, 1.0, 0.4))
+		GameState.QuestState.HANDED_IN:
+			name_lbl_tree.text = "🏆 Осмотреть Древо"
+			desc_lbl_tree.text = "Выполнено! Магия огня открыта"
+			name_lbl_tree.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+			desc_lbl_tree.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+
+	info_tree.add_child(name_lbl_tree)
+	info_tree.add_child(desc_lbl_tree)
+	row_tree.add_child(info_tree)
+	vbox.add_child(row_tree)
+
+
 	# ── Квест: кошка ──────────────────────────────────────
 	var quest_cat_color: Color
 	match GameState.quest_cat:
@@ -562,6 +597,8 @@ func _draw_quest_tab() -> void:
 	info_cat.add_child(desc_lbl_cat)
 	row_cat.add_child(info_cat)
 	vbox.add_child(row_cat)
+	
+	
 
 	# ── Квест: вампир ─────────────────────────────────────
 	var quest_vampire_color: Color

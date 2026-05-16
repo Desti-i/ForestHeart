@@ -69,13 +69,17 @@ func _show_tree_intro():
 	intro_shown = true
 	GameState.tree_intro_shown = true
 	
+	# 👇 Завершаем квест на осмотр дерева
+	if GameState.quest_tree_inspect == GameState.QuestState.ACTIVE:
+		GameState.complete_tree_inspect()
+		_show_notification("🔥 Магия огня открыта! Загляни в меню Q", Color.ORANGE, "🔥")
+	
 	_show_story_text(
 		"🌳 ДРЕВО ЖИЗНИ 🌳\n\nЭто древнее дерево хранит в себе сердце леса.\nТы чувствуешь, что дерево нуждается в твоей защите...",
 		Color.GREEN
 	)
 	
 	await get_tree().create_timer(4.0).timeout
-	
 
 	countdown_active = true
 

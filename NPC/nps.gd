@@ -19,65 +19,93 @@ var choice_btn_1: Button
 var choice_btn_2: Button
 
 func _get_dialog_lines() -> Array[String]:
-	match GameState.quest_cat:
+	# Приоритет у квеста на осмотр дерева
+	match GameState.quest_tree_inspect:
 		GameState.QuestState.NOT_TAKEN:
 			if GameState.quest_kill_boars == GameState.QuestState.HANDED_IN:
 				return [
 					"А, это ты! Рад тебя видеть!",
-					"У меня есть ещё одна просьба к тебе...",
+					"У меня есть важное задание для тебя.",
+					"За нашим лесом есть древнее Древо Жизни.",
+					"Оно хранит великую силу.",
+					"Сходи, осмотри его.",
+					"И да, по дороге поищи кошку.",
+					"Она часто убегает в лес от старушки",
+					"Поищи её в нижней части леса и принеси мне",
+					"Старшка будет очень благодарна тебе",
+					"Но сразу скажу, награды не жди!",
+					"Справишься?"
+				]
+		GameState.QuestState.ACTIVE:
+			return [
+				"Ты ещё не был у Древа?",
+				"Оно находится за лесом, на поляне.",
+				"Иди туда и осмотри его."
+			]
+		GameState.QuestState.COMPLETED:
+			match GameState.quest_cat:
+				GameState.QuestState.NOT_TAKEN:
+					return [
+						"Ты нашёл Древо? Молодец!",
+						"Магия огня теперь с тобой.",
+						"А теперь у меня есть ещё одна просьба...",
+						"Старушка из соседнего дома потеряла свою кошку.",
+						"Поможешь ей?"
+					]
+				_:
+					return [
+						"Древо осмотрено, магия огня теперь с тобой.",
+						"Старушке тоже нужна помощь."
+					]
+
+	# Квест кошка
+	match GameState.quest_cat:
+		GameState.QuestState.NOT_TAKEN:
+			if GameState.quest_tree_inspect == GameState.QuestState.COMPLETED:
+				return [
 					"Старушка из соседнего дома потеряла свою кошку.",
-					"Она сбежала куда-то в лес.",
-					"EXP я тебе не дам, но старушка говорила что угостит чем-то особенным...",
-					"Поможешь старушке?"
+					"Поможешь ей найти?"
 				]
 		GameState.QuestState.ACTIVE:
 			return [
 				"Ты ещё не нашёл кошку?",
-				"Бедная старушка очень переживает.",
 				"Поищи в лесу, она должна быть где-то там."
 			]
 		GameState.QuestState.COMPLETED:
 			return [
-				"Ты нашёл кошку?! Где она?",
-				"Старушка будет так рада!",
-				"Говорит что приготовила для тебя награду.",
-				"Открой меню Q и посмотри вкладку магии!"
+				"Ты нашёл кошку?!",
+				"Старушка будет так рада! Забери награду."
 			]
 		GameState.QuestState.HANDED_IN:
 			return [
 				"Старушка очень благодарна тебе!",
-				"Говорят она даже научила тебя какой-то магии?",
-				"Используй с умом!"
+				"Говорят она даже научила тебя какой-то магии?"
 			]
 
+	# Квест кабаны
 	match GameState.quest_kill_boars:
 		GameState.QuestState.NOT_TAKEN:
 			return [
 				"Приветствую тебя, путник!",
 				"В наших лесах развелось много диких кабанов...",
-				"Они топчут поля и пугают жителей!",
-				"Убей 10 кабанов и я щедро награжу тебя 300 EXP!",
-				"Берёшься за это дело?"
+				"Убей 10 кабанов и я награжу тебя 300 EXP!",
+				"Берёшься?"
 			]
 		GameState.QuestState.ACTIVE:
 			var left = GameState.boars_needed - GameState.boars_killed
 			return [
-				"А, это снова ты!",
 				"Кабанов осталось убить: " + str(left),
-				"Удачи, я жду тебя!"
+				"Удачи!"
 			]
 		GameState.QuestState.COMPLETED:
 			return [
-				"Ты справился! Все 10 кабанов убиты!",
-				"Держи свою награду — 300 EXP!",
-				"А теперь у меня к тебе ещё одна просьба...",
-				"Старушке нужна помощь — найди её кошку."
+				"Ты справился! Держи награду — 300 EXP!",
+				"А теперь у меня есть ещё одно задание..."
 			]
 		GameState.QuestState.HANDED_IN:
 			return [
 				"Рад видеть тебя снова, герой!",
-				"Благодаря тебе деревня спокойна.",
-				"Хорошую магию та старушка знает... используй с умом!"
+				"Благодаря тебе деревня спокойна."
 			]
 	return ["Здравствуй, путник!"]
 
@@ -250,9 +278,27 @@ func _on_next_button_pressed() -> void:
 		_show_last_line_button()
 
 func _show_last_line_button() -> void:
+	# Квест осмотр дерева - предложение
+	if GameState.quest_tree_inspect == GameState.QuestState.NOT_TAKEN and \
+	   GameState.quest_kill_boars == GameState.QuestState.HANDED_IN:
+		_show_choice(
+			"✅ Осмотреть Древо",
+			"❌ Отказать",
+			func():
+				GameState.start_quest_tree_inspect()
+				_show_notification("🌳 Квест принят! Найди Древо за лесом!")
+				_close_dialog(),
+			func():
+				dialog_label.text = "Жаль... Древо ждёт своего героя."
+				next_button.visible = true
+				choice_container.visible = false
+				next_button.text = "Закрыть"
+		)
+		return
+
 	# Квест кошка - предложение
 	if GameState.quest_cat == GameState.QuestState.NOT_TAKEN and \
-	   GameState.quest_kill_boars == GameState.QuestState.HANDED_IN:
+	   GameState.quest_tree_inspect == GameState.QuestState.COMPLETED:
 		_show_choice(
 			"✅ Помочь старушке",
 			"❌ Отказать",

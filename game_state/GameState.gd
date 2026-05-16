@@ -157,14 +157,9 @@ func can_upgrade_fire() -> bool:
 
 ## Открыть или прокачать магию огня
 func upgrade_fire_magic() -> bool:
+	# 👇 ЗАПРЕЩАЕМ ПОКУПКУ МАГИИ ОГНЯ ЗА EXP
 	if fire_magic_level == 0:
-		# Первый раз — открываем за 50 EXP
-		if spend_exp(fire_magic_levels[0]["cost"]):
-			fire_magic_level = 1
-			print("🔥 Магия огня открыта! Уровень 1")
-			emit_signal("fire_magic_upgraded", fire_magic_level)
-			return true
-		print("❌ Нужно 50 EXP чтобы открыть магию")
+		print("❄️ Магия огня не продаётся! Выполни квест 'Осмотреть Древо'")
 		return false
 
 	if not can_upgrade_fire():
@@ -181,6 +176,13 @@ func upgrade_fire_magic() -> bool:
 
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
+
+# 👇 ДОБАВЬ ЭТУ ФУНКЦИЮ
+func unlock_fire_magic() -> void:
+	if fire_magic_level == 0:
+		fire_magic_level = 1
+		print("🔥 Магия огня открыта через квест!")
+		emit_signal("fire_magic_upgraded", fire_magic_level)
 	
 	# ─── АКТИВНАЯ МАГИЯ ──────────────────────────────────────
 # "fire" или "water" - какая магия сейчас активна
@@ -712,3 +714,24 @@ func hand_in_vampire_quest() -> bool:
 	print("🎉 Квест сдан! +500 EXP! Открыта вторая локация!")
 	emit_signal("quest_updated")
 	return true
+	
+	
+	# ─── КВЕСТ: ОСМОТР ДЕРЕВА (ОТКРЫВАЕТ МАГИЮ ОГНЯ) ────────
+var quest_tree_inspect: QuestState = QuestState.NOT_TAKEN
+var tree_inspected: bool = false
+
+func start_quest_tree_inspect() -> void:
+	if quest_tree_inspect != QuestState.NOT_TAKEN:
+		return
+	quest_tree_inspect = QuestState.ACTIVE
+	print("🌳 Квест начат: Осмотри Древо за лесом!")
+	emit_signal("quest_updated")
+
+func complete_tree_inspect() -> void:
+	if quest_tree_inspect != QuestState.ACTIVE:
+		return
+	quest_tree_inspect = QuestState.COMPLETED
+	tree_inspected = true
+	unlock_fire_magic()
+	print("✅ Квест выполнен! Магия огня открыта!")
+	emit_signal("quest_updated")

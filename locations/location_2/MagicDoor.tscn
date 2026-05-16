@@ -4,25 +4,25 @@
 [ext_resource type="Texture2D" uid="uid://b10rmfein8qi4" path="res://2D Pixel Dungeon Asset Pack/Character_animation/monsters_idle/skeleton1/v1/skeleton_v1_1.png" id="2_2mbbl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_47wrg"]
-size = Vector2(35.125, 20.375)
+size = Vector2(57, 38)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_she7y"]
-radius = 21.095022
+radius = 29.017237
 
 [node name="MagicDoor" type="StaticBody2D" unique_id=1977760064]
 script = ExtResource("1_mbwmp")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=168830431]
-position = Vector2(2, 2.500001)
+position = Vector2(2, 13)
 scale = Vector2(1.25, 1.3125001)
 texture = ExtResource("2_2mbbl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1987337839]
-position = Vector2(8, 3)
+position = Vector2(1, 8)
 shape = SubResource("RectangleShape2D_47wrg")
 
 [node name="DetectionArea" type="Area2D" parent="." unique_id=795071853]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1871297516]
-position = Vector2(7, 2)
+position = Vector2(1, 10)
 shape = SubResource("CircleShape2D_she7y")

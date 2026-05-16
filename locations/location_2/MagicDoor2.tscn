@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dc8a4cetoolec"]
+
+[ext_resource type="Script" uid="uid://bfqkxmb1qdepr" path="res://locations/location_2/magic_door.gd" id="1_ywijj"]
+[ext_resource type="Texture2D" uid="uid://cyynpttem7fau" path="res://2D Pixel Dungeon Asset Pack/Character_animation/monsters_idle/skeleton2/v2/skeleton2_v2_1.png" id="2_ywijj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_47wrg"]
+size = Vector2(57, 38)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_she7y"]
+radius = 29.017237
+
+[node name="MagicDoor2" type="StaticBody2D" unique_id=1977760064]
+rotation = 1.5707964
+script = ExtResource("1_ywijj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=168830431]
+position = Vector2(3.0000005, 9)
+scale = Vector2(2.3571882, 2.4795363)
+texture = ExtResource("2_ywijj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1987337839]
+position = Vector2(2.5, 10)
+shape = SubResource("RectangleShape2D_47wrg")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=795071853]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1871297516]
+position = Vector2(2.000001, 9)
+scale = Vector2(1.195, 1.195)
+shape = SubResource("CircleShape2D_she7y")

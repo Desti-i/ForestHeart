@@ -388,6 +388,9 @@ func _draw_magic_tab() -> void:
 
 	vbox.add_child(HSeparator.new())
 
+
+
+
 	# ── Секция: Лечение ───────────────────────────────────
 	_add_section_title("💚 МАГИЯ ЛЕЧЕНИЯ  [G]")
 

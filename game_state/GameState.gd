@@ -191,6 +191,9 @@ func set_active_magic(type: String) -> void:
 	if type == "heal" and not heal_magic_unlocked:
 		print("💚 Магия лечения ещё не открыта!")
 		return
+	if type == "blood" and blood_magic_level == 0:
+		print("🩸 Магия крови ещё не открыта!")
+		return
 	active_magic = type
 	print("✨ Активная магия:", type)
 	emit_signal("active_magic_changed", type)
@@ -199,7 +202,8 @@ func get_active_magic_level() -> int:
 	match active_magic:
 		"fire":  return fire_magic_level
 		"water": return water_magic_level
-		"heal":  return heal_magic_level 
+		"heal":  return heal_magic_level
+		"blood": return blood_magic_level
 	return 0
 
 # ─── МАГИЯ ВОДЫ ──────────────────────────────────────────
@@ -421,6 +425,90 @@ func upgrade_ice_magic() -> bool:
 		return true
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
+
+# ─── МАГИЯ КРОВИ ──────────────────────────────────────────
+var blood_magic_level: int = 1
+
+signal blood_magic_upgraded(new_level: int)
+
+var blood_magic_levels: Array = [
+	{
+		"level": 1,
+		"name": "Кровавый шар",
+		"damage": 20.0,
+		"cost": 0,
+		"color": Color(0.8, 0.0, 0.0),
+		"description": "Сгусток крови",
+		"radius": 8.0,
+		"speed": 240.0,
+		"cooldown": 1.8
+	},
+	{
+		"level": 2,
+		"name": "Кровавое копьё",
+		"damage": 40.0,
+		"cost": 200,
+		"color": Color(0.7, 0.0, 0.0),
+		"description": "Пробивает врагов",
+		"radius": 12.0,
+		"speed": 340.0,
+		"cooldown": 1.5
+	},
+	{
+		"level": 3,
+		"name": "Кровавый взрыв",
+		"damage": 70.0,
+		"cost": 450,
+		"color": Color(0.6, 0.0, 0.0),
+		"description": "Взрыв крови",
+		"radius": 18.0,
+		"speed": 260.0,
+		"cooldown": 2.5
+	},
+	{
+		"level": 4,
+		"name": "Багровая смерть",
+		"damage": 120.0,
+		"cost": 800,
+		"color": Color(0.4, 0.0, 0.0),
+		"description": "Древняя магия крови",
+		"radius": 24.0,
+		"speed": 420.0,
+		"cooldown": 3.5
+	},
+]
+
+func get_blood_magic() -> Dictionary:
+	return blood_magic_levels[blood_magic_level - 1]
+
+func can_upgrade_blood() -> bool:
+	return blood_magic_level < blood_magic_levels.size()
+
+func upgrade_blood_magic() -> bool:
+
+	if not can_upgrade_blood():
+		print("🩸 Магия крови максимального уровня!")
+		return false
+
+	var next_level = blood_magic_level + 1
+	var cost = blood_magic_levels[next_level - 1]["cost"]
+
+	if spend_exp(cost):
+		blood_magic_level = next_level
+
+		print("🩸 Магия крови улучшена до уровня:",
+			blood_magic_level)
+
+		emit_signal(
+			"blood_magic_upgraded",
+			blood_magic_level
+		)
+
+		return true
+
+	print("❌ Не хватает EXP! Нужно:", cost)
+	return false
+
 
 # ─── КВЕСТ: ПРОПАВШАЯ КОШКА ──────────────────────────────
 func start_quest_cat() -> void:

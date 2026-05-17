@@ -65,11 +65,13 @@
 [ext_resource type="PackedScene" uid="uid://v6a5e2h41ka0" path="res://animals/cat/stena.tscn" id="62_om1lu"]
 [ext_resource type="PackedScene" uid="uid://snp7um1x1xl6" path="res://NPC/nps3.tscn" id="64_hyxvc"]
 [ext_resource type="PackedScene" uid="uid://6ar5avmdhlny" path="res://locations/primary_village/HeartTree.tscn" id="65_00f6k"]
-[ext_resource type="PackedScene" uid="uid://270ucbyfias7" path="res://NPC/nps2.tscn" id="65_iuklk"]
-[ext_resource type="Script" uid="uid://dr380vn5k7phn" path="res://locations/primary_village/Tutorial.gd" id="67_5xuji"]
+[ext_resource type="PackedScene" path="res://NPC/nps2.tscn" id="65_iuklk"]
+[ext_resource type="Script" path="res://locations/primary_village/Tutorial.gd" id="67_5xuji"]
 [ext_resource type="PackedScene" uid="uid://daq7uf70pi21g" path="res://iNTERFACE/EscMenu/EscMenu.tscn" id="67_jbup7"]
 [ext_resource type="PackedScene" uid="uid://dxyshi6j22adl" path="res://enemy/Orc/Orc1/Orc_1.tscn" id="68_5xuji"]
 [ext_resource type="PackedScene" uid="uid://b1h4hrkw57x73" path="res://enemy/Orc/Orc2/Orc_2.tscn" id="69_fqymq"]
+[ext_resource type="PackedScene" uid="uid://b2iyh3ivqvt3r" path="res://enemy/vampire/Vampires1/Vampir1.tscn" id="71_r2vp7"]
+[ext_resource type="PackedScene" uid="uid://cwodke3gh8l5g" path="res://enemy/vampire/Vampires2/Vampir2.tscn" id="72_f6ggj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onb6d"]
 texture = ExtResource("1_6ql0f")
@@ -9421,3 +9423,8 @@ enemy_scene = ExtResource("62_g8er5")
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=911503928]
 position = Vector2(329, -969)
 scale = Vector2(-3478116.5, 858650900)
+
+[node name="Vampir1" parent="." unique_id=355327370 instance=ExtResource("71_r2vp7")]
+
+[node name="Vampir2" parent="." unique_id=492010258 instance=ExtResource("72_f6ggj")]
+position = Vector2(-91, -18)

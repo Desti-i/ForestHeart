@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://d4lknvfljbr6n"]
+
+[ext_resource type="Script" uid="uid://dkx04s6s7gxfy" path="res://enemy/ammo/arrow/arrow.gd" id="1_boq7m"]
+[ext_resource type="Texture2D" uid="uid://dl85b2ccqstu3" path="res://enemy/ammo/stake/image_2026-05-17_21-08-20.png" id="1_npmuk"]
+
+[sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_idy3i"]
+length = 6.5306263
+
+[node name="Stake" type="Area2D" unique_id=1084414343]
+script = ExtResource("1_boq7m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1160228742]
+position = Vector2(5.9999995, -5.000001)
+scale = Vector2(1.715, 2.145)
+shape = SubResource("SeparationRayShape2D_idy3i")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=871221094]
+position = Vector2(6, 0)
+rotation = 1.5707964
+scale = Vector2(0.545, 0.545)
+texture = ExtResource("1_npmuk")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

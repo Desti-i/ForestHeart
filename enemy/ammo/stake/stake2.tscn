@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://ckkon68nl5fqf"]
+
+[ext_resource type="PackedScene" uid="uid://d4lknvfljbr6n" path="res://enemy/ammo/stake/Stake.tscn" id="1_adchf"]
+[ext_resource type="Texture2D" uid="uid://dgth184c5c04t" path="res://enemy/ammo/stake/image_2026-05-17_21-28-49.png" id="2_8f7jh"]
+
+[node name="Stake" unique_id=1084414343 instance=ExtResource("1_adchf")]
+
+[node name="Sprite2D" parent="." index="1" unique_id=871221094]
+texture = ExtResource("2_8f7jh")

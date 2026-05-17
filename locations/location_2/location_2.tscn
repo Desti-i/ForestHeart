@@ -2014,7 +2014,7 @@ tile_set = SubResource("TileSet_5v5qx")
 position = Vector2(-2498, -280)
 
 [node name="Portal" parent="." unique_id=863595973 instance=ExtResource("17_5v5qx")]
-position = Vector2(-1694, -273)
+position = Vector2(-1684, -312)
 script = ExtResource("18_c6afi")
 next_scene = "res://locations/Location3.tscn"
 

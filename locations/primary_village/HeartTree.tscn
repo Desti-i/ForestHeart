@@ -5,10 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://dg1gl084kgec7" path="res://Sprite-0003.png" id="4_pp8ft"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h5tes"]
-size = Vector2(67, 148)
+size = Vector2(174.625, 432)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_caxci"]
-radius = 144.03125
+radius = 133.0
 
 [node name="HeartTree" type="StaticBody2D" unique_id=217749783]
 script = ExtResource("1_xse57")
@@ -25,12 +25,12 @@ scale = Vector2(1.2411348, 1.4230769)
 texture = ExtResource("4_pp8ft")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1211397749]
-position = Vector2(-0.5, -18)
+position = Vector2(-14.3125, -65)
 shape = SubResource("RectangleShape2D_h5tes")
 
 [node name="DetectionArea" type="Area2D" parent="." unique_id=101981036]
 position = Vector2(-69, -33)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1298146557]
-position = Vector2(70, 31)
+position = Vector2(71, -13)
 shape = SubResource("CircleShape2D_caxci")

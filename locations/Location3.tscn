@@ -20,6 +20,8 @@
 [ext_resource type="PackedScene" uid="uid://dtew4ea0eh4hu" path="res://enemy/slime/Slime_water/Slime_water.tscn" id="18_1ty7v"]
 [ext_resource type="Script" uid="uid://dc0bcr8e1uwn" path="res://iNTERFACE/ExpBar/ExpBar.gd" id="18_pgmms"]
 [ext_resource type="PackedScene" uid="uid://c7x8ojnpkpuvj" path="res://enemy/slime/Slime_ice/Slime_ice.tscn" id="20_kg2sf"]
+[ext_resource type="PackedScene" uid="uid://exc58qwbt46c" path="res://enemy/slime/Slime_fire/Slime_fire.tscn" id="21_uvcf1"]
+[ext_resource type="PackedScene" uid="uid://evg05dkowm7v" path="res://NPC/nps5.tscn" id="22_7hk07"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kg2sf"]
 texture = ExtResource("1_14gif")
@@ -726,11 +728,13 @@ metadata/_edit_use_anchors_ = true
 [node name="WSlime" parent="mobs" unique_id=1258643216 instance=ExtResource("16_5y8qd")]
 position = Vector2(317, -12)
 enemy_scene = ExtResource("18_1ty7v")
+spawn_interval = 20.0
 spawn_radius = 100.0
 
 [node name="WSlime2" parent="mobs" unique_id=42979476 instance=ExtResource("16_5y8qd")]
 position = Vector2(379, -39)
 enemy_scene = ExtResource("18_1ty7v")
+spawn_interval = 20.0
 spawn_radius = 100.0
 
 [node name="WSlime3" parent="mobs" unique_id=46151199 instance=ExtResource("16_5y8qd")]
@@ -743,6 +747,21 @@ position = Vector2(1981, 4)
 enemy_scene = ExtResource("20_kg2sf")
 spawn_radius = 100.0
 
+[node name="WSlime5" parent="mobs" unique_id=1998966260 instance=ExtResource("16_5y8qd")]
+position = Vector2(-527, -968)
+enemy_scene = ExtResource("21_uvcf1")
+spawn_interval = 20.0
+spawn_radius = 100.0
+
+[node name="WSlime6" parent="mobs" unique_id=267873533 instance=ExtResource("16_5y8qd")]
+position = Vector2(-363, -1080)
+enemy_scene = ExtResource("21_uvcf1")
+spawn_interval = 20.0
+spawn_radius = 100.0
+
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1213521778]
 position = Vector2(-143.00005, -12)
 scale = Vector2(0.76455915, 0.96286666)
+
+[node name="Nps2" parent="." unique_id=962183908 instance=ExtResource("22_7hk07")]
+position = Vector2(-248, -84)

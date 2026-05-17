@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cj7bjdnownrm0" path="res://enemy/Boar/Boar_Attack_with_shadow.png" id="3_3vf20"]
 [ext_resource type="Texture2D" uid="uid://bh7krur22xd7t" path="res://enemy/Boar/Boar_Death_with_shadow.png" id="4_h2qal"]
 [ext_resource type="Texture2D" uid="uid://rklgb85exb2c" path="res://enemy/Boar/Boar_Idle_with_shadow.png" id="5_2ia7e"]
-[ext_resource type="Script" path="res://enemy/Patrol.gd" id="7_h2qal"]
+[ext_resource type="Script" uid="uid://buwog4el4l0uk" path="res://enemy/Patrol.gd" id="7_h2qal"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jiywy"]
 resource_local_to_scene = true
@@ -679,9 +679,9 @@ radius = 39.79793
 resource_local_to_scene = true
 
 [node name="boar_archer" unique_id=355327370 groups=["boar"] instance=ExtResource("1_171lw")]
-max_health = 30.0
-speed = 90.0
-exp_reward = 200
+damage = 3.0
+speed = 110.0
+exp_reward = 5
 use_melee = false
 use_ranged = true
 speed_ammo = 120.0

@@ -1487,6 +1487,7 @@ _data = {
 }
 
 [node name="Orc_2" unique_id=355327370 groups=["orc"] instance=ExtResource("1_sxbjt")]
+damage = 20.0
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344]
 shape = SubResource("CapsuleShape2D_xb5hq")

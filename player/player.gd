@@ -16,7 +16,7 @@ var current_health: float = max_health
 var damage:         float = 5.0
 
 const WALK_SPEED: float = 100.0
-const RUN_SPEED:  float = 500.0
+const RUN_SPEED:  float = 1000.0
 
 var current_speed:    float     = WALK_SPEED
 var idle_dir:         DIRECTION = DIRECTION.DOWN

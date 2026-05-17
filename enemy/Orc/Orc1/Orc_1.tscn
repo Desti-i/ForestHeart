@@ -1487,6 +1487,9 @@ _data = {
 }
 
 [node name="Orc_1" unique_id=355327370 groups=["goblin"] instance=ExtResource("1_smupm")]
+max_health = 70.0
+speed = 80.0
+exp_reward = 10
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344]
 shape = SubResource("CapsuleShape2D_n3hj8")

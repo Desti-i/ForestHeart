@@ -16,8 +16,9 @@
 [ext_resource type="PackedScene" uid="uid://c4qqnmbhqfdv0" path="res://iNTERFACE/QMenu/QMenu.tscn" id="14_2kmsi"]
 [ext_resource type="Texture2D" uid="uid://65nlt3kbgxxv" path="res://portal/portal1.png" id="16_x2cgo"]
 [ext_resource type="PackedScene" uid="uid://bnnvn3cbyl57f" path="res://portal/Portal2.tscn" id="17_5v5qx"]
-[ext_resource type="PackedScene" uid="uid://b1h4hrkw57x73" path="res://enemy/Orc/Orc2/Orc_2.tscn" id="18_3cgjr"]
+[ext_resource type="PackedScene" uid="uid://c7pr0xu72a5ti" path="res://enemy/boss/boss_vilage1/boss_vilage1.tscn" id="18_3cgjr"]
 [ext_resource type="Script" uid="uid://dy8xkk2p2jl84" path="res://portal/Portal2.gd" id="18_c6afi"]
+[ext_resource type="PackedScene" uid="uid://daq7uf70pi21g" path="res://iNTERFACE/EscMenu/EscMenu.tscn" id="19_3cgjr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x2cgo"]
 texture = ExtResource("2_ycjjl")
@@ -2109,6 +2110,8 @@ collision_mask = 1
 position = Vector2(5, 13)
 zoom = Vector2(2.7, 2.7)
 
-[node name="Orc_2" parent="." unique_id=355327370 instance=ExtResource("18_3cgjr")]
-position = Vector2(-2358, -198)
-damage = 50.0
+[node name="boss_vilage1" parent="." unique_id=355327370 instance=ExtResource("18_3cgjr")]
+position = Vector2(-2084, -104)
+scale = Vector2(2.24, 2.24)
+
+[node name="EscMenu" parent="boss_vilage1" unique_id=2061204431 instance=ExtResource("19_3cgjr")]

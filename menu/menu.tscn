@@ -2,11 +2,17 @@
 
 [ext_resource type="Script" uid="uid://biniqkqfrh4gf" path="res://menu/menu.gd" id="1_rwxi6"]
 [ext_resource type="PackedScene" uid="uid://bh5bepya11gn8" path="res://background/BG.tscn" id="2_g18jx"]
+[ext_resource type="Texture2D" uid="uid://cokelqbs8thbq" path="res://menu/image_2026-05-17_10-47-38.png" id="3_6nwqt"]
+[ext_resource type="Texture2D" uid="uid://dgw1w4p2puse0" path="res://menu/image_2026-05-17_13-17-33.png" id="4_juveg"]
+[ext_resource type="Texture2D" uid="uid://dejnvg00xmthx" path="res://menu/image_2026-05-17_13-25-21.png" id="5_v6yed"]
+[ext_resource type="Texture2D" uid="uid://c8lxolp0vylg1" path="res://menu/image_2026-05-17_13-24-23.png" id="6_s4hbh"]
 
 [node name="Menu" type="Node2D" unique_id=2722384]
+visible = false
 script = ExtResource("1_rwxi6")
 
 [node name="Play" type="Button" parent="." unique_id=1296806832]
+visible = false
 offset_left = 949.0
 offset_top = 264.0
 offset_right = 1161.0
@@ -15,6 +21,7 @@ theme_override_font_sizes/font_size = 60
 text = "Play"
 
 [node name="Quit" type="Button" parent="." unique_id=1966987686]
+visible = false
 offset_left = 599.0
 offset_top = 264.0
 offset_right = 811.0
@@ -23,6 +30,7 @@ theme_override_font_sizes/font_size = 60
 text = "Quit"
 
 [node name="Option" type="Button" parent="." unique_id=1972468924]
+visible = false
 offset_left = 1299.0
 offset_top = 264.0
 offset_right = 1511.0
@@ -31,14 +39,60 @@ theme_override_font_sizes/font_size = 60
 text = "Option"
 
 [node name="Bg" parent="." unique_id=1034420027 instance=ExtResource("2_g18jx")]
+visible = false
 
 [node name="new play" type="Button" parent="." unique_id=91498714]
+visible = false
 offset_left = 916.0
 offset_top = 424.0
 offset_right = 1183.0
 offset_bottom = 523.0
 theme_override_font_sizes/font_size = 60
 text = "new play"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=250536817]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=172025482]
+layout_mode = 3
+anchors_preset = 0
+scale = Vector2(48.000225, 26.999569)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="CanvasLayer/Control" unique_id=942918180]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_6nwqt")
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/Control/NinePatchRect" unique_id=1523239794]
+layout_mode = 1
+offset_left = 5.3541417
+offset_top = 4.53
+offset_right = 336.37112
+offset_bottom = 49.25991
+scale = Vector2(0.09, 0.09)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/NinePatchRect/CenterContainer" unique_id=1655055957]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TextureButton" type="TextureButton" parent="CanvasLayer/Control/NinePatchRect/CenterContainer/HBoxContainer" unique_id=1313068805]
+custom_minimum_size = Vector2(7.615, 4.11)
+layout_mode = 2
+texture_normal = ExtResource("4_juveg")
+texture_pressed = ExtResource("5_v6yed")
+texture_hover = ExtResource("6_s4hbh")
+
+[node name="TextureButton2" type="TextureButton" parent="CanvasLayer/Control/NinePatchRect/CenterContainer/HBoxContainer" unique_id=1277689932]
+layout_mode = 2
+texture_normal = ExtResource("4_juveg")
+texture_pressed = ExtResource("5_v6yed")
+texture_hover = ExtResource("6_s4hbh")
+
+[node name="TextureButton3" type="TextureButton" parent="CanvasLayer/Control/NinePatchRect/CenterContainer/HBoxContainer" unique_id=26120540]
+layout_mode = 2
+texture_normal = ExtResource("4_juveg")
+texture_pressed = ExtResource("5_v6yed")
+texture_hover = ExtResource("6_s4hbh")
 
 [connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]

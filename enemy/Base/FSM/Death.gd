@@ -1,5 +1,5 @@
 extends State
-
+class_name Death
 
 
 func enter():

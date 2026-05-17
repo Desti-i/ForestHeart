@@ -94,30 +94,6 @@ theme_override_font_sizes/font_size = 9
 text = "Сохранение"
 horizontal_alignment = 1
 
-[node name="OptionBtn" type="TextureButton" parent="Control/Background/CenterContainer/VBoxContainer" unique_id=277619676]
-layout_mode = 2
-texture_normal = ExtResource("3_xoslp")
-texture_pressed = ExtResource("4_wsqih")
-texture_hover = ExtResource("5_mcp4h")
-
-[node name="Label" type="Label" parent="Control/Background/CenterContainer/VBoxContainer/OptionBtn" unique_id=1525881178]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -28.5
-offset_top = -7.31
-offset_right = 29.500206
-offset_bottom = 6.6900177
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("6_wsqih")
-theme_override_font_sizes/font_size = 9
-text = "Настройки"
-horizontal_alignment = 1
-
 [node name="QuitBtn" type="TextureButton" parent="Control/Background/CenterContainer/VBoxContainer" unique_id=9681747]
 layout_mode = 2
 texture_normal = ExtResource("3_xoslp")
@@ -145,5 +121,4 @@ horizontal_alignment = 1
 
 [connection signal="pressed" from="Control/Background/CenterContainer/VBoxContainer/ResumeBtn" to="." method="_on_resume_btn_pressed"]
 [connection signal="pressed" from="Control/Background/CenterContainer/VBoxContainer/SaveBtn" to="." method="_on_save_btn_pressed"]
-[connection signal="pressed" from="Control/Background/CenterContainer/VBoxContainer/OptionBtn" to="." method="_on_option_btn_pressed"]
 [connection signal="pressed" from="Control/Background/CenterContainer/VBoxContainer/QuitBtn" to="." method="_on_quit_btn_pressed"]

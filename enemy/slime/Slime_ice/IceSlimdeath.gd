@@ -1,19 +1,10 @@
-extends State
+extends Death
 
 @export var ice_magic_drop_chance: float = 0.2  # Шанс 20% (можно настроить)
 
 func enter():
-	enemy.set_physics_process(false)
-	enemy.velocity = Vector2.ZERO
-
-	enemy.get_node("CollisionShape2D").set_deferred("disabled", true)
-	enemy.get_node("Attack_zone").set_deferred("disabled", true)
-	enemy.get_node("Attack_area").set_deferred("monitoring", false)
-
-	# Выдаём опыт
-	GameState.add_exp(enemy.exp_reward)
-
-	# 👇 Шанс выпадения ледяной магии (только для ледяных слизей)
+	super()
+	
 	var random_value = randf()
 	print("❄️ Шанс выпадения ледяной магии: ", ice_magic_drop_chance, " | Выпало: ", random_value)
 	
@@ -22,17 +13,3 @@ func enter():
 		print("❄️ ЛЕДЯНАЯ МАГИЯ ВЫПАЛА С ЛЕДЯНОЙ СЛИЗИ!")
 	else:
 		print("❄️ Ледяная магия НЕ выпала в этот раз")
-
-	# Анимация смерти
-	var anim_name = "death_" + enemy.get_direction_string()
-	enemy.animP.stop()
-	enemy.anim.play(anim_name)
-
-	var frames = enemy.anim.sprite_frames.get_frame_count(anim_name)
-	var fps = enemy.anim.sprite_frames.get_animation_speed(anim_name)
-	var duration = frames / fps
-
-	await enemy.get_tree().create_timer(duration).timeout
-
-	if is_instance_valid(enemy):
-		enemy.queue_free()

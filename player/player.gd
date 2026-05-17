@@ -390,8 +390,10 @@ func die() -> void:
 	
 	if get_tree() and get_tree().current_scene:
 		var current = get_tree().current_scene.scene_file_path
-		if current.find("Location3") != -1:
+		# 👇 ИСПРАВЛЕНО: ищем "location3" (с маленькой буквы) или "Location3"
+		if current.find("location3") != -1 or current.find("Location3") != -1:
 			target_scene = current
+			print("💀 Смерть на 3 локации, респавн здесь же")
 	
 	# Отключаем управление
 	set_physics_process(false)
@@ -432,14 +434,16 @@ func _respawn() -> void:
 	
 	# Определяем текущую сцену
 	var current_scene_path = get_tree().current_scene.scene_file_path
+	print("📍 Текущая сцена: ", current_scene_path)
 	
-	# Проверяем, на 3 ли мы локации
-	if current_scene_path.find("Location3") != -1:
+	# 👇 ИСПРАВЛЕНО: ищем "location3" или "Location3"
+	if current_scene_path.find("location3") != -1 or current_scene_path.find("Location3") != -1:
 		# На 3 локации - просто телепортируем на SpawnPoint
+		print("✅ Возрождение на 3 локации")
 		var spawn_point = get_tree().current_scene.get_node_or_null("SpawnPoint")
 		if spawn_point:
 			global_position = spawn_point.global_position
-			print("✅ Телепорт на SpawnPoint 3 локации")
+			print("✅ Телепорт на SpawnPoint 3 локации: ", global_position)
 		else:
 			print("⚠️ SpawnPoint не найден на 3 локации")
 		
@@ -448,8 +452,7 @@ func _respawn() -> void:
 		print("✅ Возрождён на 3 локации!")
 	else:
 		# На других локациях - переходим в деревню
-		# Сначала сохраняем ссылку на текущую сцену
-		var current_scene = get_tree().current_scene
+		print("🔄 Переход в деревню...")
 		
 		# Меняем сцену
 		get_tree().change_scene_to_file("res://locations/primary_village/Vilage1.tscn")

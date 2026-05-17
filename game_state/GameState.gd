@@ -14,6 +14,16 @@ func change_reputation(amount: int) -> void:
 	print("👤 Репутация:", reputation)
 	emit_signal("reputation_changed", reputation)
 
+func get_health_from_heal_level() -> float:
+	match heal_magic_level:
+		0: return 100   # Базовое HP
+		1: return 120   # +20 HP
+		2: return 145   # +45 HP
+		3: return 175   # +75 HP
+		4: return 210   # +110 HP
+	return 100
+
+
 # ─── EXP ─────────────────────────────────────────────────
 var exp: int = 0
 signal exp_changed(new_amount: int)
@@ -40,7 +50,7 @@ var sword_levels: Array = [
 	{
 		"level": 0,
 		"name": "Меч",
-		"damage": 5.0,
+		"damage": 45.0,
 		"anim_prefix": "attack_1_",
 		"idle_prefix": "",
 		"cost": 0,
@@ -554,6 +564,7 @@ func unlock_heal_magic() -> void:
 	print("💚 Магия лечения получена! Уровень 1")
 	emit_signal("heal_magic_unlocked_signal")
 	emit_signal("heal_magic_upgraded", heal_magic_level)
+	_update_player_max_health()
 
 func mark_heal_notification_seen() -> void:
 	heal_magic_notification = false
@@ -576,9 +587,16 @@ func upgrade_heal_magic() -> bool:
 		heal_magic_level = next_level
 		print("💚 Магия лечения улучшена до уровня:", heal_magic_level)
 		emit_signal("heal_magic_upgraded", heal_magic_level)
+		_update_player_max_health()
 		return true
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
+
+func _update_player_max_health() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		var new_max_health = get_health_from_heal_level()
+		player.update_max_health(new_max_health)
 
 # ─── КВЕСТЫ ──────────────────────────────────────────────
 enum QuestState { NOT_TAKEN, ACTIVE, COMPLETED, HANDED_IN }

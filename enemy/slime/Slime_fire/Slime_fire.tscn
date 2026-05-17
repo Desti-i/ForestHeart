@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dbu8ybkmkrwtn" path="res://enemy/slime/Slime_fire/Slime3_Idle_full.png" id="5_7023j"]
 [ext_resource type="Script" uid="uid://d021dgivmlhtf" path="res://enemy/slime/Slime_fire/SlimeFiredeath.gd" id="6_r1lm7"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8uqtp"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_r1lm7"]
 resource_local_to_scene = true
 height = 34.0
 
@@ -539,7 +539,7 @@ region = Rect2(256, 64, 64, 64)
 atlas = ExtResource("5_7023j")
 region = Rect2(320, 64, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_7023j"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_8uqtp"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -1019,16 +1019,16 @@ animations = [{
 "speed": 6.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_oxw87"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_7023j"]
 resource_local_to_scene = true
 radius = 72.02777
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ihhg6"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_oxw87"]
 resource_local_to_scene = true
 radius = 8.46
 height = 20.09
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_bifc8"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_ihhg6"]
 resource_local_to_scene = true
 
 [sub_resource type="Animation" id="Animation_gs4l7"]
@@ -1642,31 +1642,35 @@ resistances = {
 "physical": 0.6,
 "water": 1.5
 }
+max_health = 70.0
+damage = 15.0
+exp_reward = 250
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344]
-shape = SubResource("CapsuleShape2D_8uqtp")
+shape = SubResource("CapsuleShape2D_r1lm7")
 
 [node name="Movements" parent="." index="1" unique_id=403867546]
-sprite_frames = SubResource("SpriteFrames_7023j")
+sprite_frames = SubResource("SpriteFrames_8uqtp")
 frame = 8
 
 [node name="CollisionShape2D" parent="detector" parent_id_path=PackedInt32Array(963818677) index="0" unique_id=766399847]
 scale = Vector2(1.305, 1.305)
-shape = SubResource("CircleShape2D_oxw87")
+shape = SubResource("CircleShape2D_7023j")
 
 [node name="CollisionShape2D" parent="Attack_zone" parent_id_path=PackedInt32Array(1428366797) index="0" unique_id=784964863]
 position = Vector2(0, 0)
 scale = Vector2(2.59, 2.59)
-shape = SubResource("CapsuleShape2D_ihhg6")
+shape = SubResource("CapsuleShape2D_oxw87")
 
 [node name="CollisionShape2D" parent="Attack_area" parent_id_path=PackedInt32Array(1858617201) index="0" unique_id=954509707]
 position = Vector2(0, -1.5)
 scale = Vector2(2.055, 2.055)
-shape = SubResource("CircleShape2D_bifc8")
+shape = SubResource("CircleShape2D_ihhg6")
 
 [node name="Death" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="4" unique_id=1669259827]
 script = ExtResource("6_r1lm7")
 fire_sword_drop_chance = 0.2
+dark_sword_drop_chance = 0.99
 
 [node name="AnimationPlayer" parent="." index="7" unique_id=1403558373]
 libraries/ = SubResource("AnimationLibrary_7us5p")

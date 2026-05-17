@@ -21,13 +21,13 @@
 [ext_resource type="Script" uid="uid://dc0bcr8e1uwn" path="res://iNTERFACE/ExpBar/ExpBar.gd" id="18_pgmms"]
 [ext_resource type="PackedScene" uid="uid://c7x8ojnpkpuvj" path="res://enemy/slime/Slime_ice/Slime_ice.tscn" id="20_kg2sf"]
 [ext_resource type="PackedScene" uid="uid://exc58qwbt46c" path="res://enemy/slime/Slime_fire/Slime_fire.tscn" id="21_uvcf1"]
-[ext_resource type="PackedScene" path="res://NPC/nps5.tscn" id="22_7hk07"]
+[ext_resource type="PackedScene" uid="uid://evg05dkowm7v" path="res://NPC/nps5.tscn" id="22_7hk07"]
 [ext_resource type="PackedScene" uid="uid://b2iyh3ivqvt3r" path="res://enemy/vampire/Vampires1/Vampir1.tscn" id="22_vlmtn"]
 [ext_resource type="PackedScene" uid="uid://c7pr0xu72a5ti" path="res://enemy/boss/boss_vilage1/boss_vilage1.tscn" id="23_r3is5"]
 [ext_resource type="PackedScene" uid="uid://dxyshi6j22adl" path="res://enemy/Orc/Orc1/Orc_1.tscn" id="24_35uce"]
 [ext_resource type="PackedScene" uid="uid://b1h4hrkw57x73" path="res://enemy/Orc/Orc2/Orc_2.tscn" id="25_bodeb"]
-[ext_resource type="PackedScene" path="res://portal/Portal3.tscn" id="27_bodeb"]
-[ext_resource type="Script" path="res://portal/Portal3.gd" id="28_md3g4"]
+[ext_resource type="PackedScene" uid="uid://b506yt186k38" path="res://portal/Portal3.tscn" id="27_bodeb"]
+[ext_resource type="Script" uid="uid://dh1odviip0byd" path="res://portal/Portal3.gd" id="28_md3g4"]
 [ext_resource type="PackedScene" uid="uid://ds8d3x0st3fwk" path="res://enemy/boss/Boss_vampir/Boss_vampir.tscn" id="29_ye6bb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kg2sf"]
@@ -595,6 +595,7 @@ position = Vector2(1005, -207)
 
 [node name="MagicDoor" parent="Node" unique_id=1977760064 instance=ExtResource("15_s0mju")]
 position = Vector2(1424.65, 169)
+door_cost = 800
 
 [node name="MagicDoor2" parent="Node" unique_id=2038494254 instance=ExtResource("15_s0mju")]
 modulate = Color(1, 0.22745098, 1, 1)
@@ -603,34 +604,42 @@ scale = Vector2(3.545, 3.596)
 
 [node name="MagicDoor3" parent="Node" unique_id=236681086 instance=ExtResource("15_s0mju")]
 position = Vector2(1423, -162)
+door_cost = 1000
 
 [node name="MagicDoor4" parent="Node" unique_id=1780659318 instance=ExtResource("15_s0mju")]
 position = Vector2(1446, -600)
 scale = Vector2(1.3, 1.3)
+door_cost = 300
 
 [node name="MagicDoor5" parent="Node" unique_id=701973322 instance=ExtResource("16_rnqqk")]
 position = Vector2(579, -28)
 scale = Vector2(1.59, 1.59)
+door_cost = 1000
 
 [node name="MagicDoor6" parent="Node" unique_id=2072520792 instance=ExtResource("16_rnqqk")]
 position = Vector2(620, -397)
 scale = Vector2(1.59, 1.59)
+door_cost = 1000
 
 [node name="MagicDoor7" parent="Node" unique_id=1309849381 instance=ExtResource("16_rnqqk")]
 position = Vector2(1632, 12)
 scale = Vector2(1.59, 1.59)
+door_cost = 1500
 
 [node name="MagicDoor8" parent="Node" unique_id=1167839938 instance=ExtResource("16_rnqqk")]
 position = Vector2(1734, 508)
 scale = Vector2(1.59, 1.59)
+door_cost = 1000
 
 [node name="MagicDoor9" parent="Node" unique_id=992832925 instance=ExtResource("16_rnqqk")]
 position = Vector2(1034, -9)
 scale = Vector2(1.59, 1.59)
+door_cost = 1000
 
 [node name="MagicDoor10" parent="Node" unique_id=1849147361 instance=ExtResource("15_s0mju")]
 position = Vector2(385, -251.00012)
 scale = Vector2(3.545, 3.596)
+door_cost = 500
 
 [node name="MagicDoor11" parent="Node" unique_id=2022973644 instance=ExtResource("16_rnqqk")]
 modulate = Color(1, 1, 0.48235294, 1)
@@ -735,51 +744,47 @@ metadata/_edit_use_anchors_ = true
 [node name="WSlime" parent="mobs" unique_id=1258643216 instance=ExtResource("16_5y8qd")]
 position = Vector2(317, -12)
 enemy_scene = ExtResource("18_1ty7v")
-spawn_interval = 20.0
-spawn_radius = 100.0
-
-[node name="WSlime22" parent="mobs/WSlime" unique_id=962593710 instance=ExtResource("16_5y8qd")]
-position = Vector2(367, -1063)
-enemy_scene = ExtResource("20_kg2sf")
-spawn_interval = 20.0
+spawn_interval = 180.0
 spawn_radius = 100.0
 
 [node name="WSlime2" parent="mobs" unique_id=42979476 instance=ExtResource("16_5y8qd")]
 position = Vector2(379, -39)
 enemy_scene = ExtResource("18_1ty7v")
-spawn_interval = 20.0
+spawn_interval = 180.0
 spawn_radius = 100.0
 
 [node name="WSlime3" parent="mobs" unique_id=46151199 instance=ExtResource("16_5y8qd")]
 position = Vector2(2076, 32)
 enemy_scene = ExtResource("20_kg2sf")
-spawn_radius = 100.0
+spawn_interval = 60.0
+spawn_radius = 80.0
 
 [node name="WSlime4" parent="mobs" unique_id=1655142878 instance=ExtResource("16_5y8qd")]
 position = Vector2(1981, 4)
 enemy_scene = ExtResource("20_kg2sf")
-spawn_radius = 100.0
+spawn_interval = 60.0
+spawn_radius = 80.0
 
 [node name="WSlime5" parent="mobs" unique_id=1998966260 instance=ExtResource("16_5y8qd")]
 position = Vector2(-527, -968)
 enemy_scene = ExtResource("21_uvcf1")
-spawn_interval = 20.0
+spawn_interval = 60.0
 spawn_radius = 100.0
 
 [node name="WSlime6" parent="mobs" unique_id=267873533 instance=ExtResource("16_5y8qd")]
 position = Vector2(-406, -1105)
 enemy_scene = ExtResource("21_uvcf1")
-spawn_interval = 20.0
+spawn_interval = 60.0
 spawn_radius = 100.0
 
 [node name="WSlime7" parent="mobs" unique_id=472189662 instance=ExtResource("16_5y8qd")]
 position = Vector2(446, -422)
 enemy_scene = ExtResource("18_1ty7v")
-spawn_interval = 20.0
+spawn_interval = 120.0
 spawn_radius = 100.0
 
 [node name="WSlime8" parent="mobs" unique_id=1980894741 instance=ExtResource("16_5y8qd")]
-position = Vector2(370, -350)
+position = Vector2(380, -371)
 enemy_scene = ExtResource("18_1ty7v")
 spawn_interval = 20.0
 spawn_radius = 100.0
@@ -787,25 +792,27 @@ spawn_radius = 100.0
 [node name="WSlime9" parent="mobs" unique_id=350947827 instance=ExtResource("16_5y8qd")]
 position = Vector2(849, -13)
 enemy_scene = ExtResource("18_1ty7v")
-spawn_interval = 20.0
+max_enemies = 4
+spawn_interval = 120.0
 spawn_radius = 100.0
 
 [node name="WSlime10" parent="mobs" unique_id=682488633 instance=ExtResource("16_5y8qd")]
 position = Vector2(1284, -49)
 enemy_scene = ExtResource("18_1ty7v")
-spawn_interval = 20.0
+max_enemies = 4
+spawn_interval = 180.0
 spawn_radius = 100.0
 
 [node name="WSlime11" parent="mobs" unique_id=235237574 instance=ExtResource("16_5y8qd")]
 position = Vector2(1453, 90)
 enemy_scene = ExtResource("18_1ty7v")
-spawn_interval = 20.0
-spawn_radius = 100.0
+spawn_interval = 180.0
+spawn_radius = 80.0
 
 [node name="WSlime12" parent="mobs" unique_id=227949676 instance=ExtResource("16_5y8qd")]
 position = Vector2(1561, 565)
 enemy_scene = ExtResource("22_vlmtn")
-max_enemies = 1
+max_enemies = 60
 spawn_interval = 20.0
 spawn_radius = 100.0
 
@@ -813,35 +820,35 @@ spawn_radius = 100.0
 position = Vector2(1518, 469)
 enemy_scene = ExtResource("22_vlmtn")
 max_enemies = 1
-spawn_interval = 20.0
+spawn_interval = 180.0
 spawn_radius = 100.0
 
 [node name="WSlime14" parent="mobs" unique_id=283724642 instance=ExtResource("16_5y8qd")]
 position = Vector2(1415, 531)
 enemy_scene = ExtResource("22_vlmtn")
 max_enemies = 1
-spawn_interval = 20.0
+spawn_interval = 120.0
 spawn_radius = 100.0
 
 [node name="WSlime15" parent="mobs" unique_id=694932041 instance=ExtResource("16_5y8qd")]
 position = Vector2(2094, 439)
 enemy_scene = ExtResource("22_vlmtn")
-max_enemies = 1
-spawn_interval = 20.0
+max_enemies = 2
+spawn_interval = 60.0
 spawn_radius = 100.0
 
 [node name="WSlime16" parent="mobs" unique_id=1997130827 instance=ExtResource("16_5y8qd")]
 position = Vector2(2308, 545)
 enemy_scene = ExtResource("22_vlmtn")
-max_enemies = 1
-spawn_interval = 20.0
+max_enemies = 2
+spawn_interval = 120.0
 spawn_radius = 100.0
 
 [node name="WSlime17" parent="mobs" unique_id=786131683 instance=ExtResource("16_5y8qd")]
 position = Vector2(2072, 621)
 enemy_scene = ExtResource("22_vlmtn")
-max_enemies = 1
-spawn_interval = 20.0
+max_enemies = 2
+spawn_interval = 120.0
 spawn_radius = 100.0
 
 [node name="WSlime18" parent="mobs" unique_id=886457599 instance=ExtResource("16_5y8qd")]
@@ -849,14 +856,12 @@ position = Vector2(1444, -384)
 scale = Vector2(0.75, 0.75)
 enemy_scene = ExtResource("23_r3is5")
 max_enemies = 1
-spawn_interval = 20.0
 spawn_radius = 100.0
 
 [node name="WSlime19" parent="mobs" unique_id=1383884432 instance=ExtResource("16_5y8qd")]
 position = Vector2(1510, -466)
 scale = Vector2(0.75, 0.75)
 enemy_scene = ExtResource("24_35uce")
-spawn_interval = 20.0
 spawn_radius = 100.0
 
 [node name="WSlime20" parent="mobs" unique_id=2097130222 instance=ExtResource("16_5y8qd")]
@@ -864,31 +869,30 @@ position = Vector2(1346, -458)
 scale = Vector2(0.75, 0.75)
 enemy_scene = ExtResource("25_bodeb")
 max_enemies = 2
-spawn_interval = 20.0
 spawn_radius = 100.0
 
 [node name="WSlime21" parent="mobs" unique_id=487055173 instance=ExtResource("16_5y8qd")]
 position = Vector2(-342, -938)
 enemy_scene = ExtResource("21_uvcf1")
-spawn_interval = 20.0
+spawn_interval = 60.0
 spawn_radius = 100.0
 
 [node name="WSlime22" parent="mobs" unique_id=303029087 instance=ExtResource("16_5y8qd")]
 position = Vector2(1517, -977)
 enemy_scene = ExtResource("21_uvcf1")
-spawn_interval = 20.0
+spawn_interval = 180.0
 spawn_radius = 100.0
 
 [node name="WSlime23" parent="mobs" unique_id=278789118 instance=ExtResource("16_5y8qd")]
 position = Vector2(1374, -993)
 enemy_scene = ExtResource("21_uvcf1")
-spawn_interval = 20.0
+spawn_interval = 180.0
 spawn_radius = 100.0
 
 [node name="WSlime24" parent="mobs" unique_id=1516249083 instance=ExtResource("16_5y8qd")]
-position = Vector2(394, -1082)
+position = Vector2(422, -1046)
 enemy_scene = ExtResource("21_uvcf1")
-spawn_interval = 20.0
+spawn_interval = 180.0
 spawn_radius = 100.0
 
 [node name="Boss_vampir" parent="mobs" unique_id=355327370 instance=ExtResource("29_ye6bb")]
@@ -901,6 +905,12 @@ position = Vector2(356, -2087)
 [node name="RoomBottomRight" type="Marker2D" parent="mobs" unique_id=564232579]
 position = Vector2(867, -1799)
 
+[node name="WSlime25" parent="mobs" unique_id=962593710 instance=ExtResource("16_5y8qd")]
+position = Vector2(684, -1075)
+enemy_scene = ExtResource("20_kg2sf")
+spawn_interval = 180.0
+spawn_radius = 100.0
+
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1213521778]
 position = Vector2(-143.00005, -12)
 scale = Vector2(0.76455915, 0.96286666)
@@ -909,9 +919,9 @@ scale = Vector2(0.76455915, 0.96286666)
 position = Vector2(-248, -84)
 
 [node name="WSlime22" parent="." unique_id=1336160895 instance=ExtResource("16_5y8qd")]
-position = Vector2(525, -940)
+position = Vector2(569, -924)
 enemy_scene = ExtResource("18_1ty7v")
-spawn_interval = 20.0
+spawn_interval = 180.0
 spawn_radius = 100.0
 
 [node name="Portal2" parent="." unique_id=863595973 instance=ExtResource("27_bodeb")]

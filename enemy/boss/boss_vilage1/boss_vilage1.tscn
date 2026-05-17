@@ -2278,8 +2278,8 @@ _data = {
 
 [node name="boss_vilage1" unique_id=355327370 instance=ExtResource("1_g22wy")]
 script = ExtResource("2_8pwrk")
-damage_att_1 = 20.0
-damage_att_2 = 7.0
+damage_att_1 = 30.0
+damage_att_2 = 80.0
 max_health = 200.0
 speed = 80.0
 exp_reward = 200

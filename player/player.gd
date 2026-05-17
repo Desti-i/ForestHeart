@@ -53,7 +53,6 @@ func _ready() -> void:
 		hp_bar.min_value = 0
 		hp_bar.value     = current_health
 	if hp_label:
-		print("✅ hp_label найден!")
 		hp_label.text = "100/100"
 		hp_label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
 	_update_hp_label()
@@ -61,6 +60,25 @@ func _ready() -> void:
 	GameState.weapon_changed.connect(_on_weapon_changed)
 	if q_menu:
 		q_menu.visible = false
+
+func update_max_health(new_max: float) -> void:
+	var old_max = max_health
+	max_health = new_max
+	
+	# Пропорционально увеличиваем текущее здоровье
+	var health_ratio = current_health / old_max
+	current_health = max_health * health_ratio
+	current_health = clamp(current_health, 1, max_health)
+	
+	# Обновляем HP бар
+	if hp_bar:
+		hp_bar.max_value = max_health
+		hp_bar.value = current_health
+	
+	health_changed.emit(current_health, max_health)
+	_update_hp_label()
+	
+	print("❤️ Максимальное здоровье увеличено: ", old_max, " → ", max_health)
 
 func _on_weapon_changed(weapon: Dictionary) -> void:
 	damage = weapon["damage"]

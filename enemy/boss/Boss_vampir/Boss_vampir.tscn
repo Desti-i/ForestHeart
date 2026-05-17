@@ -6,14 +6,15 @@
 [ext_resource type="Texture2D" uid="uid://bp1yuanjo6eaj" path="res://enemy/boss/Boss_vampir/Vampires3_Attack_full.png" id="3_ju3ti"]
 [ext_resource type="Texture2D" uid="uid://cexrf1k8tp2x6" path="res://enemy/boss/Boss_vampir/Vampires3_Death_full.png" id="4_6j40w"]
 [ext_resource type="Texture2D" uid="uid://cel1c1jrma0pj" path="res://enemy/boss/Boss_vampir/Vampires3_Idle_full.png" id="5_r8vvo"]
-[ext_resource type="Script" uid="uid://cd7cx3r3ta812" path="res://enemy/boss/Boss_vampir/MeteorRain.gd" id="6_ju3ti"]
+[ext_resource type="Script" uid="uid://dqhv68082qkh8" path="res://enemy/boss/Boss_vampir/DeathVampir.gd" id="6_ju3ti"]
 [ext_resource type="Script" uid="uid://jsf4bbtp4tx0" path="res://enemy/boss/boss_vilage1/BossChase.gd" id="7_8vrnc"]
 [ext_resource type="Texture2D" uid="uid://4pveapiph50o" path="res://enemy/boss/Boss_vampir/image_2026-05-18_00-54-47.png" id="7_ug206"]
 [ext_resource type="PackedScene" uid="uid://crv7hi7w8bfw8" path="res://enemy/ammo/meteorite/Meteorite.tscn" id="9_ug206"]
-[ext_resource type="Script" uid="uid://o5g0yqg0tjjf" path="res://enemy/boss/Boss_vampir/TeleportAttack.gd" id="10_8vrnc"]
+[ext_resource type="Script" path="res://enemy/boss/Boss_vampir/TeleportAttack.gd" id="10_8vrnc"]
 [ext_resource type="Script" uid="uid://dbennlh76bme5" path="res://enemy/boss/boss_vilage1/AttackSelect.gd" id="10_pqcdr"]
+[ext_resource type="Script" path="res://enemy/boss/Boss_vampir/MeteorRain.gd" id="10_q5euw"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ug206"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5d0o4"]
 resource_local_to_scene = true
 height = 34.0
 
@@ -597,7 +598,7 @@ region = Rect2(192, 0, 64, 64)
 atlas = ExtResource("7_ug206")
 region = Rect2(256, 0, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_pqcdr"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_sfg55"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -1121,16 +1122,16 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_q5euw"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_fcy1u"]
 resource_local_to_scene = true
 radius = 72.02777
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5d0o4"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3og6s"]
 resource_local_to_scene = true
 radius = 8.46
 height = 20.09
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_sfg55"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_ydcww"]
 resource_local_to_scene = true
 
 [sub_resource type="Animation" id="Animation_v58uv"]
@@ -1685,33 +1686,44 @@ _data = {
 script = ExtResource("2_ym3q2")
 damage_att_1 = 0.0
 damage_att_2 = 0.0
+resistances = {
+"fire": 1.2,
+"ice": 0.8,
+"physical": 1.2,
+"water": 0.8
+}
+max_health = 300.0
+exp_reward = 2000
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344]
-shape = SubResource("CapsuleShape2D_ug206")
+shape = SubResource("CapsuleShape2D_5d0o4")
 
 [node name="Movements" parent="." index="1" unique_id=403867546]
-sprite_frames = SubResource("SpriteFrames_pqcdr")
+sprite_frames = SubResource("SpriteFrames_sfg55")
 animation = &"meteor_cast"
 frame_progress = 0.1361427
 
 [node name="CollisionShape2D" parent="detector" parent_id_path=PackedInt32Array(963818677) index="0" unique_id=766399847]
 scale = Vector2(1.515, 1.515)
-shape = SubResource("CircleShape2D_q5euw")
+shape = SubResource("CircleShape2D_fcy1u")
 
 [node name="CollisionShape2D" parent="Attack_zone" parent_id_path=PackedInt32Array(1428366797) index="0" unique_id=784964863]
 scale = Vector2(2, 2)
-shape = SubResource("CapsuleShape2D_5d0o4")
+shape = SubResource("CapsuleShape2D_3og6s")
 
 [node name="CollisionShape2D" parent="Attack_area" parent_id_path=PackedInt32Array(1858617201) index="0" unique_id=954509707]
 position = Vector2(0, 5.2)
 scale = Vector2(1.665, 1.665)
-shape = SubResource("CircleShape2D_sfg55")
+shape = SubResource("CircleShape2D_ydcww")
 
 [node name="Chase" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="1" unique_id=393080123]
 script = ExtResource("7_8vrnc")
 
-[node name="Special_attack_2" type="Node2D" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="5" unique_id=1363150048]
+[node name="Death" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="4" unique_id=1669259827]
 script = ExtResource("6_ju3ti")
+
+[node name="Special_attack_2" type="Node2D" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="5" unique_id=1363150048]
+script = ExtResource("10_q5euw")
 meteor_scene = ExtResource("9_ug206")
 
 [node name="Special_attack_1" type="Node2D" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="6" unique_id=582376484]

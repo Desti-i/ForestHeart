@@ -1,0 +1,227 @@
+[gd_scene format=3 uid="uid://crv7hi7w8bfw8"]
+
+[ext_resource type="Script" uid="uid://111ykvyhsox0" path="res://enemy/ammo/meteorite/meteor.gd" id="1_vmib0"]
+[ext_resource type="Texture2D" uid="uid://dabwwk667iad7" path="res://enemy/ammo/meteorite/image_2026-05-17_23-55-42.png" id="1_w4bx2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vmib0"]
+
+[sub_resource type="Animation" id="Animation_w4bx2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape2D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_txx6g"]
+length = 1.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.08947369, 0.17894737, 0.26842105, 0.35789475, 0.44736844, 0.5368421, 0.62631583, 0.7157895, 0.80526316, 0.8947369, 0.98421055, 1.0736842, 1.1631579, 1.2526317, 1.3421053, 1.431579, 1.5210527, 1.6105263),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["meteor"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape2D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.0728421, 1.5162255),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m8mxt"]
+_data = {
+&"RESET": SubResource("Animation_w4bx2"),
+&"meteor": SubResource("Animation_txx6g")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7w127"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(0, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4k5t2"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(128, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2cbnn"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(256, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tfqq7"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(384, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s8rhp"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(512, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ola6"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(640, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m8ug6"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(768, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aqv2i"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(896, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6i5h7"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(1024, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0dlkk"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(1152, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jikb3"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(1280, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7bcu1"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(1408, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vtp13"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(1536, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fkwj3"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(1664, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fkwja"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(1792, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y0lpw"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(1920, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_be1d6"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(2048, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qtckh"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(2176, 0, 128, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56hja"]
+atlas = ExtResource("1_w4bx2")
+region = Rect2(2304, 0, 128, 640)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xy8nf"]
+animations = [{
+"frames": [{
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_7w127")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_4k5t2")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_2cbnn")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_tfqq7")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_s8rhp")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_5ola6")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_m8ug6")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_aqv2i")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_6i5h7")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_0dlkk")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_jikb3")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_7bcu1")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_vtp13")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_fkwj3")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_fkwja")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_y0lpw")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_be1d6")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_qtckh")
+}, {
+"duration": 1.7,
+"texture": SubResource("AtlasTexture_56hja")
+}],
+"loop": false,
+"name": &"meteor",
+"speed": 19.0
+}]
+
+[node name="Meteorite" type="Area2D" unique_id=1452344852]
+script = ExtResource("1_vmib0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1745766070]
+position = Vector2(0, -10.715)
+scale = Vector2(3.375, 3.375)
+shape = SubResource("CircleShape2D_vmib0")
+disabled = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1620091211]
+libraries/ = SubResource("AnimationLibrary_m8mxt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2122831212]
+position = Vector2(0, -299)
+sprite_frames = SubResource("SpriteFrames_xy8nf")
+animation = &"meteor"
+frame = 18
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

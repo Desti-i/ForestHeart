@@ -19,7 +19,8 @@ func _ready() -> void:
 	GameState.heal_magic_upgraded.connect(func(_l): refresh())
 	GameState.heal_magic_unlocked_signal.connect(func(): refresh())
 	GameState.quest_updated.connect(func(): if current_tab == "quest": refresh())
-
+	GameState.fire_sword_upgraded.connect(func(_l): refresh())
+	
 	var panel = Panel.new()
 	panel.position = Vector2(150, 30)
 	panel.size = Vector2(700, 680)
@@ -163,6 +164,51 @@ func _draw_weapon_tab() -> void:
 			))
 
 		vbox.add_child(row)
+		vbox.add_child(HSeparator.new())
+	
+	# ── Огненный меч (выпадает с огненных слизей) ─────────
+	_add_section_title("🔥 ОГНЕННЫЙ МЕЧ")
+
+	if not GameState.fire_sword_unlocked:
+		var row = _make_row()
+		row.add_child(_make_color_bar(Color(1.0, 0.5, 0.0)))
+		var info = _make_info_box()
+		info.add_child(_make_colored_label("🔒 Не получен", 14, Color(1.0, 0.5, 0.0)))
+		info.add_child(_make_colored_label("Выпадает с огненных слизей", 12, Color(0.6, 0.6, 0.6)))
+		row.add_child(info)
+		vbox.add_child(row)
+	else:
+		for i in range(1, GameState.fire_sword_levels.size()):
+			if i < GameState.fire_sword_level: continue
+			if i > GameState.fire_sword_level + 1: continue
+			var sw = GameState.fire_sword_levels[i]
+			var row = _make_row()
+			row.add_child(_make_color_bar(sw["color"]))
+			var info = _make_info_box()
+			var name_lbl = _make_label("", 14)
+			var dmg_lbl = _make_label("", 12)
+			if i == GameState.fire_sword_level:
+				name_lbl.text = "▶ " + sw["description"]
+				dmg_lbl.text = "Урон: " + str(sw["damage"]) + "  [ТЕКУЩИЙ]"
+				name_lbl.add_theme_color_override("font_color", sw["color"])
+				dmg_lbl.add_theme_color_override("font_color", Color.WHITE)
+			else:
+				name_lbl.text = "🔒 " + sw["description"]
+				dmg_lbl.text = "Урон: " + str(sw["damage"]) + "  |  " + str(sw["cost"]) + " EXP"
+				name_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+				dmg_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+			info.add_child(name_lbl)
+			info.add_child(dmg_lbl)
+			row.add_child(info)
+			if i == GameState.fire_sword_level + 1:
+				var idx = i
+				row.add_child(_make_upgrade_btn(func():
+					if GameState.upgrade_fire_sword():
+						refresh()
+					else:
+						_show_hint("❌ Нужно " + str(GameState.fire_sword_levels[idx]["cost"]) + " EXP!")
+				))
+			vbox.add_child(row)
 
 	vbox.add_child(HSeparator.new())
 	var future = _make_label("🗡 Другое оружие: выпадает с боссов", 13)

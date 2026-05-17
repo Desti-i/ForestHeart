@@ -32,7 +32,7 @@ func spend_exp(amount: int) -> bool:
 
 # ─── МЕЧ ─────────────────────────────────────────────────
 var sword_level: int = 0
-var sword_lvl4_dropped: bool = false
+var sword_lvl3_dropped: bool = false
 signal sword_upgraded(new_level: int)
 signal weapon_changed(weapon: Dictionary)
 
@@ -49,8 +49,8 @@ var sword_levels: Array = [
 	},
 	{
 		"level": 1,
-		"name": "Меч",
-		"damage": 7.0,
+		"name": "Накалённый меч",
+		"damage": 37.0,
 		"anim_prefix": "attack_2_",
 		"idle_prefix": "s2_",
 		"cost": 100,
@@ -59,18 +59,18 @@ var sword_levels: Array = [
 	},
 	{
 		"level": 2,
-		"name": "Меч",
-		"damage": 10.0,
+		"name": "Закалённый меч",
+		"damage": 110.0,
 		"anim_prefix": "attack_3_",
 		"idle_prefix": "s3_",
 		"cost": 250,
 		"color": Color(0.3, 0.8, 1.0),
-		"description": "Ледяной меч"
+		"description": "Закалённый меч"
 	},
 	{
 		"level": 3,
-		"name": "Меч",
-		"damage": 18.0,
+		"name": "Тёмный клинок",
+		"damage": 118.0,
 		"anim_prefix": "attack_4_",
 		"idle_prefix": "s4_",
 		"cost": 500,
@@ -85,11 +85,11 @@ func get_active_weapon() -> Dictionary:
 func can_upgrade_sword() -> bool:
 	return sword_level < sword_levels.size() - 1
 
-func unlock_sword_lvl4() -> void:
-	if sword_lvl4_dropped:
+func unlock_sword_lvl3() -> void:
+	if sword_lvl3_dropped:
 		return
-	sword_lvl4_dropped = true
-	print("⚔️ Тёмный клинок выпал! Теперь можно купить в меню.")
+	sword_lvl3_dropped = true
+	print("⚔️ Ледяной меч выпал! Теперь можно купить в меню.")
 	emit_signal("sword_upgraded", sword_level)
 
 func upgrade_sword() -> bool:
@@ -97,9 +97,11 @@ func upgrade_sword() -> bool:
 		print("❌ Меч уже максимального уровня!")
 		return false
 	var next = sword_levels[sword_level + 1]
-	if sword_level + 1 == 3 and not sword_lvl4_dropped:
-		print("❌ Тёмный клинок ещё не выпал! Убей ледяную слизь!")
+	
+	if sword_level + 1 == 2 and not sword_lvl3_dropped:
+		print("❌ Ледяной меч ещё не выпал! Убей ледяную слизь!")
 		return false
+	
 	if spend_exp(next["cost"]):
 		sword_level += 1
 		print("⚔️ Меч улучшен до уровня:", sword_level)
@@ -713,7 +715,7 @@ func update_save_data() -> void:
 	SaveManager.game_data.stats.exp = exp
 	SaveManager.game_data.stats.current_health = player.current_health
 	SaveManager.game_data.stats.sword_level = sword_level
-	SaveManager.game_data.stats.sword_lvl4_dropped = sword_lvl4_dropped
+	SaveManager.game_data.stats.sword_lvl3_dropped = sword_lvl3_dropped
 	SaveManager.game_data.stats.fire_sword_unlocked = fire_sword_unlocked
 	SaveManager.game_data.stats.fire_sword_level = fire_sword_level
 	SaveManager.game_data.stats.fire_magic_level = fire_magic_level
@@ -743,7 +745,7 @@ func apply_load_data() -> void:
 	exp = data.stats.exp
 	emit_signal("exp_changed", exp)
 	sword_level = data.stats.sword_level
-	sword_lvl4_dropped = data.stats.get("sword_lvl4_dropped", false)
+	sword_lvl3_dropped = data.stats.get("sword_lvl3_dropped", false)
 	fire_sword_unlocked = data.stats.get("fire_sword_unlocked", false)
 	fire_sword_level = data.stats.get("fire_sword_level", 0)
 	fire_magic_level = data.stats.fire_magic_level

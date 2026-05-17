@@ -1,6 +1,6 @@
 extends State
 @export var fire_sword_drop_chance: float = 0.7
-@export var dark_sword_drop_chance: float = 0.7  # ← добавь
+@export var dark_sword_drop_chance: float = 0.99  # ← добавь
 
 func enter():
 	enemy.set_physics_process(false)
@@ -21,8 +21,8 @@ func enter():
 
 	# ← добавь этот блок
 	var dark_value = randf()
-	if not GameState.sword_lvl4_dropped and dark_value <= dark_sword_drop_chance:
-		GameState.unlock_sword_lvl4()
+	if not GameState.sword_lvl3_dropped and dark_value <= dark_sword_drop_chance:
+		GameState.unlock_sword_lvl3()
 		print("⚔️ ТЁМНЫЙ КЛИНОК ВЫПАЛ!")
 
 	var anim_name = "death_" + enemy.get_direction_string()

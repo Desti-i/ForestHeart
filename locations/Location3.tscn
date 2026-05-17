@@ -21,6 +21,7 @@
 [ext_resource type="Script" uid="uid://dc0bcr8e1uwn" path="res://iNTERFACE/ExpBar/ExpBar.gd" id="18_pgmms"]
 [ext_resource type="PackedScene" uid="uid://c7x8ojnpkpuvj" path="res://enemy/slime/Slime_ice/Slime_ice.tscn" id="20_kg2sf"]
 [ext_resource type="PackedScene" uid="uid://exc58qwbt46c" path="res://enemy/slime/Slime_fire/Slime_fire.tscn" id="21_uvcf1"]
+[ext_resource type="PackedScene" uid="uid://evg05dkowm7v" path="res://NPC/nps5.tscn" id="22_7hk07"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kg2sf"]
 texture = ExtResource("1_14gif")
@@ -761,3 +762,6 @@ spawn_radius = 100.0
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1213521778]
 position = Vector2(-143.00005, -12)
 scale = Vector2(0.76455915, 0.96286666)
+
+[node name="Nps2" parent="." unique_id=962183908 instance=ExtResource("22_7hk07")]
+position = Vector2(-248, -84)

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://qmcoyt5q48sk"
-path="res://.godot/imported/image_2026-05-04_08-44-44.png-f1458952504e5bc4cf72f471d83068cf.ctex"
+uid="uid://csvm7pw7geen5"
+path="res://.godot/imported/image_2026-05-18_02-37-19.png-b5e0b5e46517fde406124c6a0053cb18.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemy/ammo/sword/image_2026-05-04_08-44-44.png"
-dest_files=["res://.godot/imported/image_2026-05-04_08-44-44.png-f1458952504e5bc4cf72f471d83068cf.ctex"]
+source_file="res://enemy/boss/Boss_final/image_2026-05-18_02-37-19.png"
+dest_files=["res://.godot/imported/image_2026-05-18_02-37-19.png-b5e0b5e46517fde406124c6a0053cb18.ctex"]
 
 [params]
 

@@ -1,45 +1,59 @@
 extends State
 
-var saving_damage: float
+@export var sword_scene: PackedScene
+@export var sword_count := 8
 
-var duration := 4.0
-var timer := 0.0
-
-var damage_tick := 0.5
-var damage_timer := 0.0
+var attack_finished := false
 
 
 func enter():
-	timer = duration
-	damage_timer = 0
-	
-	saving_damage = enemy.damage
-	enemy.damage = enemy.damage_att_1
-	
-	enemy.animP.play("special_attack_2")
+
+	attack_finished = false
+
+	enemy.velocity = Vector2.ZERO
+
+	# Анимация атаки
+	enemy.animP.play("Special_attack_2")
+
+	# Выпускаем мечи
+	spawn_swords()
 
 
-func update(delta):
-	if enemy.player == null:
-		state_machine.change_state("Chase")
-		return
-	
-	var dir = (enemy.player.position - enemy.position).normalized()
-	enemy.velocity = dir * enemy.speed * 1.5
-	
-	timer -= delta
-	damage_timer -= delta
-	
-	if damage_timer <= 0:
-		damage_timer = damage_tick
-		
-		if enemy.player_in:
-			enemy.player.take_damage(enemy.damage)
-	
-	if timer <= 0:
+func update(_delta):
+
+	# Когда анимация закончилась
+	if not enemy.animP.is_playing() and not attack_finished:
+
+		attack_finished = true
+
+		# Возвращаем idle
+		enemy.anim.play("idle_" + enemy.get_direction_string())
+
+		# Возвращаемся в chase
 		state_machine.change_state("Chase")
 
+
+func spawn_swords():
+
+	for i in sword_count:
+
+		var angle = TAU * i / sword_count
+
+		var dir = Vector2.RIGHT.rotated(angle)
+
+		spawn_sword(dir)
+
+
+func spawn_sword(dir: Vector2):
+
+	var sword = sword_scene.instantiate()
+
+	sword.global_position = enemy.global_position
+
+	sword.direction = dir
+
+	enemy.get_tree().current_scene.add_child(sword)
 
 func exit():
-	enemy.damage = saving_damage
+
 	enemy.velocity = Vector2.ZERO

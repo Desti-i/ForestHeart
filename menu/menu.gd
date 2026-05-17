@@ -1,9 +1,6 @@
-extends Node2D
+extends CanvasLayer
 
-func _on_quit_pressed():
-	get_tree().quit()
-
-func _on_play_pressed():
+func _on_game_pressed() -> void:
 	if SaveManager.has_save_file():
 		SaveManager.load_game()
 		
@@ -13,7 +10,7 @@ func _on_play_pressed():
 		get_tree().change_scene_to_file("res://locations/primary_village/Vilage1.tscn")
 
 
-func _on_new_play_pressed() -> void:
+func _on_new_game_pressed() -> void:
 	SaveManager.game_data = {
 	"current_scene": "res://locations/primary_village/Vilage1.tscn",
 	"player_pos": {"x": 0, "y": 0},
@@ -40,3 +37,7 @@ func _on_new_play_pressed() -> void:
 	SaveManager.save_game()
 
 	get_tree().change_scene_to_file("res://locations/primary_village/Vilage1.tscn")
+
+
+func _on_exit_pressed() -> void:
+		get_tree().quit()

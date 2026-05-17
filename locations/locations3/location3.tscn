@@ -15,6 +15,15 @@
 [ext_resource type="Script" uid="uid://c55yxtxr6snv2" path="res://iNTERFACE/Stamina/Stamina.gd" id="10_xr1xd"]
 [ext_resource type="Script" uid="uid://dc0bcr8e1uwn" path="res://iNTERFACE/ExpBar/ExpBar.gd" id="11_ausny"]
 [ext_resource type="PackedScene" uid="uid://c4qqnmbhqfdv0" path="res://iNTERFACE/QMenu/QMenu.tscn" id="12_dmnow"]
+[ext_resource type="PackedScene" uid="uid://bayjlmyeofonw" path="res://enemy/Spawner.tscn" id="16_xr1xd"]
+[ext_resource type="PackedScene" uid="uid://cofjvrswyj4j7" path="res://enemy/plant/Plant1/Plant1.tscn" id="17_ausny"]
+[ext_resource type="PackedScene" uid="uid://b2iyh3ivqvt3r" path="res://enemy/vampire/Vampires1/Vampir1.tscn" id="18_6dwub"]
+[ext_resource type="PackedScene" uid="uid://cv427oidos1ir" path="res://NPC/nps6.tscn" id="18_ausny"]
+[ext_resource type="PackedScene" uid="uid://cwodke3gh8l5g" path="res://enemy/vampire/Vampires2/Vampir2.tscn" id="19_05jkg"]
+[ext_resource type="Script" uid="uid://c7s26jo0lft0i" path="res://NPC/nps_6.gd" id="19_dmnow"]
+[ext_resource type="PackedScene" uid="uid://brvwuo72ioqf1" path="res://enemy/plant/Plant2/Plant2.tscn" id="20_05jkg"]
+[ext_resource type="PackedScene" uid="uid://gomm6bq3v63y" path="res://enemy/plant/Plant3/Plant3.tscn" id="21_roc3a"]
+[ext_resource type="PackedScene" uid="uid://ce5l2uwnd15s" path="res://enemy/skelet/Skelet.tscn" id="22_caegq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_knver"]
 texture = ExtResource("1_oclve")
@@ -5973,9 +5982,7 @@ texture = ExtResource("5_iom3i")
 15:33/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -4.3166084, 0.8093643, 0, 4.0468197, 8, -8, 6.4749146)
 16:33/0 = 0
 18:33/0 = 0
-18:33/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -2.5180225, 8, 8, -8, 8, 1.528799, 8)
 19:33/0 = 0
-19:33/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 1.7086563, -8, -0.08992958, 5.75548, -8, 8)
 20:33/0 = 0
 20:33/0/physics_layer_0/polygon_0/points = PackedVector2Array(4.0468197, -2.6978817, 8, -2.87774, 8.003712, 10.971382, -0.9892235, 8)
 21:33/0 = 0
@@ -8036,3 +8043,70 @@ collision_mask = 1
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1959569303]
 zoom = Vector2(2.7, 2.7)
+
+[node name="mobs" type="Node" parent="." unique_id=685494323]
+
+[node name="Spawner" parent="mobs" unique_id=1258643216 instance=ExtResource("16_xr1xd")]
+position = Vector2(-1602, -695)
+enemy_scene = ExtResource("17_ausny")
+
+[node name="Spawner2" parent="mobs" unique_id=252332546 instance=ExtResource("16_xr1xd")]
+position = Vector2(-575, -616)
+enemy_scene = ExtResource("17_ausny")
+
+[node name="Spawner3" parent="mobs" unique_id=1526556678 instance=ExtResource("16_xr1xd")]
+position = Vector2(-901, -886)
+enemy_scene = ExtResource("17_ausny")
+
+[node name="Spawner4" parent="mobs" unique_id=228937586 instance=ExtResource("16_xr1xd")]
+position = Vector2(-453, -887)
+enemy_scene = ExtResource("18_6dwub")
+max_enemies = 1
+
+[node name="Spawner6" parent="mobs" unique_id=1711935171 instance=ExtResource("16_xr1xd")]
+position = Vector2(-73, -1010)
+enemy_scene = ExtResource("19_05jkg")
+
+[node name="Spawner7" parent="mobs" unique_id=1637808111 instance=ExtResource("16_xr1xd")]
+position = Vector2(179, -849)
+enemy_scene = ExtResource("19_05jkg")
+
+[node name="Spawner8" parent="mobs" unique_id=1317949292 instance=ExtResource("16_xr1xd")]
+position = Vector2(-101, -829)
+enemy_scene = ExtResource("19_05jkg")
+
+[node name="Spawner5" parent="mobs" unique_id=1857007602 instance=ExtResource("16_xr1xd")]
+position = Vector2(-227, -30)
+enemy_scene = ExtResource("20_05jkg")
+
+[node name="Spawner9" parent="mobs" unique_id=618045643 instance=ExtResource("16_xr1xd")]
+position = Vector2(-494, -129)
+enemy_scene = ExtResource("20_05jkg")
+
+[node name="Spawner10" parent="mobs" unique_id=2090503328 instance=ExtResource("16_xr1xd")]
+position = Vector2(1032, 83)
+enemy_scene = ExtResource("21_roc3a")
+
+[node name="Spawner11" parent="mobs" unique_id=1605488563 instance=ExtResource("16_xr1xd")]
+position = Vector2(706, 43)
+enemy_scene = ExtResource("21_roc3a")
+
+[node name="Spawner12" parent="mobs" unique_id=667157506 instance=ExtResource("16_xr1xd")]
+position = Vector2(984, -934)
+enemy_scene = ExtResource("22_caegq")
+
+[node name="Spawner13" parent="mobs" unique_id=1242065120 instance=ExtResource("16_xr1xd")]
+position = Vector2(1151, -1004)
+enemy_scene = ExtResource("22_caegq")
+
+[node name="Spawner14" parent="mobs" unique_id=1444058995 instance=ExtResource("16_xr1xd")]
+position = Vector2(1166, -834)
+enemy_scene = ExtResource("22_caegq")
+
+[node name="Spawner15" parent="mobs" unique_id=969206934 instance=ExtResource("16_xr1xd")]
+position = Vector2(1250, -930)
+enemy_scene = ExtResource("22_caegq")
+
+[node name="Nps2" parent="." unique_id=962183908 instance=ExtResource("18_ausny")]
+position = Vector2(-1537, -947)
+script = ExtResource("19_dmnow")

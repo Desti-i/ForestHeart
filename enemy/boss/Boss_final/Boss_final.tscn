@@ -8,8 +8,9 @@
 [ext_resource type="Script" uid="uid://b4l7frlctk0cu" path="res://enemy/boss/boss_vilage1/Special_attack_2.gd" id="4_ql7qe"]
 [ext_resource type="Script" uid="uid://dbennlh76bme5" path="res://enemy/boss/boss_vilage1/AttackSelect.gd" id="5_lebk5"]
 [ext_resource type="PackedScene" uid="uid://buphkhfkj8g37" path="res://enemy/ammo/sword/sword.tscn" id="5_ql7qe"]
+[ext_resource type="Script" uid="uid://5mhrd0saq0ew" path="res://enemy/boss/Boss_final/FinallBossdeath.gd" id="5_v7pi6"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nr10u"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ulex0"]
 resource_local_to_scene = true
 height = 34.0
 
@@ -437,7 +438,7 @@ region = Rect2(720, 318, 144, 159)
 atlas = ExtResource("2_nr10u")
 region = Rect2(864, 318, 144, 159)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_r4pvj"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_8ftq1"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -849,16 +850,16 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_iah3i"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_a1ag1"]
 resource_local_to_scene = true
 radius = 72.02777
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6dihs"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bvhud"]
 resource_local_to_scene = true
 radius = 8.46
 height = 20.09
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ql7qe"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_oagtm"]
 resource_local_to_scene = true
 
 [sub_resource type="Animation" id="Animation_bpenl"]
@@ -1527,27 +1528,30 @@ damage_att_1 = 0.0
 damage_att_2 = 0.0
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344]
-shape = SubResource("CapsuleShape2D_nr10u")
+shape = SubResource("CapsuleShape2D_ulex0")
 
 [node name="Movements" parent="." index="1" unique_id=403867546]
 scale = Vector2(0.39, 0.39)
-sprite_frames = SubResource("SpriteFrames_r4pvj")
+sprite_frames = SubResource("SpriteFrames_8ftq1")
 animation = &"Special_attack_2"
 
 [node name="CollisionShape2D" parent="detector" parent_id_path=PackedInt32Array(963818677) index="0" unique_id=766399847]
-shape = SubResource("CircleShape2D_iah3i")
+shape = SubResource("CircleShape2D_a1ag1")
 
 [node name="CollisionShape2D" parent="Attack_zone" parent_id_path=PackedInt32Array(1428366797) index="0" unique_id=784964863]
 scale = Vector2(1.865, 1.865)
-shape = SubResource("CapsuleShape2D_6dihs")
+shape = SubResource("CapsuleShape2D_bvhud")
 
 [node name="CollisionShape2D" parent="Attack_area" parent_id_path=PackedInt32Array(1858617201) index="0" unique_id=954509707]
 position = Vector2(0, 1.71)
 scale = Vector2(3.095, 3.095)
-shape = SubResource("CircleShape2D_ql7qe")
+shape = SubResource("CircleShape2D_oagtm")
 
 [node name="Chase" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="1" unique_id=393080123]
 script = ExtResource("3_lebk5")
+
+[node name="Death" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="4" unique_id=1669259827]
+script = ExtResource("5_v7pi6")
 
 [node name="Special_attack_1" type="Node2D" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="5" unique_id=1737970277]
 script = ExtResource("3_6dihs")

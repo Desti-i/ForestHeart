@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://brvwuo72ioqf1" path="res://enemy/plant/Plant2/Plant2.tscn" id="20_05jkg"]
 [ext_resource type="PackedScene" uid="uid://gomm6bq3v63y" path="res://enemy/plant/Plant3/Plant3.tscn" id="21_roc3a"]
 [ext_resource type="PackedScene" uid="uid://ce5l2uwnd15s" path="res://enemy/skelet/Skelet.tscn" id="22_caegq"]
+[ext_resource type="PackedScene" uid="uid://bnhbrkv605umj" path="res://enemy/boss/Boss_final/Boss_final.tscn" id="25_f015f"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_knver"]
 texture = ExtResource("1_oclve")
@@ -8137,3 +8138,6 @@ spawn_radius = 100.0
 [node name="Nps2" parent="." unique_id=962183908 instance=ExtResource("18_ausny")]
 position = Vector2(-1537, -947)
 script = ExtResource("19_dmnow")
+
+[node name="Boss_final" parent="." unique_id=355327370 instance=ExtResource("25_f015f")]
+position = Vector2(-1385, 635)

@@ -2,6 +2,7 @@ extends StaticBody2D
 
 @export var door_cost: int = 100
 @export var door_message: String = "Охраняю эту дверь"
+@export var door_id: String = "1"
 
 var player_nearby: bool = false
 var is_open: bool = false
@@ -12,9 +13,10 @@ var current_hint: Label = null
 @onready var detection_area = $DetectionArea
 
 func _ready():
-	# 👇 УБИРАЕМ ЭТУ СТРОКУ - она меняет цвет спрайта
-	# if door_sprite:
-	#     door_sprite.modulate = Color(0.5, 0.3, 0.1)
+	if SaveManager.game_data.has("opened_doors") and SaveManager.game_data.opened_doors.has(door_id):
+		if SaveManager.game_data.opened_doors[door_id] == true:
+			queue_free()
+			return
 	
 	if detection_area:
 		detection_area.body_entered.connect(_on_body_entered)
@@ -46,6 +48,8 @@ func _try_open_door():
 
 func _open_door():
 	is_open = true
+	
+	SaveManager.game_data.opened_doors[door_id] = true
 	
 	if door_collision:
 		door_collision.disabled = true

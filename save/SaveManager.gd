@@ -53,7 +53,8 @@ var game_data = {
 		"tree_heart_stolen": false,
 		"vampire_spawned": false,
 		"second_location_unlocked": false
-	}
+	},
+	"opened_doors": {}
 }
 
 func has_save_file() -> bool:

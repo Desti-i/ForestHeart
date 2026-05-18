@@ -760,6 +760,22 @@ func complete_tree_inspect() -> void:
 	unlock_fire_magic()
 	emit_signal("quest_updated")
 
+# ─── КОНЦОВКА ────────────────────────────────────────────
+var heart_returned: bool = false
+var ending_triggered: bool = false
+enum Ending { NONE, BAD, GOOD }
+var current_ending: Ending = Ending.NONE
+signal ending_triggered_signal(ending: Ending)
+
+# ─── ФИНАЛЬНЫЙ БОСС ──────────────────────────────────────
+var final_boss_defeated: bool = false
+signal final_boss_defeated_changed  # 👈 ДОБАВЬ ЭТУ СТРОКУ
+
+func set_final_boss_defeated(value: bool) -> void:
+	final_boss_defeated = value
+	emit_signal("final_boss_defeated_changed")
+	print("👑 Финальный босс побеждён! Сигнал отправлен.")
+
 # ─── СОХРАНЕНИЕ / ЗАГРУЗКА ───────────────────────────────
 func update_save_data() -> void:
 	var player = get_tree().get_first_node_in_group("player")

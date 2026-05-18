@@ -12,9 +12,11 @@ func enter():
 		enemy.get_node("Attack_area").set_deferred("monitoring", false)
 
 	GameState.add_exp(enemy.exp_reward)
-	
-	# 👇 ИСПОЛЬЗУЙ СИГНАЛ
-	GameState.set_final_boss_defeated(true)
+
+	# Сохраняем данные ДО анимации
+	var scene_tree = enemy.get_tree()
+	var current_scene = scene_tree.current_scene
+	var spawn_pos = enemy.global_position
 
 	# Анимация смерти
 	var anim_name = "death_" + enemy.get_direction_string()
@@ -22,10 +24,21 @@ func enter():
 		enemy.anim.play(anim_name)
 		await enemy.anim.animation_finished
 	else:
-		await get_tree().create_timer(1.0).timeout
+		await scene_tree.create_timer(1.0).timeout
 
+	# Затухание
 	var tw = enemy.create_tween()
 	tw.tween_property(enemy, "modulate:a", 0.0, 1.0)
 	await tw.finished
 
 	enemy.queue_free()
+
+	# Спавним вампира с выбором
+	var vampire_scene = load("res://enemy/boss/FinalVampir.tscn")
+	if vampire_scene:
+		var vampire = vampire_scene.instantiate()
+		vampire.global_position = spawn_pos + Vector2(80, 0)
+		current_scene.add_child(vampire)
+		print("🧛 Вампир с выбором появился!")
+	else:
+		print("❌ FinalVampir.tscn не найден!")

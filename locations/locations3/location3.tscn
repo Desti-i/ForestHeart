@@ -25,6 +25,8 @@
 [ext_resource type="PackedScene" uid="uid://gomm6bq3v63y" path="res://enemy/plant/Plant3/Plant3.tscn" id="21_roc3a"]
 [ext_resource type="PackedScene" uid="uid://ce5l2uwnd15s" path="res://enemy/skelet/Skelet.tscn" id="22_caegq"]
 [ext_resource type="PackedScene" uid="uid://bnhbrkv605umj" path="res://enemy/boss/Boss_final/Boss_final.tscn" id="25_f015f"]
+[ext_resource type="PackedScene" uid="uid://b7nk5k0wjtlbu" path="res://NPC/nps7.tscn" id="26_1ghbd"]
+[ext_resource type="Script" uid="uid://c8cnht3ihxpum" path="res://NPC/nps_7.gd" id="27_taiay"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_knver"]
 texture = ExtResource("1_oclve")
@@ -8141,3 +8143,8 @@ script = ExtResource("19_dmnow")
 
 [node name="Boss_final" parent="." unique_id=355327370 instance=ExtResource("25_f015f")]
 position = Vector2(-1385, 635)
+
+[node name="NpsFINAL" parent="." unique_id=234110035 instance=ExtResource("26_1ghbd")]
+position = Vector2(-1687, 396)
+script = ExtResource("27_taiay")
+npc_name = "Таинственный вампир"

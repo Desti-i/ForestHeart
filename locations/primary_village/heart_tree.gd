@@ -68,6 +68,7 @@ func _on_player_exited(body):
 func _show_tree_intro():
 	intro_shown = true
 	GameState.tree_intro_shown = true
+	SaveManager.game_data.flags.tree_intro_shown = GameState.tree_intro_shown
 	
 	# 👇 Завершаем квест на осмотр дерева
 	if GameState.quest_tree_inspect == GameState.QuestState.ACTIVE:
@@ -94,6 +95,7 @@ func _show_monster_scene():
 	GameState.monster_encounter_triggered = true
 	countdown_active = false
 	waiting_for_return = false
+	SaveManager.game_data.flags.monster_encounter_triggered = GameState.monster_encounter_triggered
 	
 	_show_story_text(
 		"👹 ЗЛОДЕЙ ПОЯВИЛСЯ У ДРЕВА! 👹\n\nТы видишь таинственную фигуру в тёмном плаще.\nОно вырывает сердце из дерева и скрывается в пустоте!\n\nДерево начинает увядать на глазах на деревню наступает мрак...",
@@ -110,6 +112,8 @@ func _show_monster_scene():
 	
 	GameState.tree_heart_stolen = true
 	GameState.vampire_spawned = true
+	SaveManager.game_data.flags.tree_heart_stolen = GameState.tree_heart_stolen
+	SaveManager.game_data.flags.vampire_spawned = GameState.vampire_spawned
 	
 	await get_tree().create_timer(2.0).timeout
 	

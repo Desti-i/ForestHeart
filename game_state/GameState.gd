@@ -99,6 +99,7 @@ func unlock_sword_lvl3() -> void:
 	if sword_lvl3_dropped:
 		return
 	sword_lvl3_dropped = true
+	SaveManager.game_data.stats.sword_lvl3_dropped = sword_lvl3_dropped
 	print("⚔️ Ледяной меч выпал! Теперь можно купить в меню.")
 	emit_signal("sword_upgraded", sword_level)
 
@@ -114,6 +115,7 @@ func upgrade_sword() -> bool:
 	
 	if spend_exp(next["cost"]):
 		sword_level += 1
+		SaveManager.game_data.stats.sword_level = sword_level
 		print("⚔️ Меч улучшен до уровня:", sword_level)
 		emit_signal("sword_upgraded", sword_level)
 		emit_signal("weapon_changed", get_active_weapon())
@@ -175,6 +177,7 @@ func unlock_fire_sword() -> void:
 	if fire_sword_unlocked:
 		return
 	fire_sword_unlocked = true
+	SaveManager.game_data.stats.fire_sword_unlocked = fire_sword_unlocked
 	fire_sword_level = 1
 	print("⚔️ Огненный меч получен!")
 	emit_signal("fire_sword_upgraded", fire_sword_level)
@@ -190,6 +193,7 @@ func upgrade_fire_sword() -> bool:
 	var cost = fire_sword_levels[next_level]["cost"]
 	if spend_exp(cost):
 		fire_sword_level = next_level
+		SaveManager.game_data.stats.fire_sword_level = fire_sword_level
 		print("⚔️ Огненный меч улучшен до уровня:", fire_sword_level)
 		emit_signal("fire_sword_upgraded", fire_sword_level)
 		return true
@@ -280,6 +284,7 @@ func upgrade_fire_magic() -> bool:
 	var cost = fire_magic_levels[next_level]["cost"]
 	if spend_exp(cost):
 		fire_magic_level = next_level
+		SaveManager.game_data.stats.fire_magic_level = fire_magic_level
 		print("🔥 Магия огня улучшена до уровня:", fire_magic_level)
 		emit_signal("fire_magic_upgraded", fire_magic_level)
 		return true
@@ -289,6 +294,7 @@ func upgrade_fire_magic() -> bool:
 func unlock_fire_magic() -> void:
 	if fire_magic_level == 0:
 		fire_magic_level = 1
+		SaveManager.game_data.stats.fire_magic_level = fire_magic_level
 		print("🔥 Магия огня открыта через квест!")
 		emit_signal("fire_magic_upgraded", fire_magic_level)
 
@@ -347,6 +353,8 @@ func unlock_water_magic() -> void:
 		return
 	water_magic_unlocked = true
 	water_magic_level = 1
+	SaveManager.game_data.stats.water_magic_unlocked = water_magic_unlocked
+	SaveManager.game_data.stats.water_magic_level = water_magic_level
 	print("💧 Магия воды получена!")
 	emit_signal("water_magic_unlocked_signal")
 	emit_signal("water_magic_upgraded", water_magic_level)
@@ -361,6 +369,7 @@ func upgrade_water_magic() -> bool:
 	var cost = water_magic_levels[next_level]["cost"]
 	if spend_exp(cost):
 		water_magic_level = next_level
+		SaveManager.game_data.stats.water_magic_level = water_magic_level
 		print("💧 Магия воды улучшена до уровня:", water_magic_level)
 		emit_signal("water_magic_upgraded", water_magic_level)
 		return true
@@ -423,6 +432,8 @@ func unlock_ice_magic() -> void:
 		return
 	ice_magic_unlocked = true
 	ice_magic_level = 1
+	SaveManager.game_data.stats.ice_magic_unlocked = ice_magic_unlocked
+	SaveManager.game_data.stats.ice_magic_level = ice_magic_level
 	print("❄️ Магия льда получена! Уровень 1")
 	emit_signal("ice_magic_upgraded", ice_magic_level)
 
@@ -437,6 +448,7 @@ func upgrade_ice_magic() -> bool:
 	var cost = ice_magic_levels[next_level]["cost"]
 	if spend_exp(cost):
 		ice_magic_level = next_level
+		SaveManager.game_data.stats.ice_magic_level = ice_magic_level
 		print("❄️ Магия льда улучшена до уровня:", ice_magic_level)
 		emit_signal("ice_magic_upgraded", ice_magic_level)
 		return true
@@ -490,6 +502,8 @@ func unlock_blood_magic() -> void:
 		return
 	blood_magic_unlocked = true
 	blood_magic_level = 1
+	SaveManager.game_data.stats.blood_magic_unlocked = blood_magic_unlocked
+	SaveManager.game_data.stats.blood_magic_level = blood_magic_level
 	print("🩸 Магия крови получена от босса вампиров!")
 	emit_signal("blood_magic_upgraded", blood_magic_level)
 
@@ -504,6 +518,7 @@ func upgrade_blood_magic() -> bool:
 	var cost = blood_magic_levels[next_level - 1]["cost"]
 	if spend_exp(cost):
 		blood_magic_level = next_level
+		SaveManager.game_data.stats.blood_magic_level = blood_magic_level
 		print("🩸 Магия крови улучшена до уровня:", blood_magic_level)
 		emit_signal("blood_magic_upgraded", blood_magic_level)
 		return true
@@ -561,6 +576,8 @@ func unlock_heal_magic() -> void:
 	heal_magic_unlocked = true
 	heal_magic_level = 1
 	heal_magic_notification = true
+	SaveManager.game_data.stats.heal_magic_unlocked = heal_magic_unlocked
+	SaveManager.game_data.stats.heal_magic_level = heal_magic_level
 	print("💚 Магия лечения получена! Уровень 1")
 	emit_signal("heal_magic_unlocked_signal")
 	emit_signal("heal_magic_upgraded", heal_magic_level)
@@ -585,6 +602,7 @@ func upgrade_heal_magic() -> bool:
 	var cost = heal_magic_levels[next_level]["cost"]
 	if spend_exp(cost):
 		heal_magic_level = next_level
+		SaveManager.game_data.stats.heal_magic_level = heal_magic_level
 		print("💚 Магия лечения улучшена до уровня:", heal_magic_level)
 		emit_signal("heal_magic_upgraded", heal_magic_level)
 		_update_player_max_health()
@@ -622,6 +640,8 @@ func start_quest_kill_boars() -> void:
 		return
 	quest_kill_boars = QuestState.ACTIVE
 	boars_killed = 0
+	SaveManager.game_data.quests.quest_kill_boars.state = quest_kill_boars
+	SaveManager.game_data.quests.quest_kill_boars.progress = boars_killed
 	print("📜 Квест начат: Убей 10 кабанов!")
 	emit_signal("quest_updated")
 
@@ -629,16 +649,19 @@ func register_boar_kill() -> void:
 	if quest_kill_boars != QuestState.ACTIVE:
 		return
 	boars_killed += 1
+	SaveManager.game_data.quests.quest_kill_boars.progress = boars_killed
 	print("🐗 Кабанов убито:", boars_killed, "/", boars_needed)
 	emit_signal("quest_updated")
 	if boars_killed >= boars_needed:
 		quest_kill_boars = QuestState.COMPLETED
+		SaveManager.game_data.quests.quest_kill_boars.state = quest_kill_boars
 		emit_signal("quest_updated")
 
 func hand_in_quest_kill_boars() -> bool:
 	if quest_kill_boars != QuestState.COMPLETED:
 		return false
 	quest_kill_boars = QuestState.HANDED_IN
+	SaveManager.game_data.quests.quest_kill_boars.state = quest_kill_boars
 	add_exp(70)
 	emit_signal("quest_updated")
 	if quest_cat == QuestState.NOT_TAKEN:
@@ -657,6 +680,7 @@ func start_quest_cat() -> void:
 		return
 	quest_cat = QuestState.ACTIVE
 	cat_found = false
+	SaveManager.game_data.quests.cat_quest.state = quest_cat
 
 	emit_signal("quest_updated")
 
@@ -665,12 +689,15 @@ func find_cat() -> void:
 		return
 	cat_found = true
 	quest_cat = QuestState.COMPLETED
+	SaveManager.game_data.quests.cat_quest.state = quest_cat
+	SaveManager.game_data.quests.cat_quest.progress = cat_found
 	emit_signal("quest_updated")
 
 func hand_in_quest_cat() -> bool:
 	if quest_cat != QuestState.COMPLETED:
 		return false
 	quest_cat = QuestState.HANDED_IN
+	SaveManager.game_data.quests.cat_quest.state = quest_cat
 	unlock_heal_magic()
 	emit_signal("quest_updated")
 	update_save_data()
@@ -688,16 +715,21 @@ func start_vampire_quest() -> void:
 		return
 	quest_vampire = QuestState.ACTIVE
 	goblins_killed = 0
+	SaveManager.game_data.quests.quest_vampire.state = quest_vampire
+	SaveManager.game_data.quests.quest_vampire.progress = goblins_killed
 	emit_signal("quest_updated")
 
 func register_goblin_kill() -> void:
 	if quest_vampire != QuestState.ACTIVE:
 		return
 	goblins_killed += 1
+	SaveManager.game_data.quests.quest_vampire.progress = goblins_killed
 	emit_signal("quest_updated")
 	if goblins_killed >= goblins_needed:
 		quest_vampire = QuestState.COMPLETED
 		second_location_unlocked = true
+		SaveManager.game_data.quests.quest_vampire.state = quest_vampire
+		SaveManager.game_data.flags.second_location_unlocked = second_location_unlocked
 		emit_signal("quest_updated")
 
 func hand_in_vampire_quest() -> bool:
@@ -705,6 +737,7 @@ func hand_in_vampire_quest() -> bool:
 		return false
 	quest_vampire = QuestState.HANDED_IN
 	vampire_spawned = false
+	SaveManager.game_data.quests.quest_vampire.state = quest_vampire
 	add_exp(120)
 	emit_signal("quest_updated")
 	return true
@@ -714,6 +747,7 @@ func start_quest_tree_inspect() -> void:
 	if quest_tree_inspect != QuestState.NOT_TAKEN:
 		return
 	quest_tree_inspect = QuestState.ACTIVE
+	SaveManager.game_data.quests.quest_tree_inspect.state = quest_tree_inspect
 	emit_signal("quest_updated")
 
 func complete_tree_inspect() -> void:
@@ -721,6 +755,8 @@ func complete_tree_inspect() -> void:
 		return
 	quest_tree_inspect = QuestState.COMPLETED
 	tree_inspected = true
+	SaveManager.game_data.quests.quest_tree_inspect.state = quest_tree_inspect
+	SaveManager.game_data.quests.quest_tree_inspect.progress = tree_inspected
 	unlock_fire_magic()
 	emit_signal("quest_updated")
 
@@ -734,22 +770,6 @@ func update_save_data() -> void:
 	SaveManager.game_data.current_scene = get_tree().current_scene.scene_file_path
 	SaveManager.game_data.stats.exp = exp
 	SaveManager.game_data.stats.current_health = player.current_health
-	SaveManager.game_data.stats.sword_level = sword_level
-	SaveManager.game_data.stats.sword_lvl3_dropped = sword_lvl3_dropped
-	SaveManager.game_data.stats.fire_sword_unlocked = fire_sword_unlocked
-	SaveManager.game_data.stats.fire_sword_level = fire_sword_level
-	SaveManager.game_data.stats.fire_magic_level = fire_magic_level
-	SaveManager.game_data.stats.water_magic_level = water_magic_level
-	SaveManager.game_data.stats.heal_magic_level = heal_magic_level
-	SaveManager.game_data.stats.ice_magic_unlocked = ice_magic_unlocked
-	SaveManager.game_data.stats.ice_magic_level = ice_magic_level
-	SaveManager.game_data.quests.quest_kill_boars.state = quest_kill_boars
-	SaveManager.game_data.quests.quest_kill_boars.progress = boars_killed
-	SaveManager.game_data.quests.cat_quest.state = quest_cat
-	SaveManager.game_data.quests.cat_quest.progress = {
-		"cat_found": cat_found,
-		"heal_magic_unlocked": heal_magic_unlocked
-	}
 	SaveManager.save_game()
 
 func apply_load_data() -> void:
@@ -764,19 +784,44 @@ func apply_load_data() -> void:
 			player._update_hp_label()
 	exp = data.stats.exp
 	emit_signal("exp_changed", exp)
+	
 	sword_level = data.stats.sword_level
-	sword_lvl3_dropped = data.stats.get("sword_lvl3_dropped", false)
-	fire_sword_unlocked = data.stats.get("fire_sword_unlocked", false)
-	fire_sword_level = data.stats.get("fire_sword_level", 0)
+	sword_lvl3_dropped = data.stats.sword_lvl3_dropped
+	fire_sword_unlocked = data.stats.fire_sword_unlocked
+	fire_sword_level = data.stats.fire_sword_level
+	
 	fire_magic_level = data.stats.fire_magic_level
+	
 	water_magic_level = data.stats.water_magic_level
+	water_magic_unlocked = data.stats.water_magic_unlocked
+	
+	ice_magic_unlocked = data.stats.ice_magic_unlocked
+	ice_magic_level = data.stats.ice_magic_level
+	
+	blood_magic_unlocked = data.stats.blood_magic_unlocked
+	blood_magic_level = data.stats.blood_magic_level
+	
+	heal_magic_unlocked = data.stats.heal_magic_unlocked
 	heal_magic_level = data.stats.heal_magic_level
-	ice_magic_unlocked = data.stats.get("ice_magic_unlocked", false)
-	ice_magic_level = data.stats.get("ice_magic_level", 0)
+	
 	if data.quests.has("quest_kill_boars"):
 		quest_kill_boars = data.quests.quest_kill_boars.state
 		boars_killed = data.quests.quest_kill_boars.progress
+		
 	if data.quests.has("cat_quest"):
 		quest_cat = data.quests.cat_quest.state
-		cat_found = data.quests.cat_quest.progress.cat_found
-		heal_magic_unlocked = data.quests.cat_quest.progress.heal_magic_unlocked
+		cat_found = data.quests.cat_quest.progress
+		
+	if data.quests.has("quest_vampire"):
+		quest_vampire = data.quests.quest_vampire.state
+		goblins_killed = data.quests.quest_vampire.progress
+		
+	if data.quests.has("quest_tree_inspect"):
+		quest_tree_inspect = data.quests.quest_tree_inspect.state
+		tree_inspected = data.quests.quest_tree_inspect.progress
+		
+	tree_intro_shown = data.flags.tree_intro_shown
+	monster_encounter_triggered = data.flags.monster_encounter_triggered
+	tree_heart_stolen = data.flags.tree_heart_stolen
+	vampire_spawned = data.flags.vampire_spawned
+	second_location_unlocked = data.flags.second_location_unlocked

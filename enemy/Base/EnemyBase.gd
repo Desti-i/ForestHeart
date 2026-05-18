@@ -5,7 +5,8 @@ class_name EnemyBase
 	"physical": 1.0,
 	"fire": 1.0,
 	"ice": 1.0,
-	"water": 1.0
+	"water": 1.0,
+	"blood": 1.0
 }
 
 var health: float

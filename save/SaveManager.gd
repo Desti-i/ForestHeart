@@ -8,10 +8,26 @@ var game_data = {
 	"stats": {
 		"exp": 0,
 		"current_health": 100,
+		
 		"sword_level": 0,
+		"sword_lvl3_dropped": false,
+		"fire_sword_unlocked": false,
+		"fire_sword_level": 0,
+		
 		"fire_magic_level": 0,
+		
 		"water_magic_level": 0,
+		"water_magic_unlocked": false,
+		
+		"ice_magic_unlocked": false,
+		"ice_magic_level": 0,
+		
+		"blood_magic_unlocked": false,
+		"blood_magic_level": 1,
+		
+		"heal_magic_unlocked": false,
 		"heal_magic_level": 0
+		
 	},
 	"quests": {
 		"quest_kill_boars": {
@@ -20,8 +36,23 @@ var game_data = {
 		},
 		"cat_quest": {
 			"state": 0,
-			"progress": {"cat_found": false, "heal_magic_unlocked": false}
+			"progress": false
+		},
+		"quest_vampire": {
+			"state": 0,
+			"progress": false
+		},
+		"quest_tree_inspect": {
+			"state": 0,
+			"progress": false
 		}
+	},
+	"flags": {
+		"tree_intro_shown": false,
+		"monster_encounter_triggered": false,
+		"tree_heart_stolen": false,
+		"vampire_spawned": false,
+		"second_location_unlocked": false
 	}
 }
 

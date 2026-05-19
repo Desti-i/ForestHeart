@@ -2113,5 +2113,7 @@ zoom = Vector2(2.7, 2.7)
 [node name="boss_vilage1" parent="." unique_id=355327370 instance=ExtResource("18_3cgjr")]
 position = Vector2(-2084, -104)
 scale = Vector2(2.24, 2.24)
+damage_att_2 = 10.0
+speed = 55.0
 
 [node name="EscMenu" parent="boss_vilage1" unique_id=2061204431 instance=ExtResource("19_3cgjr")]

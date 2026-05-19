@@ -9,7 +9,7 @@ var player_nearby: bool = false
 var is_alive: bool = true
 var intro_shown: bool = false
 var countdown_active: bool = false
-var countdown_time: float = 180.0
+var countdown_time: float = 10
 var player_left: bool = false
 var waiting_for_return: bool = false
 

@@ -54,11 +54,7 @@ func _teleport():
 	_show_flash_effect()
 	await get_tree().create_timer(0.3).timeout
 	
-	# Сохраняем позицию игрока для следующего раза
-	var player = get_tree().get_first_node_in_group("player")
-	if player:
-		SaveManager.game_data.player_pos = {"x": player.position.x, "y": player.position.y}
-		SaveManager.save_game()
+	
 	
 	get_tree().change_scene_to_file(next_scene)
 

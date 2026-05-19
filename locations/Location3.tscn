@@ -580,7 +580,7 @@ tile_map_data = PackedByteArray("AADt/wcAAgAGAA8AAADu/wcAAgAHAA8AAADv/wcAAgAIAA8
 tile_set = SubResource("TileSet_s0mju")
 
 [node name="Player" parent="." unique_id=627426411 instance=ExtResource("5_2r15a")]
-position = Vector2(-240.285, -13)
+position = Vector2(34, -90)
 collision_mask = 1
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1036942600]
@@ -823,7 +823,6 @@ spawn_radius = 80.0
 [node name="WSlime12" parent="mobs" unique_id=227949676 instance=ExtResource("16_5y8qd")]
 position = Vector2(1561, 565)
 enemy_scene = ExtResource("22_vlmtn")
-max_enemies = 60
 spawn_interval = 20.0
 spawn_radius = 100.0
 
@@ -927,7 +926,7 @@ position = Vector2(-143.00005, -12)
 scale = Vector2(0.76455915, 0.96286666)
 
 [node name="Nps2" parent="." unique_id=962183908 instance=ExtResource("22_7hk07")]
-position = Vector2(-248, -84)
+position = Vector2(-231, -96)
 
 [node name="WSlime22" parent="." unique_id=1336160895 instance=ExtResource("16_5y8qd")]
 position = Vector2(569, -924)

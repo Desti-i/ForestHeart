@@ -794,6 +794,8 @@ func apply_load_data() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		player.position = Vector2(data.player_pos.x, data.player_pos.y)
+		print(data.player_pos.x)
+		print(data.player_pos.y)
 		player.current_health = data.stats.current_health
 		if player.hp_bar:
 			player.hp_bar.value = player.current_health

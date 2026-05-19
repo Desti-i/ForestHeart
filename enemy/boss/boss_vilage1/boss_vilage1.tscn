@@ -5,13 +5,13 @@
 [ext_resource type="Script" uid="uid://jsf4bbtp4tx0" path="res://enemy/boss/boss_vilage1/BossChase.gd" id="2_wem20"]
 [ext_resource type="Script" uid="uid://byg3oy4n35gkk" path="res://enemy/boss/boss_vilage1/Special_attack_1.gd" id="3_7aiw8"]
 [ext_resource type="Texture2D" uid="uid://ti3fg3gwg4bf" path="res://enemy/boss/boss_vilage1/orc3_run_full.png" id="3_xm45m"]
-[ext_resource type="Script" uid="uid://b4l7frlctk0cu" path="res://enemy/boss/boss_vilage1/Special_attack_2.gd" id="4_8pwrk"]
 [ext_resource type="Texture2D" uid="uid://bh182avu6ws35" path="res://enemy/boss/boss_vilage1/orc3_attack_full.png" id="4_umln8"]
 [ext_resource type="Texture2D" uid="uid://dfsdkbrpitnjr" path="res://enemy/boss/boss_vilage1/orc3_death_full.png" id="5_mrupb"]
 [ext_resource type="Script" uid="uid://dbennlh76bme5" path="res://enemy/boss/boss_vilage1/AttackSelect.gd" id="6_4lv3y"]
 [ext_resource type="Texture2D" uid="uid://uwub0wwbqpaj" path="res://enemy/boss/boss_vilage1/orc3_idle_full.png" id="6_flwvm"]
 [ext_resource type="Texture2D" uid="uid://mjfkhcf3s3mv" path="res://enemy/boss/boss_vilage1/image_2026-05-04_00-02-18.png" id="7_umln8"]
 [ext_resource type="Texture2D" uid="uid://bkgyjnplj4pem" path="res://enemy/boss/boss_vilage1/image_2026-05-04_08-27-36.png" id="8_mrupb"]
+[ext_resource type="Script" uid="uid://dtevhbvclodte" path="res://enemy/boss/boss_vilage1/new_script.gd" id="12_flwvm"]
 [ext_resource type="Script" uid="uid://dskcof74vg6hu" path="res://enemy/boss/boss_vilage1/deathBoss.gd" id="12_retej"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_flwvm"]
@@ -2290,6 +2290,7 @@ shape = SubResource("CapsuleShape2D_flwvm")
 [node name="Movements" parent="." index="1" unique_id=403867546]
 position = Vector2(0, 5.11)
 sprite_frames = SubResource("SpriteFrames_6nhd4")
+animation = &"Down"
 
 [node name="CollisionShape2D" parent="detector" parent_id_path=PackedInt32Array(963818677) index="0" unique_id=766399847]
 shape = SubResource("CircleShape2D_retej")
@@ -2317,7 +2318,7 @@ script = ExtResource("12_retej")
 script = ExtResource("3_7aiw8")
 
 [node name="Special_attack_2" type="Node2D" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="6" unique_id=397226635]
-script = ExtResource("4_8pwrk")
+script = ExtResource("12_flwvm")
 
 [node name="AttackSelect" type="Node2D" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="7" unique_id=1161341449]
 script = ExtResource("6_4lv3y")

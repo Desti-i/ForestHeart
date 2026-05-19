@@ -95,5 +95,7 @@ func load_game():
 	if error == OK:
 		game_data = json.data
 		print("Игра успешно загружена!")
+		print(game_data.player_pos.x)
+		print(game_data.player_pos.y)
 	else:
 		print("Ошибка парсинга JSON: ", json.get_error_message())

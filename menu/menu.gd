@@ -17,6 +17,7 @@ func _on_new_game_pressed() -> void:
 	"stats": {
 		"exp": 0,
 		"current_health": 100,
+		"max_health": 100,
 		
 		"sword_level": 0,
 		"sword_lvl3_dropped": false,

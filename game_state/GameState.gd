@@ -615,6 +615,7 @@ func _update_player_max_health() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		var new_max_health = get_health_from_heal_level()
+		SaveManager.game_data.stats.max_health = new_max_health
 		player.update_max_health(new_max_health)
 
 # ─── КВЕСТЫ ──────────────────────────────────────────────
@@ -798,7 +799,9 @@ func apply_load_data() -> void:
 		print(data.player_pos.x)
 		print(data.player_pos.y)
 		player.current_health = data.stats.current_health
+		player.max_health = data.stats.max_health
 		if player.hp_bar:
+			player.hp_bar.max_value = player.max_health
 			player.hp_bar.value = player.current_health
 			player._update_hp_label()
 	exp = data.stats.exp

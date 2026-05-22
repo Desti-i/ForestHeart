@@ -311,35 +311,35 @@ var water_magic_levels: Array = [
 		"damage": 0.0, "cost": 0,
 		"color": Color(0.3, 0.6, 1.0),
 		"description": "Выпадает с водных мобов",
-		"radius": 0.0, "speed": 0.0, "cooldown": 1.8
+		"radius": 0.0, "speed": 0.0, "cooldown": 10
 	},
 	{
 		"level": 1, "name": "Водяной шар",
 		"damage": 15.0, "cost": 0,
 		"color": Color(0.2, 0.7, 1.0),
 		"description": "Водяной снаряд",
-		"radius": 8.0, "speed": 240.0, "cooldown": 1.5
+		"radius": 8.0, "speed": 240.0, "cooldown": 9
 	},
 	{
 		"level": 2, "name": "Водяной шар II",
 		"damage": 30.0, "cost": 2000,
 		"color": Color(0.0, 0.5, 1.0),
 		"description": "Мощный поток воды",
-		"radius": 13.0, "speed": 300.0, "cooldown": 3.0
+		"radius": 13.0, "speed": 300.0, "cooldown": 8.0
 	},
 	{
 		"level": 3, "name": "Водяной шар III",
 		"damage": 55.0, "cost": 4000,
 		"color": Color(0.0, 0.3, 0.9),
 		"description": "Волна цунами",
-		"radius": 18.0, "speed": 360.0, "cooldown": 1.0
+		"radius": 18.0, "speed": 360.0, "cooldown": 10.0
 	},
 	{
 		"level": 4, "name": "Океанская мощь",
-		"damage": 90.0, "cost": 7000,
+		"damage": 60.0, "cost": 7000,
 		"color": Color(0.0, 0.1, 0.8),
 		"description": "Сила древнего океана",
-		"radius": 25.0, "speed": 420.0, "cooldown": 0.0
+		"radius": 25.0, "speed": 420.0, "cooldown": 6.0
 	},
 ]
 

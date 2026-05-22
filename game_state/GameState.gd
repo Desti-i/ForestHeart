@@ -1,5 +1,6 @@
 extends Node
 
+var is_respawning: bool = false
 var has_boss_key: bool = false
 var spawn_point_name: String = "SpawnPoint"
 var boss_defeated: bool = false

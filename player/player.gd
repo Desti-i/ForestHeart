@@ -383,6 +383,7 @@ func die() -> void:
 	if current_health > 0:
 		return
 	
+	GameState.is_respawning = true
 	print("💀 Игрок умер!")
 	
 	# Сохраняем путь

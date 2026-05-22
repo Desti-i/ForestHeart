@@ -15,10 +15,19 @@ extends Node2D
 @onready var spawn_points: Dictionary = {}  # имя → Marker2D
 
 func _ready() -> void:
+	if SaveManager.has_save_file():
+		GameState.apply_load_data()
+	
 	# Собираем все Marker2D — точки спауна
 	for child in get_children():
 		if child is Marker2D:
 			spawn_points[child.name] = child
+
+	if SaveManager.has_save_file() and SaveManager.game_data.current_scene == scene_file_path:
+		var saved_pos = SaveManager.game_data.player_pos
+		if saved_pos.x != 0 or saved_pos.y != 0:
+			player.global_position = Vector2(saved_pos.x, saved_pos.y)
+			return
 
 	# Телепортируем игрока к нужной точке
 	var target_name = GameState.spawn_point_name

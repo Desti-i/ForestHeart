@@ -380,34 +380,29 @@ func heal(amount: float) -> void:
 	_update_hp_label()
 
 func die() -> void:
-	if current_health > 0:
-		return
+	if current_health > 0: return
 	
-	GameState.is_respawning = true
-	print("💀 Игрок умер!")
-	
-	# Сохраняем путь
-	var target_scene = "res://locations/primary_village/Vilage1.tscn"
-	
-	if get_tree() and get_tree().current_scene:
-		var current = get_tree().current_scene.scene_file_path
-		# 👇 ИСПРАВЛЕНО: ищем "location3" (с маленькой буквы) или "Location3"
-		if current.find("location3") != -1 or current.find("Location3") != -1:
-			target_scene = current
-			print("💀 Смерть на 3 локации, респавн здесь же")
-	
-	# Отключаем управление
 	set_physics_process(false)
 	set_process_input(false)
 	can_move = false
 	
-	# Анимация смерти (если есть)
+	# Анимация смерти
 	if anim and anim.sprite_frames.has_animation("death"):
 		anim.play("death")
 		await anim.animation_finished
 	
-	# Используем call_deferred для безопасного вызова
-	call_deferred("_do_respawn", target_scene)
+	# Проверяем, где мы находимся
+	var current_scene_path = get_tree().current_scene.scene_file_path
+	
+	# Если мы уже на 3 локации, просто вызываем функцию респавна на месте
+	if "location3" in current_scene_path.to_lower():
+		_respawn_on_third_location()
+	else:
+		# Иначе переходим в деревню
+		get_tree().change_scene_to_file("res://locations/primary_village/Vilage1.tscn")
+		# После смены сцены нужно дождаться инициализации, чтобы найти SpawnPoint
+		await get_tree().process_frame
+		_finish_respawn()
 
 func _do_respawn(target_scene: String) -> void:
 	if is_inside_tree():
@@ -475,37 +470,21 @@ func _respawn() -> void:
 
 
 func _respawn_on_third_location():
-	print("🔄 Респавн на 3 локации...")
+	print("🔄 Возрождение на 3 локации...")
 	
-	# Восстанавливаем здоровье
+	# 1. Восстанавливаем статы
 	current_health = max_health
 	stamina = max_stamina
 	
-	# Ищем SpawnPoint
+	# 2. Ищем точку спавна
 	var spawn_point = get_tree().current_scene.get_node_or_null("SpawnPoint")
 	if spawn_point:
 		global_position = spawn_point.global_position
+	else:
+		printerr("⚠️ ОШИБКА: SpawnPoint не найден на этой сцене!")
 	
-	# Восстанавливаем управление
-	set_physics_process(true)
-	set_process_input(true)
-	can_move = true
-	is_invincible = false
-	modulate = Color.WHITE
-	
-	# Обновляем HP бар
-	if hp_bar:
-		hp_bar.max_value = max_health
-		hp_bar.value = current_health
-	_update_hp_label()
-	
-	# Переподключаем сигналы
-	if not GameState.weapon_changed.is_connected(_on_weapon_changed):
-		GameState.weapon_changed.connect(_on_weapon_changed)
-	
-	damage = GameState.get_active_weapon()["damage"]
-	
-	print("✅ Возрождён на 3 локации!")
+	# 3. Возвращаем управление
+	_finish_respawn()
 
 func _respawn_in_village():
 	print("🔄 Респавн в деревне...")
@@ -578,6 +557,11 @@ func _finish_respawn() -> void:
 	damage = GameState.get_active_weapon()["damage"]
 	
 	print("✅ Респавн завершён! HP:", current_health)
+	if GameState.is_respawning:
+		var sp = get_tree().current_scene.get_node_or_null("SpawnPoint")
+		if sp:
+			global_position = sp.global_position
+		GameState.is_respawning = false
 
 func get_direction_string() -> String:
 	match idle_dir:

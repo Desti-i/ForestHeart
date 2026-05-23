@@ -100,27 +100,22 @@ func unlock_sword_lvl3() -> void:
 		return
 	sword_lvl3_dropped = true
 	SaveManager.game_data.stats.sword_lvl3_dropped = sword_lvl3_dropped
-	print("⚔️ Ледяной меч выпал! Теперь можно купить в меню.")
 	emit_signal("sword_upgraded", sword_level)
 
 func upgrade_sword() -> bool:
 	if not can_upgrade_sword():
-		print("❌ Меч уже максимального уровня!")
 		return false
 	var next = sword_levels[sword_level + 1]
 	
 	if sword_level + 1 == 2 and not sword_lvl3_dropped:
-		print("❌ Ледяной меч ещё не выпал! Убей ледяную слизь!")
 		return false
 	
 	if spend_exp(next["cost"]):
 		sword_level += 1
 		SaveManager.game_data.stats.sword_level = sword_level
-		print("⚔️ Меч улучшен до уровня:", sword_level)
 		emit_signal("sword_upgraded", sword_level)
 		emit_signal("weapon_changed", get_active_weapon())
 		return true
-	print("❌ Не хватает EXP! Нужно:", next["cost"])
 	return false
 
 func select_weapon(_index: int) -> void: pass
@@ -240,28 +235,28 @@ var fire_magic_levels: Array = [
 		"damage": 10.0, "cost": 0,
 		"color": Color(1.0, 0.5, 0.0),
 		"description": "Маленький огненный шар",
-		"radius": 7.0, "speed": 260.0, "cooldown": 2.0
+		"radius": 7.0, "speed": 260.0, "cooldown": 12.0
 	},
 	{
 		"level": 2, "name": "Огненный шар II",
 		"damage": 22.0, "cost": 1150,
 		"color": Color(1.0, 0.75, 0.0),
 		"description": "Большой горящий шар",
-		"radius": 11.0, "speed": 320.0, "cooldown": 1.7
+		"radius": 11.0, "speed": 320.0, "cooldown": 10.7
 	},
 	{
 		"level": 3, "name": "Огненный шар III",
 		"damage": 40.0, "cost": 3000,
 		"color": Color(1.0, 0.25, 0.0),
 		"description": "Огромный шар с искрами",
-		"radius": 16.0, "speed": 380.0, "cooldown": 1.5
+		"radius": 16.0, "speed": 380.0, "cooldown": 9.5
 	},
 	{
 		"level": 4, "name": "Адский огонь",
 		"damage": 70.0, "cost": 5000,
 		"color": Color(0.8, 0.0, 0.0),
 		"description": "Тёмное пламя ада",
-		"radius": 22.0, "speed": 440.0, "cooldown": 1.7
+		"radius": 22.0, "speed": 440.0, "cooldown": 7.7
 	},
 ]
 
@@ -391,31 +386,31 @@ var ice_magic_levels: Array = [
 	},
 	{
 		"level": 1, "name": "Ледяной осколок",
-		"damage": 18.0, "cost": 0,
+		"damage": 24.0, "cost": 0,
 		"color": Color(0.7, 0.95, 1.0),
 		"description": "Острый ледяной снаряд",
-		"radius": 6.0, "speed": 350.0, "cooldown": 1.8
+		"radius": 6.0, "speed": 350.0, "cooldown": 9.8
 	},
 	{
 		"level": 2, "name": "Ледяная глыба",
 		"damage": 35.0, "cost": 1800,
 		"color": Color(0.5, 0.85, 1.0),
 		"description": "Замедляет врагов",
-		"radius": 12.0, "speed": 280.0, "cooldown": 2.2
+		"radius": 12.0, "speed": 280.0, "cooldown": 8.2
 	},
 	{
 		"level": 3, "name": "Ледяной шторм",
-		"damage": 60.0, "cost": 3500,
+		"damage": 45.0, "cost": 3500,
 		"color": Color(0.3, 0.75, 1.0),
 		"description": "Три осколка веером",
-		"radius": 9.0, "speed": 320.0, "cooldown": 2.5
+		"radius": 9.0, "speed": 320.0, "cooldown": 8.5
 	},
 	{
 		"level": 4, "name": "Абсолютный ноль",
-		"damage": 95.0, "cost": 6000,
+		"damage": 60.0, "cost": 6000,
 		"color": Color(0.1, 0.6, 1.0),
 		"description": "Замораживает на месте",
-		"radius": 16.0, "speed": 260.0, "cooldown": 4.0
+		"radius": 16.0, "speed": 260.0, "cooldown": 7.0
 	},
 ]
 
@@ -455,7 +450,7 @@ func upgrade_ice_magic() -> bool:
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
 
-# ─── МАГИЯ КРОВИ (ВЫПАДАЕТ С БОССА ВАМПИРОВ) ────────────
+# ─── МАГИЯ КРОВИ  ────────────
 var blood_magic_unlocked: bool = false
 var blood_magic_level: int = 1
 signal blood_magic_upgraded(new_level: int)
@@ -463,31 +458,31 @@ signal blood_magic_upgraded(new_level: int)
 var blood_magic_levels: Array = [
 	{
 		"level": 1, "name": "Кровавый шар",
-		"damage": 20.0, "cost": 0,
+		"damage": 40.0, "cost": 0,
 		"color": Color(0.8, 0.0, 0.0),
 		"description": "Сгусток крови",
-		"radius": 8.0, "speed": 240.0, "cooldown": 1.8
+		"radius": 8.0, "speed": 240.0, "cooldown": 11.8
 	},
 	{
 		"level": 2, "name": "Кровавое копьё",
-		"damage": 40.0, "cost": 4500,
+		"damage": 50.0, "cost": 4500,
 		"color": Color(0.7, 0.0, 0.0),
 		"description": "Пробивает врагов",
-		"radius": 12.0, "speed": 340.0, "cooldown": 1.5
+		"radius": 12.0, "speed": 340.0, "cooldown": 10.5
 	},
 	{
 		"level": 3, "name": "Кровавый взрыв",
 		"damage": 70.0, "cost": 6500,
 		"color": Color(0.6, 0.0, 0.0),
 		"description": "Взрыв крови",
-		"radius": 18.0, "speed": 260.0, "cooldown": 2.5
+		"radius": 18.0, "speed": 260.0, "cooldown": 10.5
 	},
 	{
 		"level": 4, "name": "Багровая смерть",
-		"damage": 120.0, "cost": 10000,
+		"damage": 100.0, "cost": 10000,
 		"color": Color(0.4, 0.0, 0.0),
 		"description": "Древняя магия крови",
-		"radius": 24.0, "speed": 420.0, "cooldown": 3.5
+		"radius": 24.0, "speed": 420.0, "cooldown": 9.5
 	},
 ]
 

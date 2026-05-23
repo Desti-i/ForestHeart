@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bp1yuanjo6eaj" path="res://enemy/boss/Boss_vampir/Vampires3_Attack_full.png" id="3_ju3ti"]
 [ext_resource type="Texture2D" uid="uid://cexrf1k8tp2x6" path="res://enemy/boss/Boss_vampir/Vampires3_Death_full.png" id="4_6j40w"]
 [ext_resource type="Texture2D" uid="uid://cel1c1jrma0pj" path="res://enemy/boss/Boss_vampir/Vampires3_Idle_full.png" id="5_r8vvo"]
-[ext_resource type="Script" path="res://enemy/boss/Boss_vampir/DeathVampir.gd" id="6_ju3ti"]
+[ext_resource type="Script" uid="uid://dqhv68082qkh8" path="res://enemy/boss/Boss_vampir/DeathVampir.gd" id="6_ju3ti"]
 [ext_resource type="Script" uid="uid://jsf4bbtp4tx0" path="res://enemy/boss/boss_vilage1/BossChase.gd" id="7_8vrnc"]
 [ext_resource type="Texture2D" uid="uid://4pveapiph50o" path="res://enemy/boss/Boss_vampir/image_2026-05-18_00-54-47.png" id="7_ug206"]
 [ext_resource type="PackedScene" uid="uid://crv7hi7w8bfw8" path="res://enemy/ammo/meteorite/Meteorite.tscn" id="9_ug206"]

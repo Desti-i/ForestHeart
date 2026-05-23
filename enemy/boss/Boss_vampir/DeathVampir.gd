@@ -1,14 +1,8 @@
-extends State
+extends Death
 
 func enter():
-	enemy.set_physics_process(false)
-	enemy.velocity = Vector2.ZERO
-	enemy.animP.stop()
-
-	enemy.get_node("CollisionShape2D").set_deferred("disabled", true)
-	enemy.get_node("Attack_zone").set_deferred("disabled", true)
-	enemy.get_node("Attack_area").set_deferred("monitoring", false)
-
+	super()
+	
 	GameState.add_exp(enemy.exp_reward)
 	
 	# 🩸 Выпадение магии крови с босса
@@ -19,9 +13,5 @@ func enter():
 	# Отмечаем, что босс убит (портал откроется)
 	GameState.boss_defeated = true
 	print("👑 БОСС ПОБЕЖДЁН! Портал на 3 локацию открыт!")
-
-	var anim_name = "death_" + enemy.get_direction_string()
-	enemy.anim.play(anim_name)
-	await enemy.anim.animation_finished
-
-	enemy.queue_free()
+	
+	SaveManager.save_game()

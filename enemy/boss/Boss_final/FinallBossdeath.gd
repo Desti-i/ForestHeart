@@ -29,3 +29,5 @@ func enter():
 	await tw.finished
 
 	enemy.queue_free()
+	
+	SaveManager.save_game()

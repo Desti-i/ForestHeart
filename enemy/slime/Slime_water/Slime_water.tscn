@@ -1672,7 +1672,7 @@ resistances = {
 "water": 0.0
 }
 damage = 7.0
-exp_reward = 3000
+exp_reward = 150
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344]
 shape = SubResource("CapsuleShape2D_iowl8")

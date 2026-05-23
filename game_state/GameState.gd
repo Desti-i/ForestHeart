@@ -6,7 +6,6 @@ var spawn_point_name: String = "SpawnPoint"
 var boss_defeated: bool = false
 var tutorial_completed: bool = false
 
-# ─── РЕПУТАЦИЯ ───────────────────────────────────────────
 var reputation: int = 0
 signal reputation_changed(value: int)
 
@@ -51,7 +50,7 @@ var sword_levels: Array = [
 	{
 		"level": 0,
 		"name": "Меч",
-		"damage": 45.0,
+		"damage": 5.0,
 		"anim_prefix": "attack_1_",
 		"idle_prefix": "",
 		"cost": 0,

@@ -5,6 +5,7 @@ var has_boss_key: bool = false
 var spawn_point_name: String = "SpawnPoint"
 var boss_defeated: bool = false
 var tutorial_completed: bool = false
+var respawn_at_spawn_point: bool = false
 
 var reputation: int = 0
 signal reputation_changed(value: int)
@@ -773,6 +774,30 @@ func set_final_boss_defeated(value: bool) -> void:
 	print("👑 Финальный босс побеждён! Сигнал отправлен.")
 
 # ─── СОХРАНЕНИЕ / ЗАГРУЗКА ───────────────────────────────
+# Отдельная функция только для EXP и квестов (без позиции)
+func save_progress_on_death() -> void:
+	SaveManager.game_data.stats.exp = exp
+	SaveManager.game_data.stats.sword_level = sword_level
+	SaveManager.game_data.stats.fire_magic_level = fire_magic_level
+	SaveManager.game_data.stats.water_magic_level = water_magic_level
+	SaveManager.game_data.stats.heal_magic_level = heal_magic_level
+	SaveManager.game_data.stats.ice_magic_unlocked = ice_magic_unlocked
+	SaveManager.game_data.stats.ice_magic_level = ice_magic_level
+	SaveManager.game_data.stats.blood_magic_unlocked = blood_magic_unlocked
+	SaveManager.game_data.stats.blood_magic_level = blood_magic_level
+	SaveManager.game_data.stats.fire_sword_unlocked = fire_sword_unlocked
+	SaveManager.game_data.stats.fire_sword_level = fire_sword_level
+	SaveManager.game_data.stats.sword_lvl3_dropped = sword_lvl3_dropped
+	SaveManager.game_data.quests.quest_kill_boars.state = quest_kill_boars
+	SaveManager.game_data.quests.quest_kill_boars.progress = boars_killed
+	SaveManager.game_data.quests.cat_quest.state = quest_cat
+	SaveManager.game_data.quests.cat_quest.progress = cat_found
+	SaveManager.game_data.quests.quest_vampire.state = quest_vampire
+	SaveManager.game_data.quests.quest_vampire.progress = goblins_killed
+	SaveManager.game_data.quests.quest_tree_inspect.state = quest_tree_inspect
+	SaveManager.game_data.quests.quest_tree_inspect.progress = tree_inspected
+	SaveManager.save_game()
+
 func update_save_data() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
@@ -789,6 +814,14 @@ func apply_load_data() -> void:
 	var data = SaveManager.game_data
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
+		if not respawn_at_spawn_point:
+			player.position = Vector2(data.player_pos.x, data.player_pos.y)
+		player.current_health = data.stats.current_health
+		player.max_health = data.stats.get("max_health", 100.0)
+		if player.hp_bar:
+			player.hp_bar.max_value = player.max_health
+			player.hp_bar.value = player.current_health
+			player._update_hp_label()
 		player.position = Vector2(data.player_pos.x, data.player_pos.y)
 		print(data.player_pos.x)
 		print(data.player_pos.y)

@@ -60,23 +60,6 @@ func _ready() -> void:
 	GameState.weapon_changed.connect(_on_weapon_changed)
 	if q_menu:
 		q_menu.visible = false
-	
-	# Респавн после смерти — встаём на SpawnPoint с полным HP
-	if GameState.respawn_at_spawn_point:
-		GameState.respawn_at_spawn_point = false
-		current_health = max_health
-		stamina = max_stamina
-		await get_tree().process_frame
-		var sp = get_tree().current_scene.get_node_or_null("SpawnPoint")
-		if sp:
-			global_position = sp.global_position
-			print("✅ Спавн на SpawnPoint после смерти: ", global_position)
-		else:
-			print("⚠️ SpawnPoint не найден!")
-		if hp_bar:
-			hp_bar.max_value = max_health
-			hp_bar.value = current_health
-		_update_hp_label()
 
 func update_max_health(new_max: float) -> void:
 	var old_max = max_health
@@ -404,8 +387,7 @@ func die() -> void:
 	set_process_input(false)
 	can_move = false
 	
-	# Сохраняем прогресс
-	GameState.save_progress_on_death()
+	GameState.is_respawning = true
 	
 	var tree = get_tree()
 	
@@ -427,8 +409,6 @@ func die() -> void:
 			global_position = sp.global_position
 		_finish_respawn()
 	else:
-		# Ставим флаг — новый игрок встанет на SpawnPoint
-		GameState.respawn_at_spawn_point = true
 		tree.change_scene_to_file("res://locations/primary_village/Vilage1.tscn")
 
 func _do_respawn(target_scene: String) -> void:

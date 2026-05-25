@@ -27,7 +27,7 @@ func enter():
 	var tw = enemy.create_tween()
 	tw.tween_property(enemy, "modulate:a", 0.0, 1.0)
 	await tw.finished
+	
+	GameState.update_save_data()
 
 	enemy.queue_free()
-	
-	SaveManager.save_game()

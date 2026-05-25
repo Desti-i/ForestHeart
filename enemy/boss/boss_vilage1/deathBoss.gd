@@ -6,4 +6,5 @@ func enter():
 	# Отмечаем, что босс убит (портал откроется)
 	GameState.boss_defeated = true
 	print("👑 БОСС ПОБЕЖДЁН! Портал на 3 локацию открыт!")
-	SaveManager.save_game()
+	
+	GameState.update_save_data()

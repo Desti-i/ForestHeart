@@ -28,6 +28,7 @@ func _update_portal_appearance():
 
 func _on_body_entered(body: Node2D):
 	print("🔴 ВОШЁЛ:", body.name)
+	GameState.update_save_data()
 	if body.is_in_group("player"):
 		player_nearby = true
 		

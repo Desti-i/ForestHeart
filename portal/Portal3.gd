@@ -31,6 +31,7 @@ func _update_portal_appearance():
 func _on_body_entered(body: Node2D):
 	if body.is_in_group("player"):
 		player_nearby = true
+		GameState.update_save_data()
 		if GameState.boss_defeated:
 			_show_hint("🌀 Нажми E для перехода!", Color.CYAN)
 		else:

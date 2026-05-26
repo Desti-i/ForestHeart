@@ -102,6 +102,7 @@ func unlock_sword_lvl3() -> void:
 	sword_lvl3_dropped = true
 	SaveManager.game_data.stats.sword_lvl3_dropped = sword_lvl3_dropped
 	emit_signal("sword_upgraded", sword_level)
+	update_save_data()
 
 func upgrade_sword() -> bool:
 	if not can_upgrade_sword():
@@ -116,6 +117,7 @@ func upgrade_sword() -> bool:
 		SaveManager.game_data.stats.sword_level = sword_level
 		emit_signal("sword_upgraded", sword_level)
 		emit_signal("weapon_changed", get_active_weapon())
+		update_save_data()
 		return true
 	return false
 
@@ -177,6 +179,7 @@ func unlock_fire_sword() -> void:
 	fire_sword_level = 1
 	print("⚔️ Огненный меч получен!")
 	emit_signal("fire_sword_upgraded", fire_sword_level)
+	update_save_data()
 
 func upgrade_fire_sword() -> bool:
 	if not fire_sword_unlocked:
@@ -192,6 +195,7 @@ func upgrade_fire_sword() -> bool:
 		SaveManager.game_data.stats.fire_sword_level = fire_sword_level
 		print("⚔️ Огненный меч улучшен до уровня:", fire_sword_level)
 		emit_signal("fire_sword_upgraded", fire_sword_level)
+		update_save_data()
 		return true
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
@@ -283,6 +287,7 @@ func upgrade_fire_magic() -> bool:
 		SaveManager.game_data.stats.fire_magic_level = fire_magic_level
 		print("🔥 Магия огня улучшена до уровня:", fire_magic_level)
 		emit_signal("fire_magic_upgraded", fire_magic_level)
+		update_save_data()
 		return true
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
@@ -293,6 +298,7 @@ func unlock_fire_magic() -> void:
 		SaveManager.game_data.stats.fire_magic_level = fire_magic_level
 		print("🔥 Магия огня открыта через квест!")
 		emit_signal("fire_magic_upgraded", fire_magic_level)
+		update_save_data()
 
 # ─── МАГИЯ ВОДЫ ──────────────────────────────────────────
 var water_magic_unlocked: bool = false
@@ -354,6 +360,7 @@ func unlock_water_magic() -> void:
 	print("💧 Магия воды получена!")
 	emit_signal("water_magic_unlocked_signal")
 	emit_signal("water_magic_upgraded", water_magic_level)
+	update_save_data()
 
 func upgrade_water_magic() -> bool:
 	if not water_magic_unlocked:
@@ -368,6 +375,7 @@ func upgrade_water_magic() -> bool:
 		SaveManager.game_data.stats.water_magic_level = water_magic_level
 		print("💧 Магия воды улучшена до уровня:", water_magic_level)
 		emit_signal("water_magic_upgraded", water_magic_level)
+		update_save_data()
 		return true
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
@@ -432,6 +440,7 @@ func unlock_ice_magic() -> void:
 	SaveManager.game_data.stats.ice_magic_level = ice_magic_level
 	print("❄️ Магия льда получена! Уровень 1")
 	emit_signal("ice_magic_upgraded", ice_magic_level)
+	update_save_data()
 
 func upgrade_ice_magic() -> bool:
 	if not ice_magic_unlocked:
@@ -447,6 +456,7 @@ func upgrade_ice_magic() -> bool:
 		SaveManager.game_data.stats.ice_magic_level = ice_magic_level
 		print("❄️ Магия льда улучшена до уровня:", ice_magic_level)
 		emit_signal("ice_magic_upgraded", ice_magic_level)
+		update_save_data()
 		return true
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
@@ -502,6 +512,7 @@ func unlock_blood_magic() -> void:
 	SaveManager.game_data.stats.blood_magic_level = blood_magic_level
 	print("🩸 Магия крови получена от босса вампиров!")
 	emit_signal("blood_magic_upgraded", blood_magic_level)
+	update_save_data()
 
 func upgrade_blood_magic() -> bool:
 	if not blood_magic_unlocked:
@@ -517,6 +528,7 @@ func upgrade_blood_magic() -> bool:
 		SaveManager.game_data.stats.blood_magic_level = blood_magic_level
 		print("🩸 Магия крови улучшена до уровня:", blood_magic_level)
 		emit_signal("blood_magic_upgraded", blood_magic_level)
+		update_save_data()
 		return true
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
@@ -578,6 +590,7 @@ func unlock_heal_magic() -> void:
 	emit_signal("heal_magic_unlocked_signal")
 	emit_signal("heal_magic_upgraded", heal_magic_level)
 	_update_player_max_health()
+	update_save_data()
 
 func mark_heal_notification_seen() -> void:
 	heal_magic_notification = false
@@ -602,6 +615,7 @@ func upgrade_heal_magic() -> bool:
 		print("💚 Магия лечения улучшена до уровня:", heal_magic_level)
 		emit_signal("heal_magic_upgraded", heal_magic_level)
 		_update_player_max_health()
+		update_save_data()
 		return true
 	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
@@ -612,6 +626,7 @@ func _update_player_max_health() -> void:
 		var new_max_health = get_health_from_heal_level()
 		SaveManager.game_data.stats.max_health = new_max_health
 		player.update_max_health(new_max_health)
+		update_save_data()
 
 # ─── КВЕСТЫ ──────────────────────────────────────────────
 enum QuestState { NOT_TAKEN, ACTIVE, COMPLETED, HANDED_IN }
@@ -737,6 +752,7 @@ func hand_in_vampire_quest() -> bool:
 	SaveManager.game_data.quests.quest_vampire.state = quest_vampire
 	add_exp(120)
 	emit_signal("quest_updated")
+	update_save_data()
 	return true
 
 # ─── КВЕСТ: ОСМОТР ДЕРЕВА ────────────────────────────────
@@ -756,6 +772,7 @@ func complete_tree_inspect() -> void:
 	SaveManager.game_data.quests.quest_tree_inspect.progress = tree_inspected
 	unlock_fire_magic()
 	emit_signal("quest_updated")
+	update_save_data()
 
 # ─── КОНЦОВКА ────────────────────────────────────────────
 var heart_returned: bool = false
@@ -766,7 +783,7 @@ signal ending_triggered_signal(ending: Ending)
 
 # ─── ФИНАЛЬНЫЙ БОСС ──────────────────────────────────────
 var final_boss_defeated: bool = false
-signal final_boss_defeated_changed  # 👈 ДОБАВЬ ЭТУ СТРОКУ
+signal final_boss_defeated_changed
 
 func set_final_boss_defeated(value: bool) -> void:
 	final_boss_defeated = value

@@ -31,7 +31,6 @@ func _ready():
 	var tw = create_tween()
 	tw.tween_property(self, "modulate:a", 1.0, 1.0)
 	
-	print("🧛 Финальный вампир появился!")
 
 func _create_ui():
 	canvas_layer = CanvasLayer.new()
@@ -105,7 +104,6 @@ func _open_dialog():
 	dialog_label.text = "Хахаха... ты победил моих слуг.\nНо сердце дерева у меня.\nОтдай его мне добровольно и я сохраню тебе жизнь.\nИли умри здесь!"
 	dialog_panel.visible = true
 	
-	# Сразу показываем выбор
 	await get_tree().create_timer(0.5).timeout
 	_show_choice()
 
@@ -161,10 +159,8 @@ func _trigger_bad_ending():
 	_show_ending_screen(false)
 
 func _trigger_boss_fight():
-	# Закрываем диалог
 	dialog_open = false
 
-	# Вампир трансформируется в босса
 	var tw = create_tween()
 	tw.tween_property(self, "modulate", Color(0.5, 0.0, 0.8), 0.5)
 	tw.tween_property(self, "scale", Vector2(1.3, 1.3), 0.5)
@@ -177,7 +173,6 @@ func _trigger_boss_fight():
 	queue_free()
 
 func _spawn_final_boss():
-	# Загружаем сцену финального босса (наследник вампира)
 	var boss_scene = load("res://enemy/boss/final_boss/FinalBoss.tscn")
 	if not boss_scene:
 		print("❌ FinalBoss.tscn не найден!")
@@ -234,7 +229,6 @@ func _show_ending_screen(is_good: bool):
 		story.modulate.a = 0.0
 		vbox.add_child(story)
 
-		# Анимация появления текста
 		var tw = create_tween()
 		tw.tween_property(title, "modulate:a", 1.0, 1.5)
 		tw.tween_property(story, "modulate:a", 1.0, 2.0)

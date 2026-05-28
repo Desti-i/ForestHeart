@@ -6,7 +6,7 @@ var speed: float = 260.0
 var direction: Vector2 = Vector2.RIGHT
 var _lifetime: float = 0.0
 var _angle: float = 0.0
-var _trail: Array = []  # след для уровня 2
+var _trail: Array = []  
 
 func _draw_explosion(t: float) -> void:
 	var progress = _explosion_time / 0.4
@@ -14,14 +14,12 @@ func _draw_explosion(t: float) -> void:
 	var radius = lerp(10.0, _explosion_radius, progress)
 	var alpha = 1.0 - progress
 
-	# Основной взрыв
 	draw_circle(
 		Vector2.ZERO,
 		radius,
 		Color(1.0, 0.4, 0.0, alpha)
 	)
 
-	# Внутреннее ядро
 	draw_circle(
 		Vector2.ZERO,
 		radius * 0.5,
@@ -43,7 +41,6 @@ const LEVEL_DATA = {
 }
 var _max_lifetime: float = 2.0
 
-# Для уровня 3 - взрыв по области
 var _exploded: bool = false
 var _explosion_radius: float = 60.0
 var _explosion_time: float = 0.0
@@ -89,12 +86,9 @@ func _draw() -> void:
 				_draw_level3(r, col, t)
 		4: _draw_level4(r, col, t)
 
-# ─────────────────────────────────────────────
-# УРОВЕНЬ 1 — ЖИВОЙ ОГНЕННЫЙ ШАР
-# ─────────────────────────────────────────────
+# УРОВЕНЬ 1 — ОГНЕННЫЙ ШАР
 func _draw_level1(r: float, col: Color, t: float) -> void:
 
-	# Внешний glow
 	draw_circle(Vector2.ZERO, r * 3.0, Color(1.0, 0.35, 0.0, 0.05))
 	draw_circle(Vector2.ZERO, r * 2.1, Color(1.0, 0.45, 0.0, 0.15))
 	draw_circle(Vector2.ZERO, r * 1.6, Color(1.0, 0.55, 0.0, 0.30))
@@ -149,9 +143,7 @@ func _draw_level1(r: float, col: Color, t: float) -> void:
 		)
 
 
-# ─────────────────────────────────────────────
 # УРОВЕНЬ 2 — ОГНЕННОЕ КОПЬЁ
-# ─────────────────────────────────────────────
 func _draw_level2(r: float, col: Color, t: float) -> void:
 
 	# Хвост
@@ -170,11 +162,9 @@ func _draw_level2(r: float, col: Color, t: float) -> void:
 			Color(1.0, 0.3, 0.0, alpha)
 		)
 
-	# Внешний огонь
 	draw_circle(Vector2.ZERO, r * 2.6, Color(1.0, 0.4, 0.0, 0.08))
 	draw_circle(Vector2.ZERO, r * 1.8, Color(1.0, 0.55, 0.0, 0.20))
 
-	# Огненное копьё
 	var spear = PackedVector2Array()
 
 	spear.append(Vector2(r * 2.2, 0))
@@ -187,14 +177,12 @@ func _draw_level2(r: float, col: Color, t: float) -> void:
 		Color(1.0, 0.5, 0.0, 0.95)
 	)
 
-	# Ядро
 	draw_circle(
 		Vector2.ZERO,
 		r * 0.45,
 		Color(1.0, 1.0, 0.7, 0.95)
 	)
 
-	# Передняя энергия
 	var front = direction * r * 2.0
 
 	draw_circle(
@@ -202,13 +190,6 @@ func _draw_level2(r: float, col: Color, t: float) -> void:
 		r * 0.25,
 		Color(1.0, 0.9, 0.3, 0.85)
 	)
-
-
-# ─────────────────────────────────────────────
-# УРОВЕНЬ 3 — ОГНЕННОЕ СОЛНЕЧНОЕ КОЛЬЦО
-# вокруг игрока вращается магический круг
-# который наносит урон по области
-# ─────────────────────────────────────────────
 
 func _draw_level3(r: float, col: Color, t: float) -> void:
 
@@ -225,9 +206,7 @@ func _draw_level3(r: float, col: Color, t: float) -> void:
 		Color(1.0, 0.3, 0.0, 0.10)
 	)
 
-	# ──────────────────────────────────────
 	# ВРАЩАЮЩЕЕСЯ КОЛЬЦО
-	# ──────────────────────────────────────
 
 	var ring_radius = r * 2.6
 
@@ -247,9 +226,6 @@ func _draw_level3(r: float, col: Color, t: float) -> void:
 			Color(1.0, 0.45, 0.0, 0.85)
 		)
 
-	# ──────────────────────────────────────
-	# ВНЕШНЕЕ ОГНЕННОЕ КОЛЬЦО
-	# ──────────────────────────────────────
 
 	for i in 42:
 
@@ -269,11 +245,7 @@ func _draw_level3(r: float, col: Color, t: float) -> void:
 			r * 0.08,
 			Color(1.0, 0.25, 0.0, 0.55)
 		)
-
-	# ──────────────────────────────────────
 	# ЦЕНТРАЛЬНОЕ ЯДРО
-	# ──────────────────────────────────────
-
 	draw_circle(
 		Vector2.ZERO,
 		r * 1.5,
@@ -292,10 +264,6 @@ func _draw_level3(r: float, col: Color, t: float) -> void:
 		Color(1.0, 1.0, 0.85, 1.0)
 	)
 
-	# ──────────────────────────────────────
-	# ОГНЕННЫЕ ЛУЧИ
-	# ──────────────────────────────────────
-
 	for i in 8:
 
 		var angle = -_angle * 1.2 + i * TAU / 8.0
@@ -311,10 +279,6 @@ func _draw_level3(r: float, col: Color, t: float) -> void:
 			Color(1.0, 0.5, 0.0, 0.35),
 			2.0
 		)
-
-	# ──────────────────────────────────────
-	# ЛЕТАЮЩИЕ УГЛИ
-	# ──────────────────────────────────────
 
 	for i in 14:
 
@@ -333,10 +297,6 @@ func _draw_level3(r: float, col: Color, t: float) -> void:
 			Color(1.0, 0.7, 0.1, 0.75)
 		)
 
-	# ──────────────────────────────────────
-	# ПУЛЬС ПЕРЕГРУЗКИ
-	# ──────────────────────────────────────
-
 	if sin(t * 14.0) > 0.35:
 
 		draw_circle(
@@ -344,9 +304,7 @@ func _draw_level3(r: float, col: Color, t: float) -> void:
 			r * 3.4,
 			Color(1.0, 0.0, 0.0, 0.06)
 		)
-# ─────────────────────────────────────────────
 # УРОВЕНЬ 4 — ТЁМНОЕ ПЛАМЯ
-# ─────────────────────────────────────────────
 func _draw_level4(r: float, col: Color, t: float) -> void:
 
 	draw_circle(Vector2.ZERO, r * 3.2, Color(0.5, 0.0, 0.0, 0.05))
@@ -385,7 +343,6 @@ func _draw_level4(r: float, col: Color, t: float) -> void:
 		Color(1.0, 0.25, 0.0, 0.9)
 	)
 
-	# Тёмные угли
 	for i in 8:
 
 		var angle = -_angle * 1.5 + i * TAU / 8.0
@@ -408,7 +365,6 @@ func _physics_process(delta: float) -> void:
 	_lifetime += delta
 	_angle    += delta * 6.5
 
-	# Взрыв по области (уровень 3)
 	if _exploding:
 		_explosion_time += delta
 		queue_redraw()
@@ -426,7 +382,6 @@ func _physics_process(delta: float) -> void:
 		set_physics_process(false)
 		return
 
-	# Хвост для уровня 2
 	if level == 2:
 		_trail.append(global_position)
 		if _trail.size() > 8:
@@ -444,7 +399,6 @@ func _do_explosion() -> void:
 	_explosion_time = 0.0
 	speed = 0.0
 
-	# Урон по области
 	var space = get_world_2d().direct_space_state
 	var query = PhysicsShapeQueryParameters2D.new()
 	var shape = CircleShape2D.new()

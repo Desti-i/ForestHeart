@@ -85,9 +85,7 @@ func _draw() -> void:
 
 
 
-# =========================================================
-# LEVEL 1 — BLOOD ORB
-# =========================================================
+# LEVEL 1 — BLOOD 
 
 func _draw_blood_orb(t: float) -> void:
 
@@ -155,9 +153,7 @@ func _draw_blood_orb(t: float) -> void:
 
 
 
-# =========================================================
-# LEVEL 2 — BLOOD SPEAR
-# =========================================================
+# LEVEL 2 — BLOOD 
 
 func _draw_blood_spear(t: float) -> void:
 
@@ -176,7 +172,6 @@ func _draw_blood_spear(t: float) -> void:
 			Color(0.6, 0.0, 0.0, k * 0.4)
 		)
 
-	# копьё
 	var spear = PackedVector2Array()
 
 	spear.append(Vector2(r * 3.0, 0))
@@ -189,7 +184,6 @@ func _draw_blood_spear(t: float) -> void:
 		Color(0.9, 0.0, 0.0, 0.96)
 	)
 
-	# ядро
 	draw_circle(
 		Vector2(r * 0.3, 0),
 		r * 0.3,
@@ -214,15 +208,12 @@ func _draw_blood_spear(t: float) -> void:
 
 
 
-# =========================================================
-# LEVEL 3 — BLOOD RITUAL
-# =========================================================
+# LEVEL 3 — BLOOD 
 
 func _draw_blood_ring(t: float) -> void:
 
 	var r = LEVEL_DATA[3]["radius"]
 
-	# центральное ядро
 	draw_circle(
 		Vector2.ZERO,
 		r * 1.5,
@@ -235,7 +226,6 @@ func _draw_blood_ring(t: float) -> void:
 		Color(1.0, 0.25, 0.25, 1.0)
 	)
 
-	# круг ритуала
 	for i in 30:
 
 		var angle = _angle + i * TAU / 30.0
@@ -251,7 +241,6 @@ func _draw_blood_ring(t: float) -> void:
 			Color(0.7, 0.0, 0.0, 0.75)
 		)
 
-	# внутреннее кольцо
 	for i in 16:
 
 		var angle = -_angle * 1.5 + i * TAU / 16.0
@@ -284,7 +273,6 @@ func _draw_blood_ring(t: float) -> void:
 			2.0
 		)
 
-	# вспышка
 	if sin(t * 10.0) > 0.3:
 
 		draw_circle(
@@ -295,9 +283,7 @@ func _draw_blood_ring(t: float) -> void:
 
 
 
-# =========================================================
-# LEVEL 4 — BLOOD BEAM
-# =========================================================
+# LEVEL 4 — BLOOD
 
 func _draw_blood_beam(t: float) -> void:
 
@@ -316,7 +302,6 @@ func _draw_blood_beam(t: float) -> void:
 			Color(0.5, 0.0, 0.0, k * 0.45)
 		)
 
-	# внешнее свечение
 	draw_circle(
 		Vector2.ZERO,
 		r * 3.5,
@@ -358,7 +343,6 @@ func _draw_blood_beam(t: float) -> void:
 			Color(0.1, 0.0, 0.0, 0.75)
 		)
 
-	# передний импульс
 	var front = direction * r * 2.2
 
 	draw_circle(
@@ -399,7 +383,6 @@ func _physics_process(delta: float) -> void:
 		if _trail.size() > 10:
 			_trail.pop_front()
 
-	# уровень 3 стоит на месте
 	if level != 3:
 		position += direction * speed * delta
 

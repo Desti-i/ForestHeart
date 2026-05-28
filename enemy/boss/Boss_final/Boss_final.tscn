@@ -14,7 +14,7 @@
 [ext_resource type="AudioStream" uid="uid://cm5f3m5fjgo0p" path="res://enemy/boss/Boss_final/Special_attack_1-doss_vil.mp3" id="12_i2x7u"]
 [ext_resource type="AudioStream" uid="uid://cfqtowufggyou" path="res://enemy/boss/Boss_final/Special_attack_2-doss_vil.mp3" id="13_68sma"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v7pi6"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bvhud"]
 resource_local_to_scene = true
 height = 34.0
 
@@ -442,7 +442,7 @@ region = Rect2(720, 318, 144, 159)
 atlas = ExtResource("2_nr10u")
 region = Rect2(864, 318, 144, 159)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_ulex0"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_oagtm"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -854,16 +854,16 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_8ftq1"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_i2x7u"]
 resource_local_to_scene = true
 radius = 72.02777
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a1ag1"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_68sma"]
 resource_local_to_scene = true
 radius = 8.46
 height = 20.09
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_bvhud"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_k7r6f"]
 resource_local_to_scene = true
 
 [sub_resource type="Animation" id="Animation_bpenl"]
@@ -1535,29 +1535,29 @@ scale = Vector2(2.345, 2.345)
 script = ExtResource("2_3yx7f")
 damage_att_1 = 0.0
 damage_att_2 = 0.0
-max_health = 500.5
+max_health = 1300.0
 damage = 15.0
 exp_reward = 20000
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1468184344]
-shape = SubResource("CapsuleShape2D_v7pi6")
+shape = SubResource("CapsuleShape2D_bvhud")
 
 [node name="Movements" parent="." index="1" unique_id=403867546]
 scale = Vector2(0.39, 0.39)
-sprite_frames = SubResource("SpriteFrames_ulex0")
+sprite_frames = SubResource("SpriteFrames_oagtm")
 animation = &"Special_attack_2"
 
 [node name="CollisionShape2D" parent="detector" parent_id_path=PackedInt32Array(963818677) index="0" unique_id=766399847]
-shape = SubResource("CircleShape2D_8ftq1")
+shape = SubResource("CircleShape2D_i2x7u")
 
 [node name="CollisionShape2D" parent="Attack_zone" parent_id_path=PackedInt32Array(1428366797) index="0" unique_id=784964863]
 scale = Vector2(1.865, 1.865)
-shape = SubResource("CapsuleShape2D_a1ag1")
+shape = SubResource("CapsuleShape2D_68sma")
 
 [node name="CollisionShape2D" parent="Attack_area" parent_id_path=PackedInt32Array(1858617201) index="0" unique_id=954509707]
 position = Vector2(0, 1.71)
 scale = Vector2(3.095, 3.095)
-shape = SubResource("CircleShape2D_bvhud")
+shape = SubResource("CircleShape2D_k7r6f")
 
 [node name="Chase" parent="StateMachine" parent_id_path=PackedInt32Array(823540589) index="1" unique_id=393080123]
 script = ExtResource("3_lebk5")

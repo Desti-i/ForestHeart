@@ -6,11 +6,9 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_connect_to_player()
 	
-	# Настройка внешнего вида текста
+
 	if stamina_label:
-		# Золотисто-желтый цвет для стамины
 		stamina_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3))
-		# Черная обводка для читаемости
 		stamina_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0))
 		stamina_label.add_theme_constant_override("outline_size", 1)
 
@@ -48,11 +46,11 @@ func _update_label(current: float, maximum: float) -> void:
 		var stamina_percent = current / maximum
 		
 		if stamina_percent <= 0.1:
-			# Меньше 10% - красный (опасно, нельзя бежать)
+			# Меньше 10% 
 			stamina_label.add_theme_color_override("font_color", Color(1.0, 0.2, 0.2))
 		elif stamina_percent <= 0.3:
-			# Меньше 30% - оранжевый (предупреждение)
+			# Меньше 30% 
 			stamina_label.add_theme_color_override("font_color", Color(1.0, 0.6, 0.2))
 		else:
-			# Больше 30% - золотистый (норма)
+			# Больше 30% 
 			stamina_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3))

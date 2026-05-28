@@ -8,7 +8,7 @@ func _ready():
 	_show_welcome()
 
 func _show_welcome():
-	# Полупрозрачный фон
+	#  фон
 	var overlay = ColorRect.new()
 	overlay.color = Color(0, 0, 0, 0.7)
 	overlay.size = get_viewport().size
@@ -59,7 +59,6 @@ func _show_welcome():
 	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(desc)
 	
-	# Разделитель
 	var sep1 = HSeparator.new()
 	vbox.add_child(sep1)
 	
@@ -99,7 +98,6 @@ func _show_welcome():
 		action.add_theme_color_override("font_color", Color.WHITE)
 		grid.add_child(action)
 	
-	# Разделитель
 	var sep2 = HSeparator.new()
 	vbox.add_child(sep2)
 	
@@ -112,7 +110,6 @@ func _show_welcome():
 	quest.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(quest)
 	
-	# Вопрос
 	var question = Label.new()
 	question.text = "Готов ли ты приступить к игре?"
 	question.add_theme_font_size_override("font_size", 16)

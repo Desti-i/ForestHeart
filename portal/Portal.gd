@@ -5,7 +5,6 @@ extends Area2D
 var player_nearby: bool = false
 
 func _ready():
-	print("🟣 ПОРТАЛ ЗАПУЩЕН!")
 	
 	# Подключаем сигналы
 	if not body_entered.is_connected(_on_body_entered):
@@ -13,21 +12,17 @@ func _ready():
 	if not body_exited.is_connected(_on_body_exited):
 		body_exited.connect(_on_body_exited)
 	
-	# Обновляем внешний вид портала в зависимости от статуса
 	_update_portal_appearance()
 
 func _update_portal_appearance():
 	if GameState.second_location_unlocked:
 		# Активный портал
 		modulate = Color(1, 1, 1, 1)
-		print("🟢 Портал АКТИВЕН! Можно переходить.")
 	else:
-		# Заблокированный портал (серый/полупрозрачный)
+		# Заблокированный портал 
 		modulate = Color(0.4, 0.4, 0.6, 0.7)
-		print("🔴 Портал ЗАБЛОКИРОВАН! Нужно выполнить квест вампира.")
 
 func _on_body_entered(body: Node2D):
-	print("🔴 ВОШЁЛ:", body.name)
 	GameState.update_save_data()
 	if body.is_in_group("player"):
 		player_nearby = true
@@ -49,9 +44,7 @@ func _input(event):
 			_show_locked_message()
 
 func _teleport():
-	print("🌀 ТЕЛЕПОРТАЦИЯ во вторую локацию!")
 	
-	# Эффект телепортации
 	_show_flash_effect()
 	await get_tree().create_timer(0.3).timeout
 	
@@ -60,7 +53,6 @@ func _teleport():
 	get_tree().change_scene_to_file(next_scene)
 
 func _show_locked_message():
-	print("🔒 Попытка войти в заблокированный данж!")
 	
 	var lbl = Label.new()
 	lbl.text = "🔒 Вход закрыт! Поговори с вампиром в деревне и выполни его квест."

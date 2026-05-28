@@ -13,7 +13,7 @@ func enter():
 
 	GameState.add_exp(enemy.exp_reward)
 
-	# Сохраняем данные ДО анимации
+	# Сохраняем данные 
 	var scene_tree = enemy.get_tree()
 	var current_scene = scene_tree.current_scene
 	var spawn_pos = enemy.global_position
@@ -33,12 +33,8 @@ func enter():
 
 	enemy.queue_free()
 
-	# Спавним вампира с выбором
 	var vampire_scene = load("res://enemy/boss/FinalVampir.tscn")
 	if vampire_scene:
 		var vampire = vampire_scene.instantiate()
 		vampire.global_position = spawn_pos + Vector2(80, 0)
 		current_scene.add_child(vampire)
-		print("🧛 Вампир с выбором появился!")
-	else:
-		print("❌ FinalVampir.tscn не найден!")

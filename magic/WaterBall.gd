@@ -7,7 +7,7 @@ var direction: Vector2 = Vector2.RIGHT
 var _lifetime: float = 0.0
 var _angle: float = 0.0
 var _trail: Array = []
-var _hit_bodies: Array = []  # для уровня 4 - пробивание
+var _hit_bodies: Array = [] 
 
 const LEVEL_DATA = {
 	1: { "radius": 8.0,  "speed": 240.0, "damage": 15.0, "max_life": 2.0 },
@@ -17,7 +17,6 @@ const LEVEL_DATA = {
 }
 var _max_lifetime: float = 2.0
 
-# Для уровня 3 - взрыв волны
 var _exploded: bool = false
 var _exploding: bool = false
 var _explosion_time: float = 0.0
@@ -38,7 +37,6 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 
 	var shape = CircleShape2D.new()
-	# Уровень 3 - широкая волна
 	if level == 3:
 		var capsule = CapsuleShape2D.new()
 		capsule.radius = 12.0
@@ -72,7 +70,7 @@ func _draw() -> void:
 				_draw_tsunami(t)
 		4: _draw_water_beam(t)
 
-# ── Уровень 1: водяной шар ────────────────────────────────
+# ── Уровень 1
 func _draw_water_orb(t: float) -> void:
 	var r = LEVEL_DATA[1]["radius"]
 	var col = Color(0.2, 0.7, 1.0)
@@ -91,7 +89,7 @@ func _draw_water_orb(t: float) -> void:
 		var sp = Vector2(cos(angle), sin(angle)) * r * 1.3
 		draw_circle(sp, r * (0.13 + sin(t*6+i)*0.04), Color(0.4, 0.85, 1.0, 0.75))
 
-# ── Уровень 2: ледяной снаряд с хвостом ──────────────────
+# ── Уровень 2
 func _draw_ice_bolt(t: float) -> void:
 	var r = LEVEL_DATA[2]["radius"]
 
@@ -102,13 +100,11 @@ func _draw_ice_bolt(t: float) -> void:
 		var lp    = _trail[i] - global_position
 		draw_circle(lp, size, Color(0.5, 0.9, 1.0, alpha))
 
-	# Острый ледяной снаряд
 	draw_circle(Vector2.ZERO, r * 1.6, Color(0.4, 0.85, 1.0, 0.20))
 	draw_circle(Vector2.ZERO, r, Color(0.2, 0.6, 1.0, 1.0))
 	draw_circle(Vector2.ZERO, r * 0.55, Color(0.7, 0.95, 1.0, 0.95))
 	draw_circle(Vector2.ZERO, r * 0.20, Color(1.0, 1.0, 1.0, 1.00))
 
-	# Ледяные грани (снежинка)
 	for i in 6:
 		var angle = _angle * 0.5 + i * (TAU / 6.0)
 		var sp = Vector2(cos(angle), sin(angle)) * r * 0.75
@@ -119,34 +115,29 @@ func _draw_ice_bolt(t: float) -> void:
 	draw_circle(front,       r * 0.22, Color(0.8, 0.95, 1.0, 0.85))
 	draw_circle(front * 1.7, r * 0.13, Color(0.6, 0.90, 1.0, 0.60))
 
-# ── Уровень 3: волна цунами ───────────────────────────────
+# ── Уровень 3
 func _draw_tsunami(t: float) -> void:
-	# Широкая волна перпендикулярно направлению
-	var perp = Vector2(-direction.y, direction.x)  # перпендикуляр
-	var wave_w = 40.0  # полуширина волны
-	var wave_h = 18.0  # высота волны
+	var perp = Vector2(-direction.y, direction.x)  
+	var wave_w = 40.0  
+	var wave_h = 18.0  
 	var pulse  = sin(t * 6.0) * 2.0
 
-	# Основное тело волны
 	for i in 7:
 		var offset = (float(i) / 6.0 - 0.5) * wave_w * 2.0
 		var sp     = perp * offset
 		var height = wave_h - abs(offset) / wave_w * 8.0 + pulse
 		draw_circle(sp, height, Color(0.0, 0.4, 0.9, 0.85 - abs(offset)/wave_w * 0.4))
 
-	# Пена сверху
 	for i in 9:
 		var offset = (float(i) / 8.0 - 0.5) * wave_w * 2.2
 		var sp     = perp * offset + direction * (6.0 + sin(t*8+i)*2.0)
 		draw_circle(sp, 4.5 + sin(t*10+i)*1.5, Color(0.7, 0.92, 1.0, 0.80))
 
-	# Брызги
 	for i in 6:
 		var angle  = _angle * 2.0 + i * (TAU / 6.0)
 		var sp     = perp * (cos(angle) * wave_w * 0.9) + direction * (sin(angle) * 8.0)
 		draw_circle(sp, 3.0 + sin(t*12+i)*1.0, Color(0.5, 0.85, 1.0, 0.70))
 
-	# Свечение воды
 	draw_circle(Vector2.ZERO, wave_h * 1.8, Color(0.0, 0.5, 1.0, 0.10))
 
 func _draw_wave_explosion(t: float) -> void:
@@ -154,21 +145,18 @@ func _draw_wave_explosion(t: float) -> void:
 	var exp_r    = _wave_radius * progress
 	var alpha    = 1.0 - progress
 
-	# Расширяющаяся волна
 	draw_circle(Vector2.ZERO, exp_r,        Color(0.0, 0.4, 0.9, alpha * 0.5))
 	draw_circle(Vector2.ZERO, exp_r * 0.75, Color(0.2, 0.6, 1.0, alpha * 0.7))
 	draw_circle(Vector2.ZERO, exp_r * 0.45, Color(0.5, 0.85, 1.0, alpha * 0.9))
 
-	# Брызги по кругу
 	for i in 10:
 		var angle = i * (TAU / 10.0)
 		var sp    = Vector2(cos(angle), sin(angle)) * exp_r * 0.85
 		draw_circle(sp, 5.0 * alpha, Color(0.6, 0.9, 1.0, alpha))
 
-	# Пена в центре
 	draw_circle(Vector2.ZERO, exp_r * 0.2, Color(0.8, 0.95, 1.0, alpha))
 
-# ── Уровень 4: водяной луч ────────────────────────────────
+# ── Уровень 4
 func _draw_water_beam(t: float) -> void:
 	var r = LEVEL_DATA[4]["radius"]
 
@@ -188,14 +176,12 @@ func _draw_water_beam(t: float) -> void:
 	draw_circle(Vector2.ZERO, r * 0.7, Color(0.6, 0.92, 1.0, 1.0))
 	draw_circle(Vector2.ZERO, r * 0.3, Color(0.95, 1.0,  1.0, 1.0))
 
-	# Спираль вокруг луча
 	for i in 6:
 		var angle = _angle * 3.0 + i * (TAU / 6.0)
 		var dist  = r * 1.5
 		var sp    = Vector2(cos(angle), sin(angle)) * dist
 		draw_circle(sp, r * 0.20, Color(0.3, 0.8, 1.0, 0.65))
 
-	# Конус впереди
 	var front = direction * r * 2.0
 	draw_circle(front,       r * 0.45, Color(0.5, 0.9, 1.0, 0.85))
 	draw_circle(front * 1.5, r * 0.28, Color(0.7, 0.95, 1.0, 0.65))
@@ -205,7 +191,6 @@ func _physics_process(delta: float) -> void:
 	_lifetime += delta
 	_angle    += delta * 3.0
 
-	# Взрыв волны (уровень 3)
 	if _exploding:
 		_explosion_time += delta
 		queue_redraw()
@@ -223,7 +208,6 @@ func _physics_process(delta: float) -> void:
 		set_physics_process(false)
 		return
 
-	# Хвост для уровня 2 и 4
 	if level == 2 or level == 4:
 		_trail.append(global_position)
 		if _trail.size() > 10:
@@ -231,7 +215,6 @@ func _physics_process(delta: float) -> void:
 
 	position += direction * speed * delta
 
-	# Уровень 3 - чуть покачивается
 	if level == 3:
 		var wobble = Vector2(-direction.y, direction.x) * sin(_lifetime * 5.0) * 0.5
 		position += wobble
@@ -246,7 +229,6 @@ func _do_wave_explosion() -> void:
 	_explosion_time = 0.0
 	speed = 0.0
 
-	# Урон по области
 	var space = get_world_2d().direct_space_state
 	var query = PhysicsShapeQueryParameters2D.new()
 	var shape = CircleShape2D.new()
@@ -266,7 +248,6 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
 		return
 
-	# Уровень 4 - пробивание (бьёт несколько врагов)
 	if level == 4:
 		if body in _hit_bodies:
 			return
@@ -275,7 +256,6 @@ func _on_body_entered(body: Node) -> void:
 			body.take_damage(damage, "water")
 		return
 
-	# Уровень 3 - взрыв волны
 	if level == 3 and not _exploded:
 		if body.has_method("take_damage"):
 			body.take_damage(damage, "water")

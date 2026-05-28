@@ -34,10 +34,8 @@ func _ready():
 	# Проверяем текущее состояние
 	_update_boss_status()
 	
-	print("🧛 Вампир ждёт героя... boss_defeated = ", boss_defeated)
 
 func _on_boss_defeated():
-	print("🧛 ПОЛУЧЕН СИГНАЛ! Босс побеждён!")
 	boss_defeated = true
 	_update_boss_status()
 	
@@ -61,10 +59,6 @@ func _show_ready_message():
 
 func _update_boss_status():
 	boss_defeated = GameState.final_boss_defeated
-	if boss_defeated:
-		print("✅ Босс убит! Вампир готов говорить.")
-	else:
-		print("🔒 Босс ещё жив. Вампир молчит.")
 
 func _create_ui():
 	canvas_layer = CanvasLayer.new()
@@ -183,7 +177,6 @@ func _show_choice():
 	choice_btn_2.pressed.connect(_good_ending)
 
 func _bad_ending():
-	print("💀 Плохая концовка!")
 	dialog_panel.visible = false
 	game_over = true
 	
@@ -208,7 +201,6 @@ func _bad_ending():
 	_show_ending(false)
 
 func _good_ending():
-	print("🏆 Хорошая концовка!")
 	dialog_panel.visible = false
 	game_over = true
 	

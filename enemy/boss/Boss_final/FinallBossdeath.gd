@@ -13,7 +13,7 @@ func enter():
 
 	GameState.add_exp(enemy.exp_reward)
 	
-	# 👇 ИСПОЛЬЗУЙ СИГНАЛ
+	# Сигнал
 	GameState.set_final_boss_defeated(true)
 
 	# Анимация смерти

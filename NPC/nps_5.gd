@@ -27,8 +27,6 @@ func _ready():
 		area.body_entered.connect(_on_body_entered)
 		area.body_exited.connect(_on_body_exited)
 	
-	print("🗣️ Странник готов рассказывать!")
-
 func _setup_dialog():
 	dialog_lines = [
 		"О, путник! Ты пришёл вовремя.",

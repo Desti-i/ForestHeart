@@ -4,7 +4,7 @@ var states = {}  # Словарь всех состояний
 var current_state = null  # Текущее состояние
 var enemy  # Ссылка на врага
 
-func init(enemy_ref) -> void:  # Инициализация FSM
+func init(enemy_ref) -> void: 
 	enemy = enemy_ref
 	
 	for child in get_children():

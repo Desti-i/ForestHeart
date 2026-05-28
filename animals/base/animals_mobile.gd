@@ -14,12 +14,12 @@ var is_caught: bool = false
 
 @onready var ray = $RayCast2D
 @onready var anim = $AnimatedSprite2D
-@onready var detection_area = $DetectionArea  # Добавь Area2D дочерним узлом
+@onready var detection_area = $DetectionArea  
 
 func _ready():
 	randomize()
 	change_state()
-	collision_mask = 1 | 4  # Слой 1 (игрок) и слой 4 (стены)
+	collision_mask = 1 | 4  
 	
 	# Подключаем сигнал обнаружения игрока
 	if detection_area:
@@ -56,13 +56,9 @@ func _physics_process(delta):
 	ray.target_position = direction * 15
 
 func _on_player_entered(body: Node2D):
-	print("🐱 В зону вошло: ", body.name)
 	if body.is_in_group("player") and not is_caught:
 		if GameState.quest_cat == GameState.QuestState.ACTIVE:
-			print("🐱 КВЕСТ АКТИВЕН! Ловим кошку!")
 			_catch_cat()
-		else:
-			print("🐱 Квест не активен: ", GameState.quest_cat)  # 👈 ОТЛАДКА
 
 func _catch_cat():
 	is_caught = true
@@ -72,7 +68,6 @@ func _catch_cat():
 	# Уведомляем GameState, что кошка найдена
 	GameState.find_cat()
 	
-	# Показываем сообщение
 	_show_catch_message()
 	
 	# Эффект исчезновения

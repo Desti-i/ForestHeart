@@ -3,7 +3,6 @@ extends CanvasLayer
 @onready var menu_root = $Control
 
 func _ready():
-	# Прячем меню при запуске
 	menu_root.hide()
 
 func _input(event):
@@ -26,7 +25,7 @@ func _on_save_btn_pressed() -> void:
 	GameState.update_save_data()
 
 func _on_option_btn_pressed() -> void:
-	pass # Replace with function body.
+	pass 
 
 func _on_quit_btn_pressed() -> void:
 	GameState.update_save_data()

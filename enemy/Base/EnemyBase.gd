@@ -20,7 +20,7 @@ var health: float
 @export var shoot_cooldown:  float = 1.2
 @export var bullet_scene:    PackedScene
 
-## Радиус патрулирования вокруг точки спауна
+# Радиус патрулирования вокруг точки спауна
 @export var patrol_radius:   float = 80.0
 
 @onready var anim          = $Movements
@@ -34,13 +34,13 @@ var idle_dir:       DIRECTION       = DIRECTION.DOWN
 var player:         CharacterBody2D = null
 var player_in:      bool            = false
 
-## Точка спауна — запоминается при старте, нужна для патруля
+# Точка спауна  запоминается при старте
 var spawn_position: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	randomize()
 	health         = max_health
-	spawn_position = global_position   # ← запоминаем точку спауна
+	spawn_position = global_position  
 	add_to_group("orc")
 	add_to_group("enemy")
 	if hp_bar:
@@ -51,7 +51,6 @@ func _ready() -> void:
 
 	state_machine.init(self)
 
-	# Начинаем с патруля
 	await get_tree().process_frame
 	if state_machine.has_node("Patrol"):
 		state_machine.change_state("Patrol")
@@ -64,7 +63,9 @@ func _physics_process(delta: float) -> void:
 		hp_bar.global_position = global_position + Vector2(-20, -45)
 
 func _separate_from_others() -> void:
+	
 	# Находим всех соседних врагов и отталкиваемся
+	
 	var separation_radius = 24.0
 	var separation_force  = 60.0
 	var push = Vector2.ZERO
@@ -102,7 +103,7 @@ func take_damage(amount: float, damage_type: String = "physical") -> void:
 	await get_tree().create_timer(0.1).timeout
 	modulate = Color.WHITE
 	
-	# Если здоровье закончилось - умираем
+	# Если здоровье закончилось - смерть
 	if health <= 0:
 		if hp_bar:
 			hp_bar.visible = false
@@ -114,7 +115,7 @@ func take_damage(amount: float, damage_type: String = "physical") -> void:
 			GameState.register_goblin_kill()
 		
 		state_machine.change_state("Death")
-		return  # 👈 ВАЖНО: выходим, чтобы не продолжать
+		return 
 
 func _show_damage_number(amount: float) -> void:
 	var lbl := Label.new()
@@ -163,7 +164,6 @@ func get_direction_string() -> String:
 func _on_detector_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		player = body
-		# Переключаем из патруля в чейс
 		if state_machine.current_state.name != "Attack" and \
 		   state_machine.current_state.name != "RangedAttack":
 			state_machine.change_state("Chase")
@@ -172,7 +172,6 @@ func _on_detector_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		player = null
 		player_in = false
-		# Возвращаемся к патрулю
 		if state_machine.current_state.name != "Death":
 			if state_machine.has_node("Patrol"):
 				state_machine.change_state("Patrol")

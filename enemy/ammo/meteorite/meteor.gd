@@ -4,6 +4,7 @@ var damage := 20
 
 func _ready():
 	$AnimationPlayer.play("meteor")
+	$AudioStreamPlayer2D.play()
 
 	await $AnimationPlayer.animation_finished
 

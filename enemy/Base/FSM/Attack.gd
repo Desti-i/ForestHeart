@@ -14,6 +14,7 @@ func attack_loop() -> void:
 		var anim_attack = "attack_" + enemy.get_direction_string()
 		var anim_idle   = "idle_"   + enemy.get_direction_string()
 
+		enemy.attack_sound.play()
 		enemy.animP.play(anim_attack)
 		await enemy.animP.animation_finished
 
@@ -25,3 +26,4 @@ func attack_loop() -> void:
 
 func exit() -> void:
 	attacking = false
+	enemy.attack_sound.stop()

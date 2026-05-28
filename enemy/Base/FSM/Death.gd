@@ -17,6 +17,7 @@ func enter():
 
 	enemy.animP.stop()
 	enemy.anim.play(anim_name)
+	enemy.death_sound.play()
 
 	var frames = enemy.anim.sprite_frames.get_frame_count(anim_name)
 	var fps = enemy.anim.sprite_frames.get_animation_speed(anim_name)

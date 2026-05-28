@@ -8,6 +8,7 @@ var damage_tick := 0.5
 var damage_timer := 0.0
 
 func enter():
+	enemy.special_attack_2.play()
 	timer = duration
 	damage_timer = 0
 	saving_damage = enemy.damage
@@ -36,5 +37,6 @@ func update(delta):
 		state_machine.change_state("Chase")
 	
 func exit():
+	enemy.special_attack_2.stop()
 	enemy.damage = saving_damage
 	enemy.velocity = Vector2.ZERO

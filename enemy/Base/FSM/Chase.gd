@@ -1,6 +1,12 @@
 extends State
 class_name Chase
 
+func enter():
+	enemy.chase_sound.play()
+	
+func exit():
+	enemy.chase_sound.stop()
+
 func update(_delta):
 	if enemy.player == null:
 		# Возвращаемся к патрулю если есть

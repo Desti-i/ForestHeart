@@ -28,7 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://dxyshi6j22adl" path="res://enemy/Orc/Orc1/Orc_1.tscn" id="24_35uce"]
 [ext_resource type="PackedScene" uid="uid://b1h4hrkw57x73" path="res://enemy/Orc/Orc2/Orc_2.tscn" id="25_bodeb"]
 [ext_resource type="PackedScene" path="res://portal/Portal3.tscn" id="27_bodeb"]
-[ext_resource type="Script" path="res://portal/Portal3.gd" id="28_md3g4"]
+[ext_resource type="Script" uid="uid://dh1odviip0byd" path="res://portal/Portal3.gd" id="28_md3g4"]
 [ext_resource type="PackedScene" uid="uid://ds8d3x0st3fwk" path="res://enemy/boss/Boss_vampir/Boss_vampir.tscn" id="29_ye6bb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kg2sf"]

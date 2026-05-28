@@ -12,7 +12,6 @@ signal reputation_changed(value: int)
 
 func change_reputation(amount: int) -> void:
 	reputation = clamp(reputation + amount, -100, 100)
-	print("👤 Репутация:", reputation)
 	emit_signal("reputation_changed", reputation)
 
 func get_health_from_heal_level() -> float:
@@ -71,7 +70,7 @@ var sword_levels: Array = [
 	{
 		"level": 2,
 		"name": "Закалённый меч",
-		"damage": 25.0,
+		"damage": 65.0,
 		"anim_prefix": "attack_3_",
 		"idle_prefix": "s3_",
 		"cost": 2225,
@@ -81,7 +80,7 @@ var sword_levels: Array = [
 	{
 		"level": 3,
 		"name": "Тёмный клинок",
-		"damage": 35.0,
+		"damage": 135.0,
 		"anim_prefix": "attack_4_",
 		"idle_prefix": "s4_",
 		"cost": 5000,
@@ -125,7 +124,6 @@ func select_weapon(_index: int) -> void: pass
 func unlock_weapon(_index: int) -> bool: return false
 var active_weapon_index: int = 0
 
-# ─── ОГНЕННЫЙ МЕЧ ────────────────────────────────────────
 var fire_sword_unlocked: bool = false
 var fire_sword_level: int = 0
 signal fire_sword_upgraded(new_level: int)
@@ -177,27 +175,22 @@ func unlock_fire_sword() -> void:
 	fire_sword_unlocked = true
 	SaveManager.game_data.stats.fire_sword_unlocked = fire_sword_unlocked
 	fire_sword_level = 1
-	print("⚔️ Огненный меч получен!")
 	emit_signal("fire_sword_upgraded", fire_sword_level)
 	update_save_data()
 
 func upgrade_fire_sword() -> bool:
 	if not fire_sword_unlocked:
-		print("⚔️ Огненный меч ещё не получен!")
 		return false
 	if not can_upgrade_fire_sword():
-		print("⚔️ Огненный меч максимального уровня!")
 		return false
 	var next_level = fire_sword_level + 1
 	var cost = fire_sword_levels[next_level]["cost"]
 	if spend_exp(cost):
 		fire_sword_level = next_level
 		SaveManager.game_data.stats.fire_sword_level = fire_sword_level
-		print("⚔️ Огненный меч улучшен до уровня:", fire_sword_level)
 		emit_signal("fire_sword_upgraded", fire_sword_level)
 		update_save_data()
 		return true
-	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
 
 # ─── АКТИВНАЯ МАГИЯ ──────────────────────────────────────
@@ -206,13 +199,10 @@ signal active_magic_changed(magic_type: String)
 
 func set_active_magic(type: String) -> void:
 	if type == "heal" and not heal_magic_unlocked:
-		print("💚 Магия лечения ещё не открыта!")
 		return
 	if type == "blood" and blood_magic_level == 0:
-		print("🩸 Магия крови ещё не открыта!")
 		return
 	active_magic = type
-	print("✨ Активная магия:", type)
 	emit_signal("active_magic_changed", type)
 
 func get_active_magic_level() -> int:
@@ -240,11 +230,11 @@ var fire_magic_levels: Array = [
 		"damage": 10.0, "cost": 0,
 		"color": Color(1.0, 0.5, 0.0),
 		"description": "Маленький огненный шар",
-		"radius": 7.0, "speed": 260.0, "cooldown": 12.0
+		"radius": 7.0, "speed": 260.0, "cooldown": 7.0
 	},
 	{
 		"level": 2, "name": "Огненный шар II",
-		"damage": 22.0, "cost": 1150,
+		"damage": 40.0, "cost": 1150,
 		"color": Color(1.0, 0.75, 0.0),
 		"description": "Большой горящий шар",
 		"radius": 11.0, "speed": 320.0, "cooldown": 10.7
@@ -254,14 +244,14 @@ var fire_magic_levels: Array = [
 		"damage": 40.0, "cost": 3000,
 		"color": Color(1.0, 0.25, 0.0),
 		"description": "Огромный шар с искрами",
-		"radius": 16.0, "speed": 380.0, "cooldown": 9.5
+		"radius": 16.0, "speed": 380.0, "cooldown": 7.5
 	},
 	{
 		"level": 4, "name": "Адский огонь",
 		"damage": 70.0, "cost": 5000,
 		"color": Color(0.8, 0.0, 0.0),
 		"description": "Тёмное пламя ада",
-		"radius": 22.0, "speed": 440.0, "cooldown": 7.7
+		"radius": 22.0, "speed": 440.0, "cooldown": 6.7
 	},
 ]
 
@@ -275,28 +265,23 @@ func can_upgrade_fire() -> bool:
 
 func upgrade_fire_magic() -> bool:
 	if fire_magic_level == 0:
-		print("❄️ Магия огня не продаётся! Выполни квест 'Осмотреть Древо'")
 		return false
 	if not can_upgrade_fire():
-		print("🔥 Магия огня максимального уровня!")
 		return false
 	var next_level = fire_magic_level + 1
 	var cost = fire_magic_levels[next_level]["cost"]
 	if spend_exp(cost):
 		fire_magic_level = next_level
 		SaveManager.game_data.stats.fire_magic_level = fire_magic_level
-		print("🔥 Магия огня улучшена до уровня:", fire_magic_level)
 		emit_signal("fire_magic_upgraded", fire_magic_level)
 		update_save_data()
 		return true
-	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
 
 func unlock_fire_magic() -> void:
 	if fire_magic_level == 0:
 		fire_magic_level = 1
 		SaveManager.game_data.stats.fire_magic_level = fire_magic_level
-		print("🔥 Магия огня открыта через квест!")
 		emit_signal("fire_magic_upgraded", fire_magic_level)
 		update_save_data()
 
@@ -319,18 +304,18 @@ var water_magic_levels: Array = [
 		"damage": 15.0, "cost": 0,
 		"color": Color(0.2, 0.7, 1.0),
 		"description": "Водяной снаряд",
-		"radius": 8.0, "speed": 240.0, "cooldown": 9
+		"radius": 8.0, "speed": 240.0, "cooldown": 6
 	},
 	{
 		"level": 2, "name": "Водяной шар II",
-		"damage": 30.0, "cost": 2000,
+		"damage": 40.0, "cost": 2000,
 		"color": Color(0.0, 0.5, 1.0),
 		"description": "Мощный поток воды",
-		"radius": 13.0, "speed": 300.0, "cooldown": 8.0
+		"radius": 13.0, "speed": 300.0, "cooldown": 5.0
 	},
 	{
 		"level": 3, "name": "Водяной шар III",
-		"damage": 55.0, "cost": 4000,
+		"damage": 75.0, "cost": 4000,
 		"color": Color(0.0, 0.3, 0.9),
 		"description": "Волна цунами",
 		"radius": 18.0, "speed": 360.0, "cooldown": 10.0
@@ -340,7 +325,7 @@ var water_magic_levels: Array = [
 		"damage": 60.0, "cost": 7000,
 		"color": Color(0.0, 0.1, 0.8),
 		"description": "Сила древнего океана",
-		"radius": 25.0, "speed": 420.0, "cooldown": 6.0
+		"radius": 25.0, "speed": 420.0, "cooldown": 3.0
 	},
 ]
 
@@ -357,7 +342,6 @@ func unlock_water_magic() -> void:
 	water_magic_level = 1
 	SaveManager.game_data.stats.water_magic_unlocked = water_magic_unlocked
 	SaveManager.game_data.stats.water_magic_level = water_magic_level
-	print("💧 Магия воды получена!")
 	emit_signal("water_magic_unlocked_signal")
 	emit_signal("water_magic_upgraded", water_magic_level)
 	update_save_data()
@@ -366,18 +350,15 @@ func upgrade_water_magic() -> bool:
 	if not water_magic_unlocked:
 		return false
 	if not can_upgrade_water():
-		print("💧 Магия воды максимального уровня!")
 		return false
 	var next_level = water_magic_level + 1
 	var cost = water_magic_levels[next_level]["cost"]
 	if spend_exp(cost):
 		water_magic_level = next_level
 		SaveManager.game_data.stats.water_magic_level = water_magic_level
-		print("💧 Магия воды улучшена до уровня:", water_magic_level)
 		emit_signal("water_magic_upgraded", water_magic_level)
 		update_save_data()
 		return true
-	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
 
 # ─── МАГИЯ ЛЬДА ──────────────────────────────────────────
@@ -398,28 +379,28 @@ var ice_magic_levels: Array = [
 		"damage": 24.0, "cost": 0,
 		"color": Color(0.7, 0.95, 1.0),
 		"description": "Острый ледяной снаряд",
-		"radius": 6.0, "speed": 350.0, "cooldown": 9.8
+		"radius": 6.0, "speed": 350.0, "cooldown": 6.8
 	},
 	{
 		"level": 2, "name": "Ледяная глыба",
-		"damage": 35.0, "cost": 1800,
+		"damage": 45.0, "cost": 1800,
 		"color": Color(0.5, 0.85, 1.0),
 		"description": "Замедляет врагов",
-		"radius": 12.0, "speed": 280.0, "cooldown": 8.2
+		"radius": 12.0, "speed": 280.0, "cooldown": 6.2
 	},
 	{
 		"level": 3, "name": "Ледяной шторм",
-		"damage": 45.0, "cost": 3500,
+		"damage": 75.0, "cost": 3500,
 		"color": Color(0.3, 0.75, 1.0),
 		"description": "Три осколка веером",
-		"radius": 9.0, "speed": 320.0, "cooldown": 8.5
+		"radius": 9.0, "speed": 320.0, "cooldown": 9.5
 	},
 	{
 		"level": 4, "name": "Абсолютный ноль",
-		"damage": 60.0, "cost": 6000,
+		"damage": 160.0, "cost": 6000,
 		"color": Color(0.1, 0.6, 1.0),
 		"description": "Замораживает на месте",
-		"radius": 16.0, "speed": 260.0, "cooldown": 7.0
+		"radius": 16.0, "speed": 260.0, "cooldown": 8.0
 	},
 ]
 
@@ -438,27 +419,22 @@ func unlock_ice_magic() -> void:
 	ice_magic_level = 1
 	SaveManager.game_data.stats.ice_magic_unlocked = ice_magic_unlocked
 	SaveManager.game_data.stats.ice_magic_level = ice_magic_level
-	print("❄️ Магия льда получена! Уровень 1")
 	emit_signal("ice_magic_upgraded", ice_magic_level)
 	update_save_data()
 
 func upgrade_ice_magic() -> bool:
 	if not ice_magic_unlocked:
-		print("❄️ Магия льда ещё не получена! Убей ледяную слизь!")
 		return false
 	if not can_upgrade_ice():
-		print("❄️ Магия льда максимального уровня!")
 		return false
 	var next_level = ice_magic_level + 1
 	var cost = ice_magic_levels[next_level]["cost"]
 	if spend_exp(cost):
 		ice_magic_level = next_level
 		SaveManager.game_data.stats.ice_magic_level = ice_magic_level
-		print("❄️ Магия льда улучшена до уровня:", ice_magic_level)
 		emit_signal("ice_magic_upgraded", ice_magic_level)
 		update_save_data()
 		return true
-	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
 
 # ─── МАГИЯ КРОВИ  ────────────
@@ -469,21 +445,21 @@ signal blood_magic_upgraded(new_level: int)
 var blood_magic_levels: Array = [
 	{
 		"level": 1, "name": "Кровавый шар",
-		"damage": 40.0, "cost": 0,
+		"damage": 10.0, "cost": 0,
 		"color": Color(0.8, 0.0, 0.0),
 		"description": "Сгусток крови",
-		"radius": 8.0, "speed": 240.0, "cooldown": 11.8
+		"radius": 8.0, "speed": 240.0, "cooldown": 1.8
 	},
 	{
 		"level": 2, "name": "Кровавое копьё",
-		"damage": 50.0, "cost": 4500,
+		"damage": 30.0, "cost": 4500,
 		"color": Color(0.7, 0.0, 0.0),
 		"description": "Пробивает врагов",
-		"radius": 12.0, "speed": 340.0, "cooldown": 10.5
+		"radius": 12.0, "speed": 340.0, "cooldown": 3.5
 	},
 	{
 		"level": 3, "name": "Кровавый взрыв",
-		"damage": 70.0, "cost": 6500,
+		"damage": 200.0, "cost": 6500,
 		"color": Color(0.6, 0.0, 0.0),
 		"description": "Взрыв крови",
 		"radius": 18.0, "speed": 260.0, "cooldown": 10.5
@@ -493,7 +469,7 @@ var blood_magic_levels: Array = [
 		"damage": 100.0, "cost": 10000,
 		"color": Color(0.4, 0.0, 0.0),
 		"description": "Древняя магия крови",
-		"radius": 24.0, "speed": 420.0, "cooldown": 9.5
+		"radius": 24.0, "speed": 420.0, "cooldown": 6.5
 	},
 ]
 
@@ -510,27 +486,22 @@ func unlock_blood_magic() -> void:
 	blood_magic_level = 1
 	SaveManager.game_data.stats.blood_magic_unlocked = blood_magic_unlocked
 	SaveManager.game_data.stats.blood_magic_level = blood_magic_level
-	print("🩸 Магия крови получена от босса вампиров!")
 	emit_signal("blood_magic_upgraded", blood_magic_level)
 	update_save_data()
 
 func upgrade_blood_magic() -> bool:
 	if not blood_magic_unlocked:
-		print("🩸 Магия крови ещё не получена! Победи босса вампиров!")
 		return false
 	if not can_upgrade_blood():
-		print("🩸 Магия крови максимального уровня!")
 		return false
 	var next_level = blood_magic_level + 1
 	var cost = blood_magic_levels[next_level - 1]["cost"]
 	if spend_exp(cost):
 		blood_magic_level = next_level
 		SaveManager.game_data.stats.blood_magic_level = blood_magic_level
-		print("🩸 Магия крови улучшена до уровня:", blood_magic_level)
 		emit_signal("blood_magic_upgraded", blood_magic_level)
 		update_save_data()
 		return true
-	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
 
 # ─── МАГИЯ ЛЕЧЕНИЯ ───────────────────────────────────────
@@ -586,7 +557,6 @@ func unlock_heal_magic() -> void:
 	heal_magic_notification = true
 	SaveManager.game_data.stats.heal_magic_unlocked = heal_magic_unlocked
 	SaveManager.game_data.stats.heal_magic_level = heal_magic_level
-	print("💚 Магия лечения получена! Уровень 1")
 	emit_signal("heal_magic_unlocked_signal")
 	emit_signal("heal_magic_upgraded", heal_magic_level)
 	_update_player_max_health()
@@ -605,19 +575,16 @@ func upgrade_heal_magic() -> bool:
 	if not heal_magic_unlocked:
 		return false
 	if not can_upgrade_heal():
-		print("💚 Магия лечения максимального уровня!")
 		return false
 	var next_level = heal_magic_level + 1
 	var cost = heal_magic_levels[next_level]["cost"]
 	if spend_exp(cost):
 		heal_magic_level = next_level
 		SaveManager.game_data.stats.heal_magic_level = heal_magic_level
-		print("💚 Магия лечения улучшена до уровня:", heal_magic_level)
 		emit_signal("heal_magic_upgraded", heal_magic_level)
 		_update_player_max_health()
 		update_save_data()
 		return true
-	print("❌ Не хватает EXP! Нужно:", cost)
 	return false
 
 func _update_player_max_health() -> void:
@@ -654,7 +621,6 @@ func start_quest_kill_boars() -> void:
 	boars_killed = 0
 	SaveManager.game_data.quests.quest_kill_boars.state = quest_kill_boars
 	SaveManager.game_data.quests.quest_kill_boars.progress = boars_killed
-	print("📜 Квест начат: Убей 10 кабанов!")
 	emit_signal("quest_updated")
 
 func register_boar_kill() -> void:
@@ -662,7 +628,6 @@ func register_boar_kill() -> void:
 		return
 	boars_killed += 1
 	SaveManager.game_data.quests.quest_kill_boars.progress = boars_killed
-	print("🐗 Кабанов убито:", boars_killed, "/", boars_needed)
 	emit_signal("quest_updated")
 	if boars_killed >= boars_needed:
 		quest_kill_boars = QuestState.COMPLETED
@@ -788,12 +753,11 @@ signal final_boss_defeated_changed
 func set_final_boss_defeated(value: bool) -> void:
 	final_boss_defeated = value
 	emit_signal("final_boss_defeated_changed")
-	print("👑 Финальный босс побеждён! Сигнал отправлен.")
 
+# ─── СОХРАНЕНИЕ ──────────────────────────────────────
 func update_save_data() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
-		print("⚠️ Игрок не найден для сохранения!")
 		return
 	SaveManager.game_data.player_pos = {"x": player.position.x, "y": player.position.y}
 	SaveManager.game_data.current_scene = get_tree().current_scene.scene_file_path

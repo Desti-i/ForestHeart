@@ -9,26 +9,20 @@ var player_nearby: bool = false
 var is_alive: bool = true
 var intro_shown: bool = false
 var countdown_active: bool = false
-var countdown_time: float = 10
+var countdown_time: float = 120
 var player_left: bool = false
 var waiting_for_return: bool = false
 
 func _ready():
-	print("🌳 HeartTree _ready вызван")
 	heart.visible = true
 	
 	if collision_shape:
 		collision_shape.disabled = false
-		print("✅ CollisionShape2D включен")
 	
 	if detection_area:
-		print("✅ DetectionArea найден")
 		detection_area.body_entered.connect(_on_player_entered)
 		detection_area.body_exited.connect(_on_player_exited)
-		print("✅ Сигналы подключены")
-	else:
-		print("❌ DetectionArea НЕ НАЙДЕН!")
-	
+
 	if GameState.tree_intro_shown:
 		intro_shown = true
 
@@ -41,29 +35,21 @@ func _process(delta):
 			_call_player_to_tree()
 
 func _on_player_entered(body):
-	print("🔍 _on_player_entered вызван! Тело: ", body.name)
 	if body.is_in_group("player"):
-		print("✅ ЭТО ИГРОК! player_nearby = true")
 		player_nearby = true
 		
-		# Если история не показана - показываем
+		# Если история не показана 
 		if not intro_shown:
-			print("📖 Показываем историю")
 			_show_tree_intro()
-		# Если ждём возвращения после таймера - показываем монстра
 		elif waiting_for_return and not GameState.monster_encounter_triggered and not GameState.tree_heart_stolen:
-			print("👹 ИГРОК ВЕРНУЛСЯ ПОСЛЕ ТАЙМЕРА! ПОКАЗЫВАЕМ МОНСТРА!")
 			_show_monster_scene()
 
 func _on_player_exited(body):
 	if body.is_in_group("player"):
-		print("🚪 Игрок покинул зону дерева!")
 		player_nearby = false
 		
-		# Если история показана и таймер активен - отмечаем, что игрок ушёл
 		if intro_shown and countdown_active and not GameState.monster_encounter_triggered:
 			player_left = true
-			print("⏰ Игрок ушёл во время таймера")
 
 func _show_tree_intro():
 	intro_shown = true
@@ -91,7 +77,6 @@ func _show_monster_scene():
 	if GameState.monster_encounter_triggered:
 		return
 	
-	print("👹 НАЧАЛО СЦЕНЫ С МОНСТРОМ!")
 	GameState.monster_encounter_triggered = true
 	countdown_active = false
 	waiting_for_return = false
@@ -202,7 +187,6 @@ func _show_notification(msg: String, color: Color, icon: String = ""):
 	canvas.queue_free()
 
 func _show_story_text(msg: String, color: Color):
-	print("📖 ПОКАЗЫВАЕМ ИСТОРИЮ!")
 	
 	var canvas = CanvasLayer.new()
 	canvas.layer = 100

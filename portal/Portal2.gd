@@ -5,7 +5,6 @@ extends Area2D
 var player_nearby: bool = false
 
 func _ready():
-	print("🟣 ПОРТАЛ ЗАПУЩЕН!")
 	
 	# Отключаем старые сигналы, если они есть
 	if body_entered.is_connected(_on_body_entered):
@@ -17,17 +16,13 @@ func _ready():
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	
-	# Обновляем внешний вид
 	_update_portal_appearance()
 
 func _update_portal_appearance():
 	if GameState.boss_defeated:
 		modulate = Color(1, 1, 1, 1)
-		print("✅ Портал АКТИВЕН!")
 	else:
 		modulate = Color(0.3, 0.3, 0.5, 0.5)
-		print("🔒 Портал ЗАКРЫТ! Нужно убить босса.")
-
 func _on_body_entered(body: Node2D):
 	if body.is_in_group("player"):
 		GameState.update_save_data()
@@ -46,9 +41,6 @@ func _input(event):
 		_teleport()
 
 func _teleport():
-	print("🌀 Телепортация!")
-	
-	# Эффект затемнения
 	var rect = ColorRect.new()
 	rect.color = Color(0, 0, 0, 0)
 	rect.size = get_viewport().size

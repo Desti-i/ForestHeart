@@ -41,7 +41,6 @@ func _setup():
 			area.body_entered.connect(_on_body_entered)
 		if not area.body_exited.is_connected(_on_body_exited):
 			area.body_exited.connect(_on_body_exited)
-	print("🧛 Вампир готов!")
 
 func _set_collision_active(active: bool):
 	set_collision_layer_value(1, active)
@@ -278,4 +277,3 @@ func activate():
 			area.body_entered.connect(_on_body_entered)
 		if not area.body_exited.is_connected(_on_body_exited):
 			area.body_exited.connect(_on_body_exited)
-	print("🧛 Вампир активирован!")

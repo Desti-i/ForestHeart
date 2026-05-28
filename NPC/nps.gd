@@ -117,7 +117,6 @@ func _ready():
 	await get_tree().process_frame
 	_check_initial_player_in_zone()
 	GameState.quest_updated.connect(_on_quest_updated)
-	print("NPC готов!")
 
 func _on_quest_updated() -> void:
 	if dialog_open:
@@ -190,7 +189,6 @@ func _create_ui():
 	next_button.pressed.connect(_on_next_button_pressed)
 	vbox.add_child(next_button)
 
-	# Контейнер для выбора
 	choice_container = HBoxContainer.new()
 	choice_container.add_theme_constant_override("separation", 10)
 	choice_container.visible = false
@@ -211,7 +209,6 @@ func _show_choice(text1: String, text2: String, cb1: Callable, cb2: Callable) ->
 	next_button.visible = false
 	choice_container.visible = true
 
-	# Очищаем старые коннекты
 	if choice_btn_1.pressed.is_connected(_dummy):
 		pass
 	for c in choice_btn_1.pressed.get_connections():
@@ -278,7 +275,7 @@ func _on_next_button_pressed() -> void:
 		_show_last_line_button()
 
 func _show_last_line_button() -> void:
-	# Квест осмотр дерева - предложение
+	# Квест осмотр дерева 
 	if GameState.quest_tree_inspect == GameState.QuestState.NOT_TAKEN and \
 	   GameState.quest_kill_boars == GameState.QuestState.HANDED_IN:
 		_show_choice(
@@ -296,7 +293,7 @@ func _show_last_line_button() -> void:
 		)
 		return
 
-	# Квест кошка - предложение
+	# Квест кошка
 	if GameState.quest_cat == GameState.QuestState.NOT_TAKEN and \
 	   GameState.quest_tree_inspect == GameState.QuestState.COMPLETED:
 		_show_choice(

@@ -11,9 +11,13 @@ enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 @onready var hp_label = $"../CanvasLayer/Control/hp_bar/Label"
 @onready var q_menu   = $"../CanvasLayer/QMenu"
 
+#hp
+
 var max_health:     float = 100
 var current_health: float = max_health
 var damage:         float = 5.0
+
+#speed
 
 const WALK_SPEED: float = 100.0
 const RUN_SPEED:  float = 200.0
@@ -34,6 +38,8 @@ var stamina: float
 @export var dash_speed:    float = 480.0
 @export var dash_duration: float = 0.16
 @export var dash_cooldown: float = 0.9
+
+#dash
 
 var _dashing:    bool    = false
 var _dash_timer: float   = 0.0
@@ -65,12 +71,11 @@ func update_max_health(new_max: float) -> void:
 	var old_max = max_health
 	max_health = new_max
 	
-	# Пропорционально увеличиваем текущее здоровье
 	var health_ratio = current_health / old_max
 	current_health = max_health * health_ratio
 	current_health = clamp(current_health, 1, max_health)
 	
-	# Обновляем HP бар
+	# Обновляем HP
 	if hp_bar:
 		hp_bar.max_value = max_health
 		hp_bar.value = current_health
@@ -78,11 +83,8 @@ func update_max_health(new_max: float) -> void:
 	health_changed.emit(current_health, max_health)
 	_update_hp_label()
 	
-	print("❤️ Максимальное здоровье увеличено: ", old_max, " → ", max_health)
-
 func _on_weapon_changed(weapon: Dictionary) -> void:
 	damage = weapon["damage"]
-	print("⚔️ Меч улучшен! Урон:", weapon["damage"])
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("heal_magic"):
@@ -401,7 +403,7 @@ func die() -> void:
 	var scene_path = tree.current_scene.scene_file_path
 	
 	if "location3" in scene_path.to_lower():
-		# На 3 локации — просто телепорт
+		# На 3 локации
 		current_health = max_health
 		stamina = max_stamina
 		var sp = tree.current_scene.get_node_or_null("SpawnPoint")
@@ -429,50 +431,30 @@ func _stop_all_enemies() -> void:
 				sm.change_state("Idle")
 
 func _respawn() -> void:
-	print("🔄 Начинаем респавн...")
-	
 	# Восстанавливаем здоровье
 	current_health = max_health
 	stamina = max_stamina
 	
-	# Определяем текущую сцену
 	var current_scene_path = get_tree().current_scene.scene_file_path
-	print("📍 Текущая сцена: ", current_scene_path)
 	
-	# 👇 ИСПРАВЛЕНО: ищем "location3" или "Location3"
 	if current_scene_path.find("location3") != -1 or current_scene_path.find("Location3") != -1:
-		# На 3 локации - просто телепортируем на SpawnPoint
-		print("✅ Возрождение на 3 локации")
 		var spawn_point = get_tree().current_scene.get_node_or_null("SpawnPoint")
 		if spawn_point:
 			global_position = spawn_point.global_position
-			print("✅ Телепорт на SpawnPoint 3 локации: ", global_position)
-		else:
-			print("⚠️ SpawnPoint не найден на 3 локации")
-		
-		# Восстанавливаем управление
+
 		_finish_respawn()
-		print("✅ Возрождён на 3 локации!")
 	else:
-		# На других локациях - переходим в деревню
-		print("🔄 Переход в деревню...")
 		
-		# Меняем сцену
 		get_tree().change_scene_to_file("res://locations/primary_village/Vilage1.tscn")
 		
-		# Ждём загрузки новой сцены
 		await get_tree().process_frame
 		await get_tree().process_frame
 		
-		# Находим SpawnPoint в деревне
 		var spawn_point = get_tree().current_scene.get_node_or_null("SpawnPoint")
 		if spawn_point:
 			global_position = spawn_point.global_position
-			print("✅ Телепорт на SpawnPoint деревни: ", global_position)
 		
-		# Восстанавливаем управление
 		_finish_respawn()
-		print("✅ Возрождён в деревне!")
 
 
 
@@ -485,13 +467,11 @@ func _respawn_on_third_location():
 	_finish_respawn()
 
 func _respawn_in_village():
-	print("🔄 Респавн в деревне...")
 	
 	# Сохраняем данные
 	var saved_health = max_health
 	var saved_stamina = max_stamina
 	
-	# Меняем сцену
 	get_tree().change_scene_to_file("res://locations/primary_village/Vilage1.tscn")
 	
 	# Ждём загрузки
@@ -502,20 +482,16 @@ func _respawn_in_village():
 	current_health = saved_health
 	stamina = saved_stamina
 	
-	# Ищем SpawnPoint
 	var spawn_point = get_tree().current_scene.get_node_or_null("SpawnPoint")
 	if spawn_point:
 		global_position = spawn_point.global_position
-		print("✅ Телепорт на SpawnPoint")
-	
-	# Восстанавливаем управление
 	set_physics_process(true)
 	set_process_input(true)
 	can_move = true
 	is_invincible = false
 	modulate = Color.WHITE
 	
-	# Обновляем HP бар
+	# Обновляем HP
 	if hp_bar:
 		hp_bar.max_value = max_health
 		hp_bar.value = current_health
@@ -526,8 +502,6 @@ func _respawn_in_village():
 		GameState.weapon_changed.connect(_on_weapon_changed)
 	
 	damage = GameState.get_active_weapon()["damage"]
-	
-	print("✅ Возрождён в деревне!")
 
 func _finish_respawn() -> void:
 	remove_from_group("dead")
@@ -545,7 +519,6 @@ func _finish_respawn() -> void:
 	if not GameState.weapon_changed.is_connected(_on_weapon_changed):
 		GameState.weapon_changed.connect(_on_weapon_changed)
 	damage = GameState.get_active_weapon()["damage"]
-	print("✅ Респавн завершён! HP:", current_health)
 
 func get_direction_string() -> String:
 	match idle_dir:

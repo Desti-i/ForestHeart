@@ -56,7 +56,6 @@ func _physics_process(delta):
 	ray.target_position = direction * 15
 
 func _on_player_entered(body: Node2D):
-	print("🐱 В зону вошло: ", body.name)
 	if body.is_in_group("player") and not is_caught:
 		if GameState.quest_cat == GameState.QuestState.ACTIVE:
 			_catch_cat()

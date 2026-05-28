@@ -3,7 +3,7 @@ extends Node2D
 # ── Символы ───────────────────────────────────────────────
 const SYMBOLS     = ["7", "★", "☠", "◆", "†", "●"]
 const WEIGHTS     = [5,   15,   15,   15,   25,  25]
-const SPIN_COST   = 50
+const SPIN_COST   = 200
 
 # ── Узлы ──────────────────────────────────────────────────
 @onready var reel1        = $CanvasLayer/Reel1
@@ -20,12 +20,12 @@ var _player_nearby: bool  = false
 var _ui_open:       bool  = false
 var _final_syms:    Array = ["7", "7", "7"]
 
-# SVG размер 300x460, центр в 0,0 значит левый верх = -150, -230
+
 const SVG_W = 300.0
 const SVG_H = 460.0
 const OX    = -SVG_W / 2.0   # -150
 const OY    = -SVG_H / 2.0   # -230
-# В casino_machine.gd добавь в _ready():
+
 func _create_sign() -> void:
 	var sign = Label.new()
 	sign.text = "✨ МАГИЧЕСКОЕ КАЗИНО ✨"
@@ -33,7 +33,7 @@ func _create_sign() -> void:
 	sign.add_theme_color_override("font_color", Color(0.94, 0.75, 0.25))
 	sign.add_theme_constant_override("outline_size", 2)
 	sign.add_theme_color_override("font_outline_color", Color.BLACK)
-	sign.position = Vector2(-220, -260)  # над машиной
+	sign.position = Vector2(-220, -260)  
 	sign.z_index = 10
 	add_child(sign)
 	
@@ -46,7 +46,7 @@ func _create_sign() -> void:
 func _ready() -> void:
 	_setup_ui()
 	_setup_collision()
-	_create_sign()  # ← добавь эту строку
+	_create_sign() 
 	area.body_entered.connect(_on_body_entered)
 	area.body_exited.connect(_on_body_exited)
 	spin_button.pressed.connect(_on_spin_pressed)
@@ -55,11 +55,12 @@ func _ready() -> void:
 	
 
 func _setup_ui() -> void:
-	# Центр экрана
-	var cx = 576.0  # половина ширины экрана
-	var cy = 324.0  # половина высоты экрана
+
+	var cx = 576.0  
+	var cy = 324.0  
 
 	# ── Барабаны ─────────────────────────────────────────
+	
 	_style_reel(reel1, cx - 150 + 22,  cy - 230 + 130)
 	_style_reel(reel2, cx - 150 + 111, cy - 230 + 130)
 	_style_reel(reel3, cx - 150 + 200, cy - 230 + 130)
@@ -177,7 +178,6 @@ func _animate_reel(lbl: Label, final_sym: String, duration: float) -> void:
 		if elapsed > duration * 0.65:
 			interval = lerpf(interval, 0.18, 0.12)
 
-	# Финальный символ с небольшим прыжком
 	lbl.text = final_sym
 	var tw = create_tween()
 	tw.tween_property(lbl, "scale", Vector2(1.3, 1.3), 0.08)
@@ -230,7 +230,7 @@ func _shake_label(lbl: Label) -> void:
 	tw.tween_property(lbl, "position", orig + Vector2(-4, 0), 0.05)
 	tw.tween_property(lbl, "position", orig, 0.05)
 
-# ── Вспомогательные ───────────────────────────────────────
+
 func _weighted_rand() -> String:
 	var total = 0
 	for w in WEIGHTS: total += w

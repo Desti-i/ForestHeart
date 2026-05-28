@@ -9,7 +9,6 @@ func enter() -> void:
 	_wait_timer = randf_range(1.0, 2.5)
 
 func update(delta: float) -> void:
-	# Проверяем игрока через player а не player_in
 	if enemy.player != null:
 		state_machine.change_state("Chase")
 		return

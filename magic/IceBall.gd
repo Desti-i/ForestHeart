@@ -7,7 +7,7 @@ var direction: Vector2 = Vector2.RIGHT
 var _lifetime: float = 0.0
 var _angle: float = 0.0
 var _trail: Array = []
-var _hit_bodies: Array = []  # для уровня 4 - заморозка
+var _hit_bodies: Array = [] 
 
 const LEVEL_DATA = {
 	1: { "radius": 6.0,  "speed": 350.0, "damage": 18.0,  "max_life": 1.8 },
@@ -16,7 +16,7 @@ const LEVEL_DATA = {
 	4: { "radius": 16.0, "speed": 260.0, "damage": 95.0,  "max_life": 2.5 },
 }
 var _max_lifetime: float = 1.8
-var _slow_duration: float = 2.0  # длительность замедления
+var _slow_duration: float = 2.0  
 
 func setup(lvl: int, dir: Vector2) -> void:
 	level     = lvl
@@ -50,11 +50,10 @@ func _draw() -> void:
 		3: _draw_ice_storm(t)
 		4: _draw_absolute_zero(t)
 
-# ── Уровень 1: острый ледяной осколок ────────────────────
+# ── Уровень 1
 func _draw_ice_shard(t: float) -> void:
 	var r = LEVEL_DATA[1]["radius"]
 
-	# Хвост
 	for i in _trail.size():
 		var alpha = float(i) / _trail.size() * 0.4
 		var size  = r * (float(i) / _trail.size()) * 0.6
@@ -74,7 +73,7 @@ func _draw_ice_shard(t: float) -> void:
 		var sp = Vector2(cos(angle), sin(angle)) * r * 0.8
 		draw_circle(sp, r * 0.12, Color(0.8, 0.97, 1.0, 0.85))
 
-# ── Уровень 2: ледяная глыба (замедляет) ─────────────────
+# ── Уровень 2
 func _draw_ice_block(t: float) -> void:
 	var r = LEVEL_DATA[2]["radius"]
 
@@ -120,7 +119,7 @@ func _draw_ice_block(t: float) -> void:
 			Color(0.8, 1.0, 1.0, 0.7)
 		)
 
-# ── Уровень 3: ледяной шторм (три осколка) ───────────────
+# ── Уровень 3
 func _draw_ice_storm(t: float) -> void:
 	var r = LEVEL_DATA[3]["radius"]
 
@@ -162,7 +161,7 @@ func _draw_ice_storm(t: float) -> void:
 		Color(1.0, 1.0, 1.0, 0.9)
 	)
 
-# ── Уровень 4: абсолютный ноль (заморозка) ───────────────
+# ── Уровень 4
 func _draw_absolute_zero(t: float) -> void:
 	var r = LEVEL_DATA[4]["radius"]
 
@@ -243,15 +242,13 @@ func _on_body_entered(body: Node) -> void:
 	if body.has_method("take_damage"):
 		body.take_damage(damage, "ice")
 
-	# Уровень 2 - замедление
 	if level >= 2 and body.has_node("StateMachine"):
 		_apply_slow(body)
 
-	# Уровень 4 - полная заморозка
 	if level == 4:
 		_apply_freeze(body)
 		_hit_bodies.append(body)
-		return  # пробивает насквозь
+		return  
 
 	queue_free()
 

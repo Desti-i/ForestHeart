@@ -22,7 +22,7 @@ func _ready() -> void:
 	GameState.fire_sword_upgraded.connect(func(_l): refresh())
 	GameState.blood_magic_upgraded.connect(func(_l): refresh())
 	
-	# 👇 УВЕЛИЧЕННАЯ ПАНЕЛЬ
+	# РАЗМЕР
 	var panel = Panel.new()
 	panel.position = Vector2(100, 20)
 	panel.size = Vector2(820, 780)
@@ -122,9 +122,8 @@ func refresh() -> void:
 		"magic":  _draw_magic_tab()
 		"quest":  _draw_quest_tab()
 
-# ══════════════════════════════════════════════════════════
 # ВКЛАДКА: ОРУЖИЕ
-# ══════════════════════════════════════════════════════════
+
 func _draw_weapon_tab() -> void:
 	_add_section_title("⚔ МЕЧ  [Пробел]")
 
@@ -173,9 +172,7 @@ func _draw_weapon_tab() -> void:
 	future.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 	vbox.add_child(future)
 
-# ══════════════════════════════════════════════════════════
 # ВКЛАДКА: МАГИЯ
-# ══════════════════════════════════════════════════════════
 func _draw_magic_tab() -> void:
 	_add_section_title("✨ АКТИВНАЯ МАГИЯ  [F]")
 
@@ -512,9 +509,8 @@ func _show_heal_notification() -> void:
 	tween.tween_property(msg, "modulate:a", 0.0, 3.0)
 	tween.tween_callback(msg.queue_free)
 
-# ══════════════════════════════════════════════════════════
+
 # ВКЛАДКА: КВЕСТЫ
-# ══════════════════════════════════════════════════════════
 func _draw_quest_tab() -> void:
 	_add_section_title("📜 КВЕСТЫ")
 
@@ -709,9 +705,8 @@ func _draw_quest_tab() -> void:
 		progress_fill_vampire.color = Color(0.8, 0.3, 0.8)
 		progress_bg_vampire.add_child(progress_fill_vampire)
 
-# ══════════════════════════════════════════════════════════
 # ХЕЛПЕРЫ
-# ══════════════════════════════════════════════════════════
+
 func _make_row() -> HBoxContainer:
 	var row := HBoxContainer.new()
 	row.custom_minimum_size = Vector2(760, 52)

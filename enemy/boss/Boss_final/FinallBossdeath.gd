@@ -19,6 +19,7 @@ func enter():
 	# Анимация смерти
 	var anim_name = "death_" + enemy.get_direction_string()
 	if enemy.anim.sprite_frames.has_animation(anim_name):
+		enemy.death_sound.play()
 		enemy.anim.play(anim_name)
 		await enemy.anim.animation_finished
 	else:

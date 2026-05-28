@@ -23,6 +23,10 @@ var health: float
 # Радиус патрулирования вокруг точки спауна
 @export var patrol_radius:   float = 80.0
 
+@onready var chase_sound   = $ChaseSound
+@onready var attack_sound = $AttackSound
+@onready var death_sound = $DeathSound
+
 @onready var anim          = $Movements
 @onready var animP         = $AnimationPlayer
 @onready var state_machine = $StateMachine

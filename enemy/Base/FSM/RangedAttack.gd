@@ -30,6 +30,7 @@ func shoot_once(id):
 	
 	var anim_name_attack = "attack_rang_" + enemy.get_direction_string()
 	var anim_name_idle = "idle_" + enemy.get_direction_string()
+	enemy.attack_sound.play()
 	enemy.anim.play(anim_name_attack)
 	
 	await enemy.anim.animation_finished

@@ -7,6 +7,7 @@ var attack_finished := false
 
 
 func enter():
+	enemy.special_attack_2.play()
 
 	attack_finished = false
 

@@ -14,6 +14,7 @@ func enter():
 	spawn_timer = 0.0
 
 	enemy.velocity = Vector2.ZERO
+	enemy.special_attack_2.play()
 
 	enemy.anim.play("meteor_cast")
 

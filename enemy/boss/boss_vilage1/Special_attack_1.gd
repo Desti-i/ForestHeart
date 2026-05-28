@@ -3,6 +3,7 @@ extends State
 var saving_damage: float
 
 func enter():
+	enemy.special_attack_1.play()
 	saving_damage = enemy.damage
 	enemy.damage = enemy.damage_att_1
 	

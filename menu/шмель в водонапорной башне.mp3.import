@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cg0ef2anoj8ea"
+path="res://.godot/imported/шмель в водонапорной башне.mp3-d53d087a3af5b7f26cba8269203a872f.mp3str"
+
+[deps]
+
+source_file="res://menu/шмель в водонапорной башне.mp3"
+dest_files=["res://.godot/imported/шмель в водонапорной башне.mp3-d53d087a3af5b7f26cba8269203a872f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

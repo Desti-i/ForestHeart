@@ -15,6 +15,7 @@ extends Node2D
 @onready var spawn_points: Dictionary = {}  # имя → Marker2D
 
 func _ready() -> void:
+	
 	if GameState.is_respawning:
 		GameState.is_respawning = false
 		return

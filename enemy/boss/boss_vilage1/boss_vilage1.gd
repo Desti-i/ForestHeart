@@ -4,7 +4,6 @@ extends EnemyBase
 @export var damage_att_2: float
 
 @onready var special_attack_2   = $Special_attack_2
-@onready var special_attack_1   = $Special_attack_1
 
 var phase: float = 1
 

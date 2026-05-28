@@ -5,12 +5,17 @@ signal stamina_changed(cur: float, max_val: float)
 
 enum DIRECTION { DOWN, UP, LEFT, RIGHT }
 
+@onready var run_sound   = $RunSound
+@onready var attack_sound = $AttackSound
+@onready var death_sound = $DeathSound
+
 @onready var anim  = $Movements
 @onready var animP = $AnimationPlayer
 @onready var hp_bar   = $"../CanvasLayer/Control/hp_bar"
 @onready var hp_label = $"../CanvasLayer/Control/hp_bar/Label"
 @onready var q_menu   = $"../CanvasLayer/QMenu"
 
+var is_dead: bool = false
 var max_health:     float = 100
 var current_health: float = max_health
 var damage:         float = 5.0
@@ -336,6 +341,10 @@ func _facing_vector() -> Vector2:
 
 func handle_movements() -> void:
 	if input_direction != Vector2.ZERO:
+		
+		if not run_sound.playing:
+			run_sound.play()
+			
 		if abs(input_direction.x) > abs(input_direction.y):
 			if input_direction.x > 0:
 				anim.play("Right"); idle_dir = DIRECTION.RIGHT
@@ -347,18 +356,23 @@ func handle_movements() -> void:
 			else:
 				anim.play("Up");   idle_dir = DIRECTION.UP
 	else:
+		run_sound.stop()
 		anim.play("idle_" + get_direction_string())
 
 func handle_attack() -> void:
 	can_move = false
 	velocity  = Vector2.ZERO
 	var weapon = GameState.get_active_weapon()
+	
+	run_sound.stop()
+	attack_sound.play()
+	
 	animP.play(weapon["anim_prefix"] + get_direction_string())
 	await animP.animation_finished
 	can_move = true
 
 func take_damage(incoming_damage: float) -> void:
-	if is_invincible:
+	if is_invincible or is_dead:
 		return
 	current_health -= incoming_damage
 	current_health  = max(current_health, 0)
@@ -383,6 +397,8 @@ func die() -> void:
 	if current_health > 0:
 		return
 	
+	is_dead = true
+	
 	set_physics_process(false)
 	set_process_input(false)
 	can_move = false
@@ -391,6 +407,7 @@ func die() -> void:
 	
 	var tree = get_tree()
 	
+	death_sound.play()
 	if anim and anim.sprite_frames.has_animation("death"):
 		anim.play("death")
 		await anim.animation_finished
@@ -530,6 +547,7 @@ func _respawn_in_village():
 	print("✅ Возрождён в деревне!")
 
 func _finish_respawn() -> void:
+	is_dead = false
 	remove_from_group("dead")
 	add_to_group("player")
 	set_physics_process(true)

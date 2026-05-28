@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://jsf4bbtp4tx0" path="res://enemy/boss/boss_vilage1/BossChase.gd" id="7_8vrnc"]
 [ext_resource type="Texture2D" uid="uid://4pveapiph50o" path="res://enemy/boss/Boss_vampir/image_2026-05-18_00-54-47.png" id="7_ug206"]
 [ext_resource type="PackedScene" uid="uid://crv7hi7w8bfw8" path="res://enemy/ammo/meteorite/Meteorite.tscn" id="9_ug206"]
-[ext_resource type="Script" uid="uid://o5g0yqg0tjjf" path="res://enemy/boss/Boss_vampir/TeleportAttack.gd" id="10_8vrnc"]
+[ext_resource type="Script" path="res://enemy/boss/Boss_vampir/TeleportAttack.gd" id="10_8vrnc"]
 [ext_resource type="Script" uid="uid://dbennlh76bme5" path="res://enemy/boss/boss_vilage1/AttackSelect.gd" id="10_pqcdr"]
 [ext_resource type="Script" uid="uid://cd7cx3r3ta812" path="res://enemy/boss/Boss_vampir/MeteorRain.gd" id="10_q5euw"]
 [ext_resource type="AudioStream" uid="uid://blpwcjksu6mrc" path="res://enemy/boss/Boss_vampir/vampir-att-1.mp3" id="14_sfg55"]
@@ -1699,7 +1699,7 @@ resistances = {
 "physical": 1.2,
 "water": 0.8
 }
-max_health = 300.0
+max_health = 1500.0
 exp_reward = 2000
 bullet_scene = ExtResource("9_ug206")
 
